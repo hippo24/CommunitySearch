@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>TFT 전적 상세 조회</title>
+    <style>
+      body {
+        font-family: "Segoe UI", sans-serif;
+        padding: 2rem;
+        background: #1c1c1e;
+        color: #fff;
+      }
+      input,
+      button {
+        padding: 0.5rem;
+        font-size: 1rem;
+        border-radius: 8px;
+        border: none;
+      }
+      input {
+        width: 300px;
+        margin-right: 10px;
+      }
+      button {
+        background-color: #3b82f6;
+        color: white;
+        cursor: pointer;
+      }
+      .result {
+        margin-top: 2rem;
+        padding: 1rem;
+        background: #2c2c2e;
+        border-radius: 12px;
+      }
+      .match {
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background: #3a3a3c;
+        border-radius: 10px;
+      }
+      .item-icon {
+        width: 24px;
+        height: 24px;
+        vertical-align: middle;
+        margin-right: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🔍 롤토체스 전적 상세 조회</h1>
+    <p>
+      소환사 이름을 <strong>닉네임#태그</strong> 형식으로 입력하세요 (예:
+      바다새#KR1)
+    </p>
+    <input type="text" id="riotId" placeholder="예: 바다새#KR1" />
+    <button onclick="fetchTFTStats()">조회하기</button>
+    <div id="result" class="result" style="display: none"></div>
+
+    <script>
+      // 수동 매핑 테이블 (아이템 ID: 숫자)
+      // 아이템 텍스트 -> 이미지 전환 (자습시간에 해볼게요.)
+      // 예시 icon: "https://cdn.metatft.com/cdn-cgi/image/width=80,height=80,format=auto/https://cdn.metatft.com/file/metatft/items/tft_item_rapidfirecannon.png",
+      const itemMap = {};
+
+      fetch(
+        "https://ddragon.leagueoflegends.com/cdn/14.7.1/data/ko_KR/tft-item.json"
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          for (let key in data.data) {
+            const item = data.data[key];
+            itemMap[item.id] = {
+              name: item.name,
+              icon: `https://ddragon.leagueoflegends.com/cdn/14.7.1/img/tft-item/${item.image.full}`,
+            };
+          }
+          console.log("아이템 매핑 완료:", itemMap);
+        });
+
+      async function fetchTFTStats() {
+        const riotId = document.getElementById("riotId").value;
+        const resultDiv = document.getElementById("result");
+        resultDiv.style.display = "none";
+        resultDiv.innerHTML = "불러오는 중...";
+
+        const apiKey = "RGAPI-dd357dd3-702e-4d21-bc26-717827a494e8";
+
+        if (!riotId.includes("#")) {
+          alert("게임이름#태그라인 형식으로 입력해주세요.");
+          return;
+        }
+
+        const [gameName, tagLine] = riotId.split("#");
+
+        try {
+          const accountRes = await fetch(
+            `https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(
+              gameName
+            )}/${encodeURIComponent(tagLine)}`,
+            { headers: { "X-Riot-Token": apiKey } }
+          );
+          const accountData = await accountRes.json();
+          const puuid = accountData.puuid;
+
+          const summonerRes = await fetch(
+            `https://kr.api.riotgames.com/tft/summoner/v1/summoners/by-puuid/${puuid}`,
+            { headers: { "X-Riot-Token": apiKey } }
+          );
+          const summonerData = await summonerRes.json();
+          const summonerId = summonerData.id;
+
+          const tierRes = await fetch(
+            `https://kr.api.riotgames.com/tft/league/v1/entries/by-summoner/${summonerId}`,
+            { headers: { "X-Riot-Token": apiKey } }
+          );
+          const data = await tierRes.json();
+          const info = data[0];
+          const winRate = (
+            (info.wins / (info.wins + info.losses)) *
+            100
+          ).toFixed(1);
+
+          let html = `
+        <h2>${gameName} 님의 TFT 전적</h2>
+        <p><strong>레벨:</strong> ${summonerData.summonerLevel}</p>
+        <p><strong>티어:</strong> ${info.tier} ${info.rank} (${info.leaguePoints} LP)</p>
+        <p><strong>승/패:</strong> ${info.wins}승 ${info.losses}패</p>
+        <p><strong>승률:</strong> ${winRate}%</p>
+        <h3>📊 최근 5경기 상세 전적</h3>
+      `;
+
+          const matchIdsRes = await fetch(
+            `https://asia.api.riotgames.com/tft/match/v1/matches/by-puuid/${puuid}/ids?count=2`,
+            { headers: { "X-Riot-Token": apiKey } }
+          );
+          const matchIds = await matchIdsRes.json();
+
+          for (const matchId of matchIds) {
+            const matchRes = await fetch(
+              `https://asia.api.riotgames.com/tft/match/v1/matches/${matchId}`,
+              { headers: { "X-Riot-Token": apiKey } }
+            );
+            const matchData = await matchRes.json();
+
+            const puuidNameMap = {};
+            const puuids = matchData.metadata.participants; // 8명 PUUID 배열
+
+            // 모든 PUUID 소환사명 호출
+            await Promise.all(
+              puuids.map(async (puuid) => {
+                const res = await fetch(
+                  `https://asia.api.riotgames.com/riot/account/v1/accounts/by-puuid/${puuid}`,
+                  { headers: { "X-Riot-Token": apiKey } }
+                );
+                const data = await res.json();
+                puuidNameMap[puuid] = `${data.gameName}#${data.tagLine}`;
+              })
+            );
+
+            html += `<div class="match"><h3> 매치 번호: ${matchId}</h3>`;
+
+            matchData.info.participants
+              .sort((a, b) => a.placement - b.placement)
+              .forEach((p) => {
+                const isSelf = p.puuid === puuid;
+                const name = puuidNameMap[p.puuid] || "알 수 없음";
+                const displayName = isSelf ? `⭐ ${name}` : name;
+
+                const placement = p.placement ?? "-";
+                const level = p.level ?? "-";
+                const gold = p.gold_left ?? "-";
+                const damage = p.total_damage_to_players ?? "-";
+
+                const traits = Array.isArray(p.traits)
+                  ? p.traits
+                      .filter((t) => t.tier_current > 0)
+                      .map((t) =>
+                        t.name
+                          .replace(/^TFT\d*_/, "")
+                          .replace(/([A-Z])/g, " $1")
+                          .trim()
+                      )
+                      .join(" / ")
+                  : "조합 없음";
+
+                const units = Array.isArray(p.units)
+                  ? p.units
+                      .map((u) => {
+                        const star = "⭐".repeat(u.tier);
+                        const championName =
+                          u.character_id?.replace(/^TFT\d*_/, "") ||
+                          "알 수 없음";
+
+                        const items =
+                          Array.isArray(u.itemNames) && u.itemNames.length > 0
+                            ? u.itemNames
+                                .map((name) => {
+                                  const item = itemMap[name];
+                                  return item
+                                    ? `<img src="${item.icon}" alt="${item.name}" title="${item.name}" width="24" style="vertical-align:middle;margin-right:4px;">`
+                                    : name.replace(/^TFT_Item_|TFT\d+_/g, "");
+                                })
+                                .join(" ")
+                            : "";
+
+                        return `${championName} ${star}${
+                          items ? " —&nbsp " + items : ""
+                        }`;
+                      })
+                      .join("<br>")
+                  : "챔피언 정보 없음";
+
+                html += `
+                    <div class="match" style="background:${
+                      isSelf ? "#4DA6FF" : "#4a4a4a"
+                    }; margin-top:1rem;">
+                    <h4><strong>${displayName}</strong> | ${placement}등 | 레벨 ${level} | 골드 ${gold}</h4>
+                    <p><strong>조합:</strong> ${traits}</p>
+                    <p><strong>딜량:</strong> ${damage}</p>
+                    <p><strong>챔피언:</strong><br>${units}</p>
+                  </div>
+                `;
+              });
+          }
+          resultDiv.innerHTML = html;
+          resultDiv.style.display = "block";
+        } catch (e) {
+          console.error("에러 발생:", e);
+          resultDiv.innerHTML = "⚠️ 전적을 불러오는 중 오류가 발생했습니다.";
+          resultDiv.style.display = "block";
+        }
+      }
+
+      //엔터로 검색 가능
+      document.addEventListener("DOMContentLoaded", () => {
+        const input = document.getElementById("riotId");
+
+        input.addEventListener("keydown", (event) => {
+          if (event.key === "Enter") {
+            fetchTFTStats();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
