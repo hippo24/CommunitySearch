@@ -1,4 +1,4 @@
-package kr.t1.sts;
+package kr.t1.sts.controller;
 
 import java.text.DateFormat;
 import java.util.Date;
