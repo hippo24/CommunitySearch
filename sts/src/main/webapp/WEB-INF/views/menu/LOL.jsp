@@ -15,9 +15,6 @@
     <pre>${result}</pre>
   </c:if>
 
-
-	
-	<h2>소환사 정보</h2>
 	<c:if test="${not empty error}">
 	    <p style="color:red">${error}</p>
 	</c:if>
@@ -31,5 +28,7 @@
 	    <input type="text" name="riotId" placeholder="아이디#태그">
 	    <button type="submit">조회</button>
 	</form>
+		
+
 
 </div>
