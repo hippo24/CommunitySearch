@@ -71,47 +71,55 @@ public class LOLController {
     @RequestMapping(value = "/LOL", method = RequestMethod.POST)
     public String handleLOLSearch(@RequestParam("riotId") String riotId, Model model) {
         try {
-            // 1. Riot ID 분리
+            // riotId를 "소환사이름#태그" 형태로 받음
             String[] parts = riotId.split("#");
-            if (parts.length != 2) {
-                model.addAttribute("error", "형식이 잘못되었습니다. 예: 아이디#KR1");
-                return "menu/LOL";
-            }
             String gameName = parts[0];
             String tagLine = parts[1];
 
-            // 2. Riot API 호출 (1단계: puuid 얻기)
-           
-            String accountUrl = "https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/"
-                    + URLEncoder.encode(gameName, "UTF-8") + "/"
-                    + URLEncoder.encode(tagLine, "UTF-8") + "?api_key=" + RIOT_API_KEY;
+            // URL encoding (공백은 %20으로 치환)
+            String encodedGameName = URLEncoder.encode(gameName, "UTF-8").replace("+", "%20");
+            String encodedTagLine = URLEncoder.encode(tagLine, "UTF-8").replace("+", "%20");
 
-            URL url = new URL(accountUrl);
+            // Riot API Key (보안상 properties에서 읽어오는 것이 이상적이나, 여기선 하드코딩)
+
+            // API 호출 URL
+            String apiUrl = "https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/"
+                    + encodedGameName + "/" + encodedTagLine + "?api_key=" + RIOT_API_KEY;
+
+            URL url = new URL(apiUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
+            int responseCode = conn.getResponseCode();
+            if (responseCode == 200) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                String inputLine;
+                StringBuilder response = new StringBuilder();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                // JSON 파싱
+                JSONObject json = new JSONObject(response.toString());
+                String puuid = json.getString("puuid");
+                String gameNameResult = json.getString("gameName");
+                String tagLineResult = json.getString("tagLine");
+
+                model.addAttribute("puuid", puuid);
+                model.addAttribute("gameName", gameNameResult);
+                model.addAttribute("tagLine", tagLineResult);
+                model.addAttribute("rawJson", json.toString(2));
+                System.out.println(json);
+            } else {
+                model.addAttribute("error", "API 호출 실패: 응답 코드 " + responseCode);
             }
-            br.close();
 
-            // 3. JSON 파싱 (여기!)
-            JSONObject accountData = new JSONObject(sb.toString());
-            String puuid = accountData.getString("puuid");
-
-            // 다음 단계 계속...
-
-            model.addAttribute("puuid", puuid);
-            return "menu/LOL";
         } catch (Exception e) {
             e.printStackTrace();
-            model.addAttribute("error", "API 호출 중 오류 발생: " + e.getMessage());
-            return "menu/LOL";
+            model.addAttribute("error", "예외 발생: " + e.getMessage());
         }
+        return "menu/LOL";
     }
-
-
 }
