@@ -66,17 +66,15 @@ public class LOLController {
 	public String handleLOLSearch(@RequestParam("riotId") String riotId, Model model) {
 
 		try {
-// 1. 소환사 계정 정보 API 호출
+
             // riotId를 "소환사이름#태그" 형태로 받음
             String[] parts = riotId.split("#");
             String gameName = parts[0];
             String tagLine = parts[1];
 
-            // URL encoding (공백은 %20으로 치환)
+            // URL 공백은 %20으로 치환
             String encodedGameName = URLEncoder.encode(gameName, "UTF-8").replace("+", "%20");
             String encodedTagLine = URLEncoder.encode(tagLine, "UTF-8").replace("+", "%20");
-
-            // Riot API Key (보안상 properties에서 읽어오는 것이 이상적이나, 여기선 하드코딩)
 
             // API 호출 URL
             String apiUrl = "https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/"
@@ -85,7 +83,7 @@ public class LOLController {
 			JSONObject accountData = getJsonFromUrl(apiUrl);
 			String puuid = accountData.getString("puuid");
 
-// 2. puuid로 Summoner 정보 호출 (소환사 ID 필요)
+			// puuid -> SummonerData
 			String summonerUrl = "https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/" + puuid
 					+ "?api_key=" + API_KEY;
 
@@ -94,14 +92,14 @@ public class LOLController {
 
 			model.addAttribute("summonerInfo", summonerData);
 
-// 3. 티어 정보 API 호출
+			// 티어 정보 API
 			String tierUrl = "https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/" + summonerId
 					+ "?api_key=" + API_KEY;
 
 			JSONArray tierData = getJsonArrayFromUrl(tierUrl);
 			JSONObject soloTierInfo = null;
 
-// 솔로랭크 정보만 뽑기
+			// 솔랭
 			for (int i = 0; i < tierData.length(); i++) {
 				JSONObject entry = tierData.getJSONObject(i);
 				if ("RANKED_SOLO_5x5".equals(entry.getString("queueType"))) {

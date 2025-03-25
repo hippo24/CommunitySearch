@@ -19,7 +19,7 @@
 	    <p style="color:red">${error}</p>
 	</c:if>
 	
-	<c:if test="${not empty summoner}">
+	<c:if test="${not empty summonerData}">
 	    <p>Game Name: ${summoner.gameName}#${summoner.tagLine}</p>
 	    <p>Level: ${summoner.summonerLevel}</p>
 	</c:if>
