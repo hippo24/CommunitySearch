@@ -1,9 +1,9 @@
-package kr.t1.sts.model.dto;
+package kr.t1.sts.model.vo;
 
 import lombok.Data;
 
 @Data
-public class RiotSummonerDTO {
+public class RiotSummonerVO {
     private String gameName;
     private String tagLine;
     private String puuid;
