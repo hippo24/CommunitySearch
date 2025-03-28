@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>TFT 챔피언 배치 툴</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    #champions {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .champion {
+      width: 50px;
+      height: 50px;
+      cursor: grab;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    #board {
+      display: grid;
+      grid-template-columns: repeat(7, 60px);
+      grid-template-rows: repeat(4, 60px);
+      gap: 5px;
+    }
+
+    .cell {
+      width: 60px;
+      height: 60px;
+      background-color: white;
+      border: 1px solid #aaa;
+      border-radius: 4px;
+      position: relative;
+    }
+
+    .cell img.champion {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>TFT 배치 툴</h1>
+
+  <div id="champions">
+    <img id="champ1" class="champion" src="https://ddragon.leagueoflegends.com/cdn/13.6.1/img/champion/Aatrox.png" draggable="true" />
+    <img id="champ2" class="champion" src="https://ddragon.leagueoflegends.com/cdn/13.6.1/img/champion/Ahri.png" draggable="true" />
+    <img id="champ3" class="champion" src="https://ddragon.leagueoflegends.com/cdn/13.6.1/img/champion/Annie.png" draggable="true" />
+  </div>
+
+  <div id="board"></div>
+
+  <script>
+    const board = document.getElementById("board");
+
+    // 보드 
+    for (let i = 0; i < 28; i++) {
+      const cell = document.createElement("div");
+      cell.classList.add("cell");
+      cell.dataset.index = i;
+      board.appendChild(cell);
+    }
+
+    let draggedChampionId = null;
+
+    // 드래그
+    document.querySelectorAll(".champion").forEach(champ => {
+      champ.addEventListener("dragstart", (e) => {
+        draggedChampionId = e.target.id;
+      });
+    });
+
+    // 드롭
+    document.querySelectorAll(".cell").forEach(cell => {
+      cell.addEventListener("dragover", (e) => {
+        e.preventDefault(); // 드롭 허용
+      });
+
+      cell.addEventListener("drop", (e) => {
+        if (!draggedChampionId) return;
+
+        // 챔피언 넣기
+        const champImg = document.createElement("img");
+        champImg.src = document.getElementById(draggedChampionId).src;
+        champImg.classList.add("champion");
+
+        // 삭제
+        champImg.addEventListener("click", () => {
+          champImg.remove();
+        });
+
+        // 기존 삭제 후 추가
+        cell.innerHTML = "";
+        cell.appendChild(champImg);
+
+        draggedChampionId = null;
+      });
+    });
+  </script>
+</body>
+</html>

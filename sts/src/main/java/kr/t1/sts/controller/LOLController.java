@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class LOLController {
 
-	private static final String API_KEY = "RGAPI-2cc7996a-eddb-4fa8-8291-59f14cb76f04";
+	private static final String API_KEY = "RGAPI-881214b1-f8d2-4b89-b74b-c8d7386f260a";
 
 	@RequestMapping(value = "/LOL", method = RequestMethod.GET)
 	public String showLOLPage() {
