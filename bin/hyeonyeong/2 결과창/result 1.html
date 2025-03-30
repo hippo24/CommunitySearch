@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>소환사 정보</title>
+  <style>
+    body {
+      background-color: #1c1c26;
+      color: #ffffff;
+      font-family: "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .profile-card {
+      background-color: #2e2e38;
+      border-radius: 16px;
+      padding: 24px 32px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 360px;
+      text-align: center;
+    }
+
+    .profile-img {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      margin-bottom: 16px;
+      border: 3px solid #4b4b5e;
+    }
+
+    .name-tag {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .queue-type {
+      font-size: 14px;
+      color: #b2b8d4;
+      margin-bottom: 4px;
+    }
+
+    .tier {
+      font-size: 20px;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .stats {
+      font-size: 14px;
+      color: #b2b8d4;
+      margin-top: 4px;
+    }
+
+    .lp {
+      font-size: 16px;
+      margin-top: 4px;
+    }
+
+    .tier-icon {
+      width: 100px;
+    }
+  </style>
+</head>
+<body>
+  <div class="profile-card">
+    <img class="profile-img" id="profileIcon" src="" alt="Profile Icon" />
+    <div class="level" id="summonerLevel">레벨</div>
+    <div class="name-tag" id="nameTag">소환사 이름</div>
+    <div class="queue-type">개인/2인 랭크 게임</div>
+    <img id="tierIcon" class="tier-icon" src="" alt="Tier Icon" />
+    <div class="tier" id="tierInfo">티어 정보</div>
+    <div class="lp" id="lpInfo">LP</div>
+    <div class="stats" id="winRate">승률</div>
+  </div>
+
+  <script>
+    const riotId = JSON.parse(localStorage.getItem("riotId"));
+    console.log("riotId:", riotId);
+
+    if (!riotId) {
+      alert("플레이어 정보가 없습니다. 검색 페이지로 이동합니다.");
+      location.href = "index.html";
+    }
+  
+    const API_KEY = "RGAPI-eae9e209-a13a-45d3-a7c4-c188a00d3a74";
+    const { gameName, tagLine } = riotId;
+    
+    async function loadData() {
+      try {
+        // Riot ID → PUUID
+        const accountRes = await fetch(
+          `https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}?api_key=${API_KEY}`
+        );
+        const accountData = await accountRes.json();
+        const puuid = accountData.puuid;
+        const riotName = accountData.gameName; // 실제 Riot 계정명 반환
+
+        // 실제 Riot 계정명 사용
+        document.getElementById("nameTag").textContent = `${riotName}#${tagLine}`;
+  
+        // 3. UI 반영: 이름, 레벨, 아이콘
+        const summonerRes = await fetch(
+          `https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${puuid}?api_key=${API_KEY}`
+        );
+        const summonerData = await summonerRes.json();
+
+        const profileIconUrl = `https://ddragon.leagueoflegends.com/cdn/14.6.1/img/profileicon/${summonerData.profileIconId}.png`;
+        document.getElementById("profileIcon").src = profileIconUrl;
+        document.getElementById("summonerLevel").textContent = `레벨 ${summonerData.summonerLevel}`;
+  
+        // 4. 랭크 정보 요청
+        const rankRes = await fetch(
+          `https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerData.id}?api_key=${API_KEY}`
+        );
+        const rankData = await rankRes.json();
+        const solo = rankData.find(e => e.queueType === "RANKED_SOLO_5x5");
+  
+        if (solo) {
+          const { tier, rank, leaguePoints, wins, losses } = solo;
+          const winRate = Math.round((wins / (wins + losses)) * 100);
+  
+          document.getElementById("tierInfo").textContent = `${tier} ${rank}`;
+          document.getElementById("lpInfo").textContent = `${leaguePoints} LP`;
+          document.getElementById("winRate").textContent = `${wins}승 ${losses}패 · 승률 ${winRate}%`;
+  
+          // 5. 티어 아이콘 추가
+          const iconMap = {
+            CHALLENGER: "challenger",
+            GRANDMASTER: "grandmaster",
+            MASTER: "master",
+            DIAMOND: "diamond",
+            PLATINUM: "platinum",
+            GOLD: "gold",
+            SILVER: "silver",
+            BRONZE: "bronze",
+            IRON: "iron"
+          };
+          const iconName = iconMap[tier.toUpperCase()];
+          if (iconName) {
+            const tierIconUrl = `https://opgg-static.akamaized.net/images/medals_new/${iconName}.png`;
+            document.getElementById("tierIcon").src = tierIconUrl;
+          }
+        } else {
+          document.getElementById("tierInfo").textContent = "Unranked";
+          document.getElementById("lpInfo").textContent = "-";
+          document.getElementById("winRate").textContent = "-";
+        }
+  
+      } catch (err) {
+        console.error("API 호출 중 오류 발생:", err);
+        alert("정보를 불러오지 못했습니다.");
+      }
+    }
+  
+    loadData();
+  </script>
+</body>
+</html>

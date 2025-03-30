@@ -12,7 +12,7 @@
       async function getMatchHistory() {
         const input = document.getElementById("riotId").value;
         const [gameName, tagLine] = input.split("#");
-        const apiKey = "RGAPI-97214360-f7a8-44c4-bc6c-f940eea81e74";
+        const apiKey = "RGAPI-eae9e209-a13a-45d3-a7c4-c188a00d3a74"; // api
 
         if (!gameName || !tagLine) {
           document.getElementById("output").textContent =
@@ -43,7 +43,8 @@
           );
           const summonerData = await summonerRes.json();
           const { summonerLevel, id: summonerId } = summonerData;
-          const name = riotName; // name이 없다면 riotName을 대체 사용
+          const name = riotName; // name이 없다면 riotName을 대체 사용,
+          // 입력값을 그대로 받아오면 안 되는 이유 => 입력때 abcabc#kr1로 검색을 했으면 실제 닉네임은 abc abc#kr인데 대소문자/띄어쓰기를 무시하는 상황이 발생
 
           // 2. 티어 / 점수 / 승패
           const leagueRes = await fetch(
@@ -73,7 +74,7 @@
 
           // 2단계: puuid → matchId 목록
           const matchIdsRes = await fetch(
-            `https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=20`,
+            `https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=30`, //count=""안에 숫자 바꾸면 출력 갯수와 통계가 바뀜
             {
               headers: { "X-Riot-Token": apiKey },
             }
@@ -134,7 +135,7 @@
                 `승/패: ${tierInfo.wins}승 ${tierInfo.losses}패\n` +
                 `승률: ${tierInfo.winRate}\n`
               : "랭크 정보 없음\n") +
-            `\n🔥 챔피언별 통계 (Top 3)\n` +
+            `\n🔥 챔피언별 통계 (최근 ${matchIds.length}판 기준)\n` +
             JSON.stringify(sortedStats, null, 2) +
             `\n\n📘 최근 경기 전적\n` +
             JSON.stringify(matchDetails, null, 2);
@@ -144,7 +145,7 @@
           console.error(err);
         }
       }
-      //최근 전적 조회 클릭으로만 검색하면 불편하니(엔터로 검색 가능하게 구현)
+      //엔터로 검색 가능
       document.addEventListener("DOMContentLoaded", () => {
         const input = document.getElementById("riotId");
 
