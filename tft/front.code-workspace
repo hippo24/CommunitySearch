@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../../JAVA_TEMP_1230/front"
+		},
+		{
+			"path": "../../JAVA_TEMP_1230/front_ss"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "front"
+	}
+}
