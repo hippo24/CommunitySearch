@@ -13,7 +13,6 @@
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	
-	<!-- 		
 	<bean id="dataSource"
 	      class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 	    <property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
@@ -24,7 +23,6 @@
 	    <property name="password" value="${db.password}"></property>
 	</bean>  
 	
-	-->
 		
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 	    <property name="dataSource" ref="dataSource" />
