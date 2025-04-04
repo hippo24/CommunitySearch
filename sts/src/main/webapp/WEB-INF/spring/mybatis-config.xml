@@ -4,7 +4,7 @@
   "https://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<typeAliases>
-<!-- 	<typeAlias type="kr.kh.tmp.model.vo.MemberVO" alias="MemberVO"/> -->	
+		<typeAlias type="kr.t1.sts.model.vo.RiotSummonerVO" alias="RiotSummonerVO"/>
 
 	</typeAliases>
 </configuration>

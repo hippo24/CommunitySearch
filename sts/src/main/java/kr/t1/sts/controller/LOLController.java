@@ -1,5 +1,9 @@
 package kr.t1.sts.controller;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,9 +11,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,10 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+
 @Controller
 public class LOLController {
 
-	private static final String API_KEY = "RGAPI-c1fba0f3-9fa7-4bef-a874-3571c0bf23f7";
+	@Value("${riot.api.key}")
+	private String apiKey;
 
 	@RequestMapping(value = "/LOL", method = RequestMethod.GET)
 	public String showLOLPage() {
@@ -78,14 +82,14 @@ public class LOLController {
 
             // API 호출 URL
             String apiUrl = "https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/"
-                    + encodedGameName + "/" + encodedTagLine + "?api_key=" + API_KEY;
+                    + encodedGameName + "/" + encodedTagLine + "?api_key=" + apiKey;
 
 			JSONObject accountData = getJsonFromUrl(apiUrl);
 			String puuid = accountData.getString("puuid");
 
 			// puuid -> SummonerData
 			String summonerUrl = "https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/" + puuid
-					+ "?api_key=" + API_KEY;
+					+ "?api_key=" + apiKey;
 
 			JSONObject summonerData = getJsonFromUrl(summonerUrl);
 			String summonerId = summonerData.getString("id"); // 이 ID로 티어 정보 요청
@@ -94,7 +98,7 @@ public class LOLController {
 
 			// 티어 정보 API
 			String tierUrl = "https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/" + summonerId
-					+ "?api_key=" + API_KEY;
+					+ "?api_key=" + apiKey;
 
 			JSONArray tierData = getJsonArrayFromUrl(tierUrl);
 			JSONObject soloTierInfo = null;
