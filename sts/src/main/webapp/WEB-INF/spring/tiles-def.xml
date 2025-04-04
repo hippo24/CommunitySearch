@@ -4,23 +4,16 @@
        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
  
 <tiles-definitions>
-	
-	<!-- 패턴이 슬래시 all1 슬래시 all2 형태인 애는 내가 처리하겠다 -> all1은 1에 all2는 2에 넣어줌 -->
-	<!--  <definition name="/*/*" extends=".root">	--> <!-- .root기준으로 확장 -->
-    <definition name="/*/*" template="/WEB-INF/views/layout/baseLayout.jsp">
-        <put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />      
+    <definition name=".root" template="/WEB-INF/views/layout/baseLayout.jsp">
+        <put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />
         <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
-      	<put-attribute name="body" value="/WEB-INF/views/{1}/{2}.jsp" />
     </definition>
-
-    <definition name="*" template="/WEB-INF/views/layout/baseLayout.jsp">
-        <put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />      
-        <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
-      	<put-attribute name="body" value="/WEB-INF/views/{1}.jsp" />	<!-- 확장으로 추가된 속성으로는 body가 있다 -->
-	</definition>
-	
-
     
-
-	
+   <definition name="/*/*" extends=".root">      
+      <put-attribute name="body" value="/WEB-INF/views/{1}/{2}.jsp" />
+    </definition>
+    
+   <definition name="*" extends=".root">      
+      <put-attribute name="body" value="/WEB-INF/views/{1}.jsp" />
+    </definition>
 </tiles-definitions>

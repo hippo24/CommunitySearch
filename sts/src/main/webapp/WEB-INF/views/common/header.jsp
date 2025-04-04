@@ -24,11 +24,11 @@
 
   <!-- 로그인 폼 (오른쪽 끝) -->
   <c:if test="${user == null}">
-    <form class="form-inline" action="<c:url value='/login'/>" method="post">
-      <input type="text" class="form-control mr-sm-2" name="username" placeholder="아이디">
-      <input type="password" class="form-control mr-sm-2" name="password" placeholder="비밀번호">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">로그인</button>
-    </form>
+      <a class="btn btn-outline-success form-inline my-2 my-sm-0" href="<c:url value="/login"/>">로그인</a>
+      <a class="btn btn-outline-success form-inline my-2 my-sm-0" href="<c:url value="/signup"/>">회원가입</a>
+  </c:if>
+  <c:if test="${user != null}">
+      <a class="btn btn-outline-info form-inline my-2 my-sm-0" href="<c:url value="/logout"/>">로그아웃</a>
   </c:if>
 </nav>
 
