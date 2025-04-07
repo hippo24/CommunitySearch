@@ -4,6 +4,7 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.t1.sts.model.vo.UserVO;
+import kr.t1.sts.service.UserService;
+
 /**
  * Handles requests for the application home page.
  */
@@ -20,7 +24,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-	
+
+	@Autowired
+	UserService userService;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home() {
@@ -35,12 +41,12 @@ public class HomeController {
 	}
 	
 	@PostMapping("/signup")
-	public String signupPost(Model model, MemberVO member) {
-		if(memberService.signup(member)) {
+	public String signupPost(Model model, UserVO member) {
+		if(userService.signup(member)) {
 			model.addAttribute("url","/");
 			model.addAttribute("msg","회원 가입에 성공했습니다.");
 		}else {			//아이디 중복검사 넣으면 회원가입 실패 자체는 없어야 하지만 아직은 구현 안했기 때문에
-			model.addAttribute("url","/signup?id=" + member.getMe_id());	// 입력한 아이디 그대로 넣어줌
+			model.addAttribute("url","/signup?id=" + member.getUs_id());	// 입력한 아이디 그대로 넣어줌
 			model.addAttribute("msg","회원 가입에 실패했습니다.");
 		}
 		//return "/member/signup";
@@ -54,15 +60,15 @@ public class HomeController {
 	}
 	
 	@PostMapping("/login")
-	public String loginPost(Model model, MemberVO member) {
+	public String loginPost(Model model, UserVO member) {
 		
-		MemberVO user = memberService.login(member);
+		UserVO user = userService.login(member);
 		if(user != null) {
 			model.addAttribute("url","/");
 			model.addAttribute("msg","로그인에 성공했습니다.");
 			model.addAttribute("user", user);	//여기 "유저" 명이랑 interceptor "유저"랑 일치시켜야 받을수있음.
 		}else {			
-			model.addAttribute("url","/login?id=" + member.getMe_id());	
+			model.addAttribute("url","/login?id=" + member.getUs_id());	
 			model.addAttribute("msg","로그인에 실패했습니다.");
 		}
 
@@ -87,7 +93,7 @@ public class HomeController {
 	@PostMapping("/check/id")
 	//리턴타입 꼭 Object일 필요는 없음. List로 보내고 싶으면 List로 수정해도 상관없음 
 	public boolean checkId(@RequestParam("id") String id){
-		return memberService.checkId(id);
+		return userService.checkId(id);
 	}
 	
 
