@@ -4,7 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import kr.t1.sts.model.vo.UserVO;
 
-@Mapper
+//@Mapper
 public interface UserDao {
 
 	boolean insertUser(UserVO user);

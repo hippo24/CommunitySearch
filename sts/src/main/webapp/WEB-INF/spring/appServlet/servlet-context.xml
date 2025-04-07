@@ -21,11 +21,11 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="kr.t1.sts.*" />
 	
+	<!-- 타일즈 뷰 리졸버 -->
 	<beans:bean id="tilesViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
 	    <beans:property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView" />
-	    <beans:property name="order" value="1" /><!-- 순서를 우선으로 지정 -->
+	    <beans:property name="order" value="1" /><!-- 우선순위를 이쪽으로 지정(value=1) -->
 	</beans:bean>
 	     
 	<beans:bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
@@ -35,7 +35,7 @@
 	        </beans:list>
 	    </beans:property>
 	</beans:bean>
-	
+	<context:component-scan base-package="kr.t1.sts.*" />
 
 
 	<!-- 파일 업로드 용량 제한 설정 -->
@@ -45,11 +45,11 @@
 		<beans:property name="maxUploadSize" value="10485760"/>
 	</beans:bean>
 	<beans:bean id="uploadPath" class="java.lang.String">
-	<!--
-		beans:constructor-arg value="서버에 저장할 경로"
-	-->
-	<beans:constructor-arg value="D:\\uploads2"/>
-</beans:bean>
+		<!--
+			beans:constructor-arg value="서버에 저장할 경로"
+		-->
+		<beans:constructor-arg value="D:\\uploads2"/>
+	</beans:bean>
 
 
 </beans:beans>

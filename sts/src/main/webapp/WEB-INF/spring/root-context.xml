@@ -33,5 +33,6 @@
 
 	</bean>
 	
+	<mybatis-spring:scan base-package="kr.t1.sts.dao"/>
 	
 </beans>

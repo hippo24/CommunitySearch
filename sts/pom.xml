@@ -217,11 +217,6 @@
 			<artifactId>log4jdbc-log4j2-jdbc4</artifactId>
 			<version>1.16</version>
 		</dependency>
-		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20240303</version>
-		</dependency>
 		<!-- Log4j2 Core -->
 		<dependency>
 		    <groupId>org.apache.logging.log4j</groupId>
@@ -236,7 +231,25 @@
 		    <version>2.20.0</version>
 		</dependency>
 				
+		<!-- pom.xml -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-context-support</artifactId>
+		    <version>${org.springframework-version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>javax.mail</groupId>
+		    <artifactId>mail</artifactId>
+		    <version>1.4.3</version>
+		</dependency>
 				
+				
+		<!-- json -->		
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20240303</version>
+		</dependency>
 	
 	
 		<!-- 의존성 추가는 헷갈리면 항상 맨 밑에 하는게 좋음 -->

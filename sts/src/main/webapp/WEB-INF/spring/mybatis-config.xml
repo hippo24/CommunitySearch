@@ -5,6 +5,7 @@
 <configuration>
 	<typeAliases>
 		<typeAlias type="kr.t1.sts.model.vo.RiotSummonerVO" alias="RiotSummonerVO"/>
+		<typeAlias type="kr.t1.sts.model.vo.UserVO" alias="UserVO"/>
 
 	</typeAliases>
 </configuration>

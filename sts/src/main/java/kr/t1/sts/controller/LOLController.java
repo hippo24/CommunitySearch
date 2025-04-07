@@ -41,7 +41,7 @@ public class LOLController {
 	 * URLEncoder.encode(parts[0], "UTF-8"); String tagLine =
 	 * URLEncoder.encode(parts[1], "UTF-8");
 	 * 
-	 * String apiKey = "RGAPI-여기에-당신의-API키"; // ← 여기에 본인의 API 키 입력 // Riot API -
+	 * String apiKey = "RGAPI-API키"; // ← 여기에 본인의 API 키 입력 // Riot API -
 	 * PUUID 얻기 String url =
 	 * "https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/" +
 	 * gameName + "/" + tagLine;
@@ -81,24 +81,31 @@ public class LOLController {
             String encodedTagLine = URLEncoder.encode(tagLine, "UTF-8").replace("+", "%20");
 
             // API 호출 URL
+            // String apiUrl = "https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/" + encodedGameName + "/" + encodedTagLine + "?api_key=" + apiKey;
             String apiUrl = "https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/"
-                    + encodedGameName + "/" + encodedTagLine + "?api_key=" + apiKey;
+                    + encodedGameName + "/" + encodedTagLine;
+
 
 			JSONObject accountData = getJsonFromUrl(apiUrl);
 			String puuid = accountData.getString("puuid");
 
 			// puuid -> SummonerData
-			String summonerUrl = "https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/" + puuid
+/*			String summonerUrl = "https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/" + puuid
 					+ "?api_key=" + apiKey;
-
+*/
+			String summonerUrl = "https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/" + puuid;
 			JSONObject summonerData = getJsonFromUrl(summonerUrl);
 			String summonerId = summonerData.getString("id"); // 이 ID로 티어 정보 요청
 
 			model.addAttribute("summonerInfo", summonerData);
-
+/*
 			// 티어 정보 API
 			String tierUrl = "https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/" + summonerId
 					+ "?api_key=" + apiKey;
+*/
+			String tierUrl = "https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/" + summonerId;
+
+
 
 			JSONArray tierData = getJsonArrayFromUrl(tierUrl);
 			JSONObject soloTierInfo = null;
@@ -128,6 +135,8 @@ public class LOLController {
 		URL url = new URL(urlString);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setRequestMethod("GET");
+		
+		con.setRequestProperty("X-Riot-Token", apiKey);
 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
 		StringBuilder result = new StringBuilder();
@@ -146,6 +155,8 @@ public class LOLController {
 		URL url = new URL(urlString);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setRequestMethod("GET");
+		
+		con.setRequestProperty("X-Riot-Token", apiKey);
 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
 		StringBuilder result = new StringBuilder();
