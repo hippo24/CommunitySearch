@@ -296,8 +296,6 @@
                                    	      icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_virus.tft_set14.png"
                                    	    }
                                    	};
-
-
                                     const stylePriority = {
                                     	    3: 1, // 고유특성
                                     	    5: 2, // 프리즘
