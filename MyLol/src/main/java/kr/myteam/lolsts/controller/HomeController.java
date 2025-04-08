@@ -1,4 +1,4 @@
-package kr.myteam.lolsts;
+package kr.myteam.lolsts.controller;
 
 import java.text.DateFormat;
 import java.util.Date;
