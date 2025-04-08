@@ -194,33 +194,109 @@
                                         matchDetailHtml += '</div>';
                                     });
                                     matchDetailHtml += '</ul><strong>시너지:</strong><ul>';
-                                    const traitNameMap = { 
-                                 		  "TFT14_Immortal": "황금 황소",
-                                 		  "TFT14_Cutter": "처형자",
-                                 		  "TFT14_Strong": "학살자",
-                                 		  "TFT14_Marksman": "사격수",
-                                 		  "TFT14_Techie": "기술광",
-                                 		  "TFT14_Controller": "책략가",
-                                 		  "TFT14_Armorclad": "요새",
-                                 		  "TFT14_Supercharge": "증.폭.",
-                                 		  "TFT14_HotRod": "니트로",
-                                 		  "TFT14_Cyberboss": "사이버보스",
-                                 		  "TFT14_Divinicorp": "신성기업",
-                                 		  "TFT14_EdgeRunner": "엑소테크",
-                                 		  "TFT14_Bruiser": "난동꾼",
-                                 		  "TFT14_Thirsty": "다이나모",
-                                 		  "TFT14_Mob": "범죄 조직",
-                                 		  "TFT14_Netgod": "네트워크의 신",
-                                 		  "TFT14_Swift": "속사포",
-                                 		  "TFT14_StreetDemon": "거리의 악마",
-                                 		  "TFT14_AnimaSquad": "동물특공대",
-                                 		  "TFT14_Suits": "사이퍼",
-                                 		  "TFT14_BallisTek": "폭발 봇",
-                                 		  "TFT14_Vanguard": "선봉대",
-                                 		  "TFT14_ViegoUniqueTrait": "영혼 살해자",
-                                 		  "TFT14_Overlord": "군주",
-                                 		  "TFT14_Virus": "바이러스"
-                                 	};
+                                    const traitMetaMap = {
+                                   	    "TFT14_Immortal": {
+                                   	      name: "황금 황소",
+                                   	      icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_goldenox.tft_set14.png"
+                                   	    },
+                                   	    "TFT14_Cutter": {
+                                   	      name: "처형자",
+                                   	      icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_4_executioner.png"
+                                   	    },
+                                   	    "TFT14_Strong": {
+                                   	      name: "학살자",
+                                   	      icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_4_slayer.png"
+                                   	    },
+                                   	    "TFT14_Marksman": {
+                                   	      name: "사격수",
+                                   	      icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_marksman.tft_set14.png"
+                                   	    },
+                                   	    "TFT14_Techie": {
+                                   	      name: "기술광",
+                                   	      icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_techie.tft_set14.png"
+                                   	    },
+                                   	    "TFT14_Controller": {
+                                   	      name: "책략가",
+                                   	      icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_9_strategist.png"
+                                   	    },
+                                   	    "TFT14_Armorclad": {
+                                   	      name: "요새",
+                                   	      icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_9_bastion.png"
+                                   	    },
+                                   	    "TFT14_Supercharge": {
+                                   	      name: "증.폭.",
+                                   	      icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_amp.tft_set14.png"
+                                   	    },
+                                   	    "TFT14_HotRod": {
+                                   	      name: "니트로",
+                                   	      icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_nitroforge.tft_set14.png"
+                                   	    },
+                                   	    "TFT14_Cyberboss": {
+                                   	      name: "사이버보스",
+                                   	      icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_cyberbosses.tft_set14.png"
+                                   	    },
+                                   	    "TFT14_Divinicorp": {
+                                   	      name: "신성기업",
+                                   	      icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_divinicorp.tft_set14.png"
+                                   	    },
+                                   	    "TFT14_EdgeRunner": {
+                                   	      name: "엑소테크",
+                                   	      icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_exotech.tft_set14.png"
+                                   	    },
+                                   	    "TFT14_Bruiser": {
+                                   	      name: "난동꾼",
+                                   	      icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_bruiser.tft_set14.png"
+                                   	    },
+                                   	    "TFT14_Thirsty": {
+                                   	      name: "다이나모",
+                                   	      icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_dynamo.tft_set14.png"
+                                   	    },
+                                   	    "TFT14_Mob": {
+                                   	      name: "범죄 조직",
+                                   	      icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_mob.tft_set14.png"
+                                   	    },
+                                   	    "TFT14_Netgod": {
+                                   	      name: "네트워크의 신",
+                                   	      icon: "https://cdn.metatft.com/file/metatft/traits/netgod.png"
+                                   	    },
+                                   	    "TFT14_Swift": {
+                                   	      name: "속사포",
+                                   	      icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_10_rapidfire.png"
+                                   	    },
+                                   	    "TFT14_StreetDemon": {
+                                   	      name: "거리의 악마",
+                                   	      icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_streetdemon.tft_set14.png"
+                                   	    },
+                                   	    "TFT14_AnimaSquad": {
+                                   	      name: "동물특공대",
+                                   	      icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_animasquad.tft_set14.png"
+                                   	    },
+                                   	    "TFT14_Suits": {
+                                   	      name: "사이퍼",
+                                   	      icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_cypher.tft_set14.png"
+                                   	    },
+                                   	    "TFT14_BallisTek": {
+                                   	      name: "폭발 봇",
+                                   	      icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_boombots.tft_set14.png"
+                                   	    },
+                                   	    "TFT14_Vanguard": {
+                                   	      name: "선봉대",
+                                   	      icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_12_vanguard.tft_set12.png"
+                                   	    },
+                                   	    "TFT14_ViegoUniqueTrait": {
+                                   	      name: "영혼 살해자",
+                                   	      icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_soulkiller.tft_set14.png"
+                                   	    },
+                                   	    "TFT14_Overlord": {
+                                   	      name: "군주",
+                                   	      icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_overlord.tft_set14.png"
+                                   	    },
+                                   	    "TFT14_Virus": {
+                                   	      name: "바이러스",
+                                   	      icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_virus.tft_set14.png"
+                                   	    }
+                                   	};
+
 
                                     const stylePriority = {
                                     	    3: 1, // 고유특성
@@ -244,11 +320,19 @@
                                    	        return aPriority - bPriority;
                                    	    });
 
-                                  	filteredTraits.forEach(function(trait) {
-                                  	    const displayName = traitNameMap[trait.name] || trait.name;
-                                  	    const grade = styleName[trait.style] || '';
-                                  	    matchDetailHtml += '<p>' + displayName + ' (' + trait.num_units + ', ' + grade + ')</p>';
-                                  	});        
+                                   	filteredTraits.forEach(function(trait) {
+                                   	    const meta = traitMetaMap[trait.name];
+                                   	    const displayName = meta ? meta.name : trait.name;
+                                   	    const imageUrl = meta ? meta.icon : '';
+
+                                   	    // 이미지가 있는 경우에만 추가
+                                   	    if (imageUrl) {
+                                   	    	matchDetailHtml += '<img src="' + imageUrl + '" alt="' + displayName + '" width="24" height="24" style="vertical-align:middle; margin-right:6px; filter: invert(1);" />';
+                                   	    }
+
+                                   	    const grade = styleName[trait.style] || '';
+                                   	    matchDetailHtml += '<p>' + displayName + ' (' + trait.num_units + ', ' + grade + ')</p>';
+                                   	});    
                                   	matchDetailHtml += '</ul><hr>';
                                 }
                             });
