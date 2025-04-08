@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.kh.riot.Model.vo.Trait;
 import kr.kh.riot.Service.TFTApiService;
 
 @Controller
@@ -87,6 +89,20 @@ public class TFTApiController {
         	e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+    
+    //JSON으로부터 시너지 이미지 가져오기
+    @GetMapping("/trait")
+    public String getTrait(@RequestParam("name") String name, Model model) {
+        Trait trait = tftApiService.getTraitByKoreanName(name);
+        model.addAttribute("trait", trait);
+        return "/tft/trait"; // trait.jsp로 연결
+    }
+    @RequestMapping("/tft/traits")
+    public String showTraits(Model model) {
+        List<Trait> traitList = tftApiService.getTraitList();
+        model.addAttribute("traitList", traitList);
+        return "tft/trait"; // 또는 "tft/traits"
     }
 }
 

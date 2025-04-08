@@ -3,6 +3,8 @@ package kr.kh.riot.Service;
 import java.util.List;
 import java.util.Map;
 
+import kr.kh.riot.Model.vo.Trait;
+
 public interface TFTApiService {
 	//닉네임, 태그로 PUUID 가져오기
     Map<String, Object> getSummonerByRiotId(String gameName, String tagLine) throws Exception;
@@ -14,5 +16,8 @@ public interface TFTApiService {
     Map<String, Object> getSummonerByPuuid(String puuid) throws Exception;  
     //티어 & 점수 가져오기
     List<Map<String, Object>> getTFTLeagueInfo(String summonerId) throws Exception;  
-
+    
+    // 이름으로 검색
+    Trait getTraitByKoreanName(String name);
+	List<Trait> getTraitList(); 
 }
