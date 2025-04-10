@@ -28,6 +28,11 @@ public class TFTApiController {
     public String getSummoner() {
         return "/tft/summoner"; // JSP 파일 이름 (summoner.jsp)
     }
+    
+    @GetMapping("/summoner2")
+    public String getSummoner2() {
+        return "/tft/summoner2"; // JSP 파일 이름 (summoner.jsp)
+    }
 
     // AJAX 요청을 처리하는 /searchPUUID 엔드포인트
     @GetMapping("/searchPUUID")
