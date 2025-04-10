@@ -17,7 +17,8 @@ public interface TFTApiService {
     //티어 & 점수 가져오기
     List<Map<String, Object>> getTFTLeagueInfo(String summonerId) throws Exception;  
     
-    // 이름으로 검색
-    Trait getTraitByKoreanName(String name);
-	List<Trait> getTraitList(); 
+	/*
+	 * // 이름으로 검색 Trait getTraitByKoreanName(String name); List<Trait>
+	 * getTraitList();
+	 */
 }

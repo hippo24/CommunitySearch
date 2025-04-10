@@ -78,35 +78,26 @@ public class TFTApiServiceImp implements TFTApiService {
         
     }
     
-    //JSON 파싱
-    private Map<String, Trait> traitMap;
-    
-    @PostConstruct
-    public void init() throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        InputStream is = getClass().getResourceAsStream("/static/data/tft-trait.json");
-        JsonNode root = mapper.readTree(is);
-        JsonNode dataNode = root.get("data");
-
-        traitMap = new HashMap<>();
-        Iterator<Map.Entry<String, JsonNode>> fields = dataNode.fields();
-        while (fields.hasNext()) {
-            Map.Entry<String, JsonNode> entry = fields.next();
-            String id = entry.getKey();
-
-            if (id.startsWith("TFT14_")) {
-                Trait trait = mapper.treeToValue(entry.getValue(), Trait.class);
-                traitMap.put(trait.getName(), trait); // 한글 이름으로 키 저장
-            }
-        }
-    }
-    @Override
-    public Trait getTraitByKoreanName(String name) {
-        return traitMap.get(name);
-    }
-
-    @Override
-    public List<Trait> getTraitList() {
-        return new ArrayList<>(traitMap.values());
-    }
+	/*
+	 * //JSON 파싱 private Map<String, Trait> traitMap;
+	 * 
+	 * @PostConstruct public void init() throws IOException { ObjectMapper mapper =
+	 * new ObjectMapper(); InputStream is =
+	 * getClass().getResourceAsStream("/static/data/tft-trait.json"); JsonNode root
+	 * = mapper.readTree(is); JsonNode dataNode = root.get("data");
+	 * 
+	 * traitMap = new HashMap<>(); Iterator<Map.Entry<String, JsonNode>> fields =
+	 * dataNode.fields(); while (fields.hasNext()) { Map.Entry<String, JsonNode>
+	 * entry = fields.next(); String id = entry.getKey();
+	 * 
+	 * if (id.startsWith("TFT14_")) { Trait trait =
+	 * mapper.treeToValue(entry.getValue(), Trait.class);
+	 * traitMap.put(trait.getName(), trait); // 한글 이름으로 키 저장 } } }
+	 * 
+	 * @Override public Trait getTraitByKoreanName(String name) { return
+	 * traitMap.get(name); }
+	 * 
+	 * @Override public List<Trait> getTraitList() { return new
+	 * ArrayList<>(traitMap.values()); }
+	 */
 }

@@ -86,18 +86,17 @@ public class TFTApiController {
         }
     }
     
-    //JSON으로부터 시너지 이미지 가져오기
-    @GetMapping("/trait")
-    public String getTrait(@RequestParam("name") String name, Model model) {
-        Trait trait = tftApiService.getTraitByKoreanName(name);
-        model.addAttribute("trait", trait);
-        return "/tft/trait"; // trait.jsp로 연결
-    }
-    @RequestMapping("/tft/traits")
-    public String showTraits(Model model) {
-        List<Trait> traitList = tftApiService.getTraitList();
-        model.addAttribute("traitList", traitList);
-        return "tft/trait"; // 또는 "tft/traits"
-    }
+	/*
+	 * //JSON으로부터 시너지 이미지 가져오기
+	 * 
+	 * @GetMapping("/trait") public String getTrait(@RequestParam("name") String
+	 * name, Model model) { Trait trait = tftApiService.getTraitByKoreanName(name);
+	 * model.addAttribute("trait", trait); return "/tft/trait"; // trait.jsp로 연결 }
+	 * 
+	 * @RequestMapping("/tft/traits") public String showTraits(Model model) {
+	 * List<Trait> traitList = tftApiService.getTraitList();
+	 * model.addAttribute("traitList", traitList); return "tft/trait"; // 또는
+	 * "tft/traits" }
+	 */
 }
 
