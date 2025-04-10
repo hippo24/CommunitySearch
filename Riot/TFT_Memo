@@ -9,19 +9,6 @@
 ## 경기 상세 정보
 1. ✅ 순위 
 2. ✅ 사용유닛(이름, 코스트, 사용한 아이템) & 코스트별 테두리 적용 완료.
-3. ✅ 활성화된 시너지 (등급포함) -> 이미지 제외 다 구현 완료.
+3. ✅ 활성화된 시너지 (등급포함)
 4. 플레이어의 전설이
-
-## 시너지 이미지 표시
-1. ✅ traitMetaMap을 통해 맵핑(?)
-   ex) TFT14_Immortal -> "황금 황소", "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_goldenox.tft_set14.png"
-2.
-
-
-
-## 시너지 이미지를 위한 JSON 파싱
-🧱 Step 1. resources/static/data/ 폴더에 JSON 저장하기
-🧾 Step 2. VO 클래스 준비 (Trait.java, TraitImage.java)
-🧠 Step 3. Service에서 JSON 파싱
-
-    
+5. 경기 획득 점수(LP) ->이건 따로 어디서 구하는지 찾아봐야함.

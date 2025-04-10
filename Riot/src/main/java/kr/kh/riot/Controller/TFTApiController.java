@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import kr.kh.riot.Model.vo.Trait;
 import kr.kh.riot.Service.TFTApiService;
 
 @Controller
@@ -23,9 +22,16 @@ public class TFTApiController {
 
     @Autowired
     TFTApiService tftApiService;
-
+    
+    @GetMapping("/home")
+    public String home(Model model) {
+    	 model.addAttribute("pageType", "tft");
+        return "/tft/summoner"; // JSP 파일 이름 (summoner.jsp)
+    }
+    
     @GetMapping("/summoner")
-    public String getSummoner() {
+    public String getSummoner(Model model) {
+    	 model.addAttribute("pageType", "tft");
         return "/tft/summoner"; // JSP 파일 이름 (summoner.jsp)
     }
     

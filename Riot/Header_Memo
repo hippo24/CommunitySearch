@@ -1,0 +1,17 @@
+## LOL <-> TFT 
+1. ✅ 하나의 헤더에서 홈버튼 전환 기능
+	1) Header
+		<c:when test="${pageType == 'lol'}">
+			(롤 전용 홈버튼)
+		</c:when>
+		<c:when test="${pageType == 'tft'}">
+			(롤체 전용 홈버튼)
+		</c:when>
+	2) Controller
+		model.addAttribute("pageType", "tft"); //tft
+	3) jsp
+		<%request.setAttribute("pageType", "tft");%>
+		
+2. 로고 이미지 적용(위치 적용 능지 이슈로 미구현,,)
+
+

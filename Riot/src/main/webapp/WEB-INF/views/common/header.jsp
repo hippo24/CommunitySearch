@@ -9,10 +9,28 @@
 <body>
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 	  <div class="container-fluid">
-	    <a class="navbar-brand" href='<c:url value="/"/>'>Home</a>
-	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
-	      <span class="navbar-toggler-icon"></span>
-	    </button>
+	    <!-- 좌측 로고 및 페이지 전환 -->
+		<div class="d-flex align-items-center">
+			<c:choose>
+				<c:when test="${pageType == 'lol'}">
+					
+					<a class="navbar-brand" href="<c:url value='/lol/home'/>">
+						<img src="${pageContext.request.contextPath}/img/tft_logo.png" alt="LOL 홈" style="height: 30px;">
+					</a>
+					<a class="btn btn-outline-light btn-sm ms-2" href="<c:url value='/tft/home'/>">
+						<img src="${pageContext.request.contextPath}/img/tft_logo.png" alt="TFT 홈" style="height: 30px;">
+					</a>
+				</c:when>
+				<c:when test="${pageType == 'tft'}">
+					<a class="navbar-brand" href="<c:url value='/tft/home'/>">
+						<img src="${pageContext.request.contextPath}/img/tft_logo.png" alt="TFT 홈" style="height: 30px;">
+					</a>
+					<a class="btn btn-outline-light btn-sm ms-2" href="<c:url value='/lol/home'/>">
+						<img src="${pageContext.request.contextPath}/img/tft_logo.png" alt="LOL 홈" style="height: 30px;">
+					</a>
+				</c:when>
+			</c:choose>
+		</div>
 	    <div class="collapse navbar-collapse" id="collapsibleNavbar">
 	      <ul class="navbar-nav">
 	        <li class="nav-item">
