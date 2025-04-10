@@ -15,18 +15,18 @@
 				<c:when test="${pageType == 'lol'}">
 					
 					<a class="navbar-brand" href="<c:url value='/lol/home'/>">
-						<img src="https://cdn.dak.gg/tft/images2/tft/traits/background/unique.svg" alt="LOL 홈" style="height: 30px;">
+						<img src="https://cdn.dak.gg/lol/images/header/ico-lol.svg" alt="LOL 홈" style="height: 30px;">
 					</a>
-					<a class="btn btn-outline-light btn-sm ms-2" href="<c:url value='/tft/home'/>">
-						<img src="https://cdn.dak.gg/tft/images2/tft/traits/background/chromatic.svg" alt="TFT 홈" style="height: 30px;">
+					<a class="btn btn-sm ms-2" href="<c:url value='/tft/home'/>">
+						<img src="https://cdn.dak.gg/tft/images2/gnb/family/ico-tft.svg" alt="TFT 홈" style="height: 30px;">
 					</a>
 				</c:when>
 				<c:when test="${pageType == 'tft'}">
 					<a class="navbar-brand" href="<c:url value='/tft/home'/>">
-						<img src="https://cdn.dak.gg/tft/images2/tft/traits/background/chromatic.svg" alt="TFT 홈" style="height: 30px;">
+						<img src="https://cdn.dak.gg/tft/images2/gnb/family/ico-tft.svg" alt="TFT 홈" style="height: 30px;">
 					</a>
-					<a class="btn btn-outline-light btn-sm ms-2" href="<c:url value='/lol/home'/>">
-						<img src="https://cdn.dak.gg/tft/images2/tft/traits/background/unique.svg" alt="LOL 홈" style="height: 30px;">
+					<a class="btn btn-sm ms-2" href="<c:url value='/lol/home'/>">
+						<img src="https://cdn.dak.gg/lol/images/header/ico-lol.svg" alt="LOL 홈" style="height: 30px;">
 					</a>
 				</c:when>
 			</c:choose>

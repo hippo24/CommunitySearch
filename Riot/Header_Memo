@@ -8,9 +8,11 @@
 			(롤체 전용 홈버튼)
 		</c:when>
 	2) Controller
-		model.addAttribute("pageType", "tft"); //tft
+		model.addAttribute("pageType", "tft");
 	3) jsp
 		<%request.setAttribute("pageType", "tft");%>
+		
+	=> 새로운 페이지를 만들 때마다 매번 각 타입(lol/tft)에 맞게 2번과 3번을 설정해줘야한다는 번거로움이 있긴함.
 		
 2. 로고 이미지 적용(위치 적용 능지 이슈로 미구현,,)
 

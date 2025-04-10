@@ -36,11 +36,13 @@ public class HomeController {
 	}
 	
 	@GetMapping("/lol/board")
-	public String lolBoard() {
+	public String lolBoard(Model model) {
+		model.addAttribute("pageType", "lol");
 		return "/lol/board";
 	}
 	@GetMapping("/tft/board")
-	public String tftBoard() {
+	public String tftBoard(Model model) {
+		model.addAttribute("pageType", "tft");
 		return "/tft/board";
 	}
 }
