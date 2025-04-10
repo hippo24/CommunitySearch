@@ -1,3 +1,4 @@
+![image](https://github.com/user-attachments/assets/de789cfa-0044-40bc-a497-6745973cdab2)
 
 ## 플레이어 전적 조회
 1. ✅ 이름   
@@ -6,7 +7,6 @@
 4. ✅ 플레이어 아이콘
 5. ✅ PUUID -> 최근경기ID -> 경기 상세 정보
 .
-![image](https://github.com/user-attachments/assets/de789cfa-0044-40bc-a497-6745973cdab2)
 
 ## 경기 상세 정보
 1. ✅ 순위 
