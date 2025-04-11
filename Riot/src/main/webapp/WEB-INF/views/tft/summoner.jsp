@@ -33,7 +33,7 @@
         <!-- 소환사 정보가 여기에 표시됩니다. -->
     </div>
     <br>
-    <div id="summonerInfo" style="margin-top: 20px;">
+    <div id="summonerMatchInfo" style="margin-top: 20px;">
         <!-- 소환사 정보가 여기에 표시됩니다. -->
     </div>
 
@@ -56,7 +56,7 @@
                     },
                     success: function(response) {
                         if (response.error) {
-                            $('#summonerInfo').html('<p style="color: red;">' + response.error + '</p>');
+                            $('#summonerMatchInfo').html('<p style="color: red;">' + response.error + '</p>');
                         } else {
                             var puuid = response.puuid;
                             
@@ -99,18 +99,18 @@
                                             $('#summonerProfile').html(summonerPro);
                                         },
                                         error: function() {
-                                            $('#summonerInfo').append('<p style="color: red;">경기 ID를 가져오는 중 오류가 발생했습니다.</p>');
+                                            $('#summonerMatchInfo').append('<p style="color: red;">경기 ID를 가져오는 중 오류가 발생했습니다.</p>');
                                         }
                                     });
                                     
                                 },
                                 error: function() {
-                                    $('#summonerInfo').append('<p style="color: red;">경기 ID를 가져오는 중 오류가 발생했습니다.</p>');
+                                    $('#summonerMatchInfo').append('<p style="color: red;">경기 ID를 가져오는 중 오류가 발생했습니다.</p>');
                                 }
                             });
 
                             var summonerHtml = '<p>PUUID: ' + response.puuid + '</p>';
-                            $('#summonerInfo').html(summonerHtml);
+                            $('#summonerMatchInfo').html(summonerHtml);
 
                             // TFT 경기 ID 요청
                             $.ajax({
@@ -123,17 +123,17 @@
                                         console.log(matchIdsResponse);
                                         fetchMatchDetails(matchIdsResponse, 0, puuid);
                                     } else {
-                                        $('#summonerInfo').append('<p>최근 경기 데이터가 없습니다.</p>');
+                                        $('#summonerMatchInfo').append('<p>최근 경기 데이터가 없습니다.</p>');
                                     }
                                 },
                                 error: function() {
-                                    $('#summonerInfo').append('<p style="color: red;">경기 ID를 가져오는 중 오류가 발생했습니다.</p>');
+                                    $('#summonerMatchInfo').append('<p style="color: red;">경기 ID를 가져오는 중 오류가 발생했습니다.</p>');
                                 }
                             });
                         }
                     },
                     error: function() {
-                        $('#summonerInfo').html('<p style="color: red;">소환사 정보를 가져오는 중 오류가 발생했습니다.</p>');
+                        $('#summonerMatchInfo').html('<p style="color: red;">소환사 정보를 가져오는 중 오류가 발생했습니다.</p>');
                     }
                 });
             });
@@ -148,7 +148,7 @@
                     data: { matchId: matchId },
                     success: function(matchDetailResponse) {
                         if (matchDetailResponse.error) {
-                            $('#summonerInfo').append('<p style="color: red;">경기 ID ' + matchId + ': ' + matchDetailResponse.error + '</p>');
+                            $('#summonerMatchInfo').append('<p style="color: red;">경기 ID ' + matchId + ': ' + matchDetailResponse.error + '</p>');
                         } else {
                         	
                             var matchDetailHtml = '<h3>경기 상세 정보 (경기 ID: ' + matchId + ')</h3>';
@@ -231,13 +231,13 @@
                                         "TFT14_Overlord": { name: "군주", icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_overlord.tft_set14.png" },
                                         "TFT14_Virus": { name: "바이러스", icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_virus.tft_set14.png" }
                                     };
-
+									//시너지
                                     const stylePriority = {
-                                        3: 1,
-                                        5: 2,
-                                        4: 3,
-                                        2: 4,
-                                        1: 5
+                                        3: 1, //유니크
+                                        5: 2, //프리즘
+                                        4: 3, //골드
+                                        2: 4, //실버
+                                        1: 5  //브론즈
                                     };
 
                                     const styleName = {
@@ -247,7 +247,7 @@
                                         4: "골드",
                                         5: "프리즘"
                                     };
-
+									//표시해주는 우선순위 설정
                                     const filteredTraits = player.traits
                                         .filter(trait => trait.tier_current > 0 && trait.style > 0)
                                         .sort((a, b) => {
@@ -255,7 +255,7 @@
                                             const bPriority = stylePriority[b.style] || 999;
                                             return aPriority - bPriority;
                                         });
-
+									//화면에 표시하기
                                     filteredTraits.forEach(function(trait) {
                                         const meta = traitMetaMap[trait.name];
                                         const displayName = meta ? meta.name : trait.name;
@@ -274,18 +274,17 @@
                                             '</div>';
                                         }
                                     });
-
                                     matchDetailHtml += '</div><hr>';
-
                                 }
                             });
-                            $('#summonerInfo').append(matchDetailHtml);
+                			//내용들 막 우겨넣은 matchDetailHtml 화면에 출력시키기.
+                            $('#summonerMatchInfo').append(matchDetailHtml);
                         }
                         // 다음 경기 ID로 넘어가기
                         fetchMatchDetails(matchIds, index + 1, puuid);
                     },
                     error: function() {
-                        $('#summonerInfo').append('<p style="color: red;">경기 ID ' + matchId + '의 데이터를 가져오는 중 오류가 발생했습니다.</p>');
+                        $('#summonerMatchInfo').append('<p style="color: red;">경기 ID ' + matchId + '의 데이터를 가져오는 중 오류가 발생했습니다.</p>');
                         // 다음 경기 ID로 넘어가기
                         fetchMatchDetails(matchIds, index + 1, puuid);
                     }
