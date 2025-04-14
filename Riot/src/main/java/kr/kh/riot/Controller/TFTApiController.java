@@ -46,7 +46,7 @@ public class TFTApiController {
         }
     }
 
-    // PUUID로 최근 TFT 경기 ID 가져오기
+    // PUUID로 최근 TFT 경기 ID 가져오기 -> 10개 이후 또 10개 가져오게 하는 법 필요함.
     @GetMapping("/recentTftMatchIds")
     @ResponseBody
     public List<String> getRecentTftMatchIds(@RequestParam String puuid) {
@@ -79,7 +79,7 @@ public class TFTApiController {
         }
     }
     
-    //소환사 정보 출력
+    //소환사 정보 출력 막말로 puuid로 부터 시작해서 따로 둘까 생각중이기도 함.
     @GetMapping("/getSummonerProfile")
     public String listPost(@RequestParam String puuid, @RequestParam String summonerId, @RequestParam String gameName, 
     		@RequestParam String tagLine, Model model) {

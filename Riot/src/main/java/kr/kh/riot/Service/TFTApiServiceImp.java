@@ -46,8 +46,10 @@ public class TFTApiServiceImp implements TFTApiService {
 
     @Override
     public List<String> getRecentTftMatchIds(String puuid) throws Exception {
-    	//최근 경기부터 시작해 10개까지
-        String url = String.format("https://asia.api.riotgames.com/tft/match/v1/matches/by-puuid/%s/ids?start=0&count=10&api_key=%s",
+    	//(start+1)번째 경기부터 시작해 count개까지
+    	int start = 0;
+    	int count = 50;
+        String url = String.format("https://asia.api.riotgames.com/tft/match/v1/matches/by-puuid/%s/ids?start="+start+"&count="+count+"&api_key=%s",
                                    puuid, apiKey);
         // REST API 호출 및 응답 받기
         return restTemplate.getForObject(url, List.class);
@@ -78,26 +80,5 @@ public class TFTApiServiceImp implements TFTApiService {
         
     }
     
-	/*
-	 * //JSON 파싱 private Map<String, Trait> traitMap;
-	 * 
-	 * @PostConstruct public void init() throws IOException { ObjectMapper mapper =
-	 * new ObjectMapper(); InputStream is =
-	 * getClass().getResourceAsStream("/static/data/tft-trait.json"); JsonNode root
-	 * = mapper.readTree(is); JsonNode dataNode = root.get("data");
-	 * 
-	 * traitMap = new HashMap<>(); Iterator<Map.Entry<String, JsonNode>> fields =
-	 * dataNode.fields(); while (fields.hasNext()) { Map.Entry<String, JsonNode>
-	 * entry = fields.next(); String id = entry.getKey();
-	 * 
-	 * if (id.startsWith("TFT14_")) { Trait trait =
-	 * mapper.treeToValue(entry.getValue(), Trait.class);
-	 * traitMap.put(trait.getName(), trait); // 한글 이름으로 키 저장 } } }
-	 * 
-	 * @Override public Trait getTraitByKoreanName(String name) { return
-	 * traitMap.get(name); }
-	 * 
-	 * @Override public List<Trait> getTraitList() { return new
-	 * ArrayList<>(traitMap.values()); }
-	 */
+	
 }
