@@ -34,11 +34,6 @@ public class TFTApiController {
     	 model.addAttribute("pageType", "tft");
         return "/tft/summoner"; // JSP 파일 이름 (summoner.jsp)
     }
-    
-    @GetMapping("/summoner2")
-    public String getSummoner2() {
-        return "/tft/summoner2"; // JSP 파일 이름 (summoner.jsp)
-    }
 
     // AJAX 요청을 처리하는 /searchPUUID 엔드포인트
     @GetMapping("/searchPUUID")
@@ -84,30 +79,25 @@ public class TFTApiController {
         }
     }
     
-    //이건 리스트형식이였음
-    @GetMapping("/getTFTLeagueInfo")
-    @ResponseBody
-    public ResponseEntity<List<Map<String, Object>>> getTFTLeagueInfo(@RequestParam String summonerId) {
-        try {
-        	List<Map<String, Object>> leagueInfo = tftApiService.getTFTLeagueInfo(summonerId);
-            return ResponseEntity.ok(leagueInfo);
-        } catch (Exception e) {
-        	e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    //소환사 정보 출력
+    @GetMapping("/getSummonerProfile")
+    public String listPost(@RequestParam String puuid, @RequestParam String summonerId, @RequestParam String gameName, 
+    		@RequestParam String tagLine, Model model) {
+		try {
+			// 서비스에서 소환사 정보 가져오기
+			Map<String, Object> summoner = tftApiService.getSummonerByPuuid(puuid);
+			List<Map<String, Object>> leagueInfo = tftApiService.getTFTLeagueInfo(summonerId);
+			System.out.println(summoner);
+			// 가져온 데이터를 JSP에 보내기
+			model.addAttribute("dto", leagueInfo.get(0)); // 첫 번째 데이터만 보낸다고 가정
+			model.addAttribute("gameName", gameName);
+			model.addAttribute("tagLine", tagLine);
+			model.addAttribute("summoner", summoner);
+		} catch (Exception e) {	
+			e.printStackTrace();
+		}
+        return "tft/profile"; 
     }
     
-	/*
-	 * //JSON으로부터 시너지 이미지 가져오기
-	 * 
-	 * @GetMapping("/trait") public String getTrait(@RequestParam("name") String
-	 * name, Model model) { Trait trait = tftApiService.getTraitByKoreanName(name);
-	 * model.addAttribute("trait", trait); return "/tft/trait"; // trait.jsp로 연결 }
-	 * 
-	 * @RequestMapping("/tft/traits") public String showTraits(Model model) {
-	 * List<Trait> traitList = tftApiService.getTraitList();
-	 * model.addAttribute("traitList", traitList); return "tft/trait"; // 또는
-	 * "tft/traits" }
-	 */
 }
 

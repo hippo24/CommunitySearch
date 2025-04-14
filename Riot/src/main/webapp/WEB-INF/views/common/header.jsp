@@ -13,7 +13,6 @@
 		<div class="d-flex align-items-center">
 			<c:choose>
 				<c:when test="${pageType == 'lol'}">
-					
 					<a class="navbar-brand" href="<c:url value='/lol/home'/>">
 						<img src="https://cdn.dak.gg/lol/images/header/ico-lol.svg" alt="LOL 홈" style="height: 30px;">
 					</a>
@@ -33,10 +32,13 @@
 		</div>
 	    <div class="collapse navbar-collapse" id="collapsibleNavbar">
 	      <ul class="navbar-nav">
-	        <li class="nav-item">
-	          <a class="nav-link" href="<c:url value="/tft/summoner"/>">롤체 전적 조회</a>
-	        </li>
-	        
+	        <li class="nav-item dropdown">
+		      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">전적 조회</a>
+		      <div class="dropdown-menu">
+		        <a class="dropdown-item" href="<c:url value="/tft/summoner"/>">LOL 전적 조회</a>
+		        <a class="dropdown-item" href="<c:url value="/tft/summoner"/>">TFT 전적 조회</a>
+		      </div>
+		    </li>
 	        <li class="nav-item dropdown">
 		      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">게시글</a>
 		      <div class="dropdown-menu">
