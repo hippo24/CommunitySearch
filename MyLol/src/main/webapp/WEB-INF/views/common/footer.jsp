@@ -9,8 +9,8 @@
 </head>
 <body>
 <div class="mt-4 p-5 bg-secondary text-white">
-  <h1>푸터</h1> 
-  <p>푸터입니다.</p> 
+  <h1>사이트맵</h1> 
+  <p>여기다 사이트맵을 뿌릴 예정입니다.</p> 
 </div>
 </body>
 </html>

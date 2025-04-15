@@ -3,7 +3,13 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.myteam.lolsts.dao.UserDao">
-	
+	<insert id="insertUser">
+		insert into user(US_ID,US_PW,US_NAME,US_EMAIL,US_CREATE,US_AUTHORITY) 
+		value (#{user.us_id}, #{user.us_pw}, #{user.us_name}, #{user.us_email}, now(), "USER")
+	</insert>
 
+	<select id="selectUserBy" resultType="UserVO">
+	 	select * from User where ${type} = #{checker}
+	</select>
 
 </mapper>

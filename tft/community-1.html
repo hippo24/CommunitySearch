@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>자유 게시판</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap 4 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+
+    .card-subtitle {
+      font-size: 0.85rem;
+      color: gray;
+    }
+
+    .card {
+      transition: background-color 0.2s;
+    }
+
+    .card:hover {
+      background-color: #f1f1f1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 상단 네비게이션 바 -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Talk 게시판</a>
+  </nav>
+
+  <div class="container mt-4">
+
+    <!-- 탭 필터 -->
+    <ul class="nav nav-tabs mb-3" id="boardTabs">
+      <li class="nav-item">
+        <a class="nav-link active" href="#" onclick="loadPosts('all')">전체</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" onclick="loadPosts('popular')">인기</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" onclick="loadPosts('recent')">최신</a>
+      </li>
+    </ul>
+
+    <!-- 게시글 리스트 -->
+    <div id="postList"></div>
+
+    <!-- 페이지네이션 -->
+    <nav aria-label="Page navigation" class="mt-4">
+      <ul class="pagination justify-content-center" id="pagination">
+        <li class="page-item"><a class="page-link" href="#">이전</a></li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">다음</a></li>
+      </ul>
+    </nav>
+
+  </div>
+
+  <!-- JavaScript 코드 -->
+  <script>
+    const dummyPosts = [
+      {
+        title: "내용1",
+        author: "익명1",
+        time: "yyyy-dd-mm",
+        likes: 12,
+        comments: 5
+      },
+      {
+        title: "내용2",
+        author: "익명2",
+        time: "yyyy-dd-mm",
+        likes: 4,
+        comments: 0
+      },
+      {
+        title: "자유 게시판 기능 추가 중입니다.",
+        author: "관리자",
+        time: "yyyy-dd-mm",
+        likes: 20,
+        comments: 8
+      }
+    ];
+
+    function loadPosts(type) {
+      const postList = document.getElementById("postList");
+      postList.innerHTML = "";
+
+      dummyPosts.forEach(post => {
+        const card = document.createElement("div");
+        card.className = "card mb-2";
+
+        card.innerHTML = `
+          <div class="card-body">
+            <h5 class="card-title">${post.title}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">${post.author} · ${post.time}</h6>
+            <div class="d-flex justify-content-between">
+              <small>👍 ${post.likes}</small>
+              <small>💬 ${post.comments}</small>
+            </div>
+          </div>
+        `;
+
+        postList.appendChild(card);
+      });
+    }
+
+    // 초기 게시글 로딩
+    window.onload = () => {
+      loadPosts('all');
+    };
+  </script>
+
+</body>
+</html>
