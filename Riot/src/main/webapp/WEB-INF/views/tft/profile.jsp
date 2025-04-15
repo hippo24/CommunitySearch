@@ -25,7 +25,7 @@
 			    <div class="fw-bold fs-5 mb-1">${gameName}#${tagLine}</div>
 			    <div>레벨: <strong>${summoner.summonerLevel}</strong></div>
 			    <div>티어: <strong>${dto.tier} ${dto.rank}</strong> (${dto.leaguePoints} LP)</div>
-			    <div>판수: <strong>${dto.total}</strong></div>
+			    <div>판수: <strong>${dto.wins + dto.losses}</strong></div>
 			    <div>순방: <strong>${dto.wins}</strong> / 패배: <strong>${dto.losses}</strong></div>
 			</div>
       </div>

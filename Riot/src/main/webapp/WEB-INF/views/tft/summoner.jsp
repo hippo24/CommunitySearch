@@ -97,6 +97,9 @@
 	                    data: { puuid : puuid, summonerId: id, gameName : gameName, tagLine : tagLine},
 	                    success: function (summoner) {
 	                        $('#summonerProfile').html(summoner);
+	                        /* 이거 안하면 다른 유저 검색할 때 전적이 기존 유저 검색 결과 밑에 
+	                        이어서 생겨서 임시로 새로고침 느낌으로 둠 */
+	                        $('#gameInfo').html('');
 	                    }
 	                });
 	            }

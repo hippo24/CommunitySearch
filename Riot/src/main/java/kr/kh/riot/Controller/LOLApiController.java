@@ -19,7 +19,7 @@ public class LOLApiController {
     @GetMapping("/home")
     public String getSummoner(Model model) {
     	 model.addAttribute("pageType", "lol");
-        return "/tft/summoner2"; // JSP 파일 이름 (summoner.jsp)
+        return "/tft/summoner"; // JSP 파일 이름 (summoner.jsp)
     }
     
     @GetMapping("/summoner")

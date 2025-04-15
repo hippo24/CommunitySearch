@@ -1,24 +1,12 @@
 package kr.kh.riot.Service;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import kr.kh.riot.Model.vo.Trait;
 
 @Service
 public class TFTApiServiceImp implements TFTApiService {
@@ -48,7 +36,7 @@ public class TFTApiServiceImp implements TFTApiService {
     public List<String> getRecentTftMatchIds(String puuid) throws Exception {
     	//(start+1)번째 경기부터 시작해 count개까지
     	int start = 0;
-    	int count = 50;
+    	int count = 10;
         String url = String.format("https://asia.api.riotgames.com/tft/match/v1/matches/by-puuid/%s/ids?start="+start+"&count="+count+"&api_key=%s",
                                    puuid, apiKey);
         // REST API 호출 및 응답 받기
