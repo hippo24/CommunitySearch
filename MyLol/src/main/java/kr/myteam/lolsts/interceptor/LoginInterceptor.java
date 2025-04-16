@@ -28,7 +28,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 	    ModelAndView modelAndView)
 	    throws Exception {
 		 //구현   
-	
+	/*
 		UserVO newUser = (UserVO)modelAndView.getModel().get("user");			
 		
 		HttpSession session = request.getSession();
@@ -52,8 +52,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 		Date date = new Date(System.currentTimeMillis() + time * 1000);	//System.currentTimeMillis() : 현재 시간을 밀리초로 반환 -> time *1000 하면 1주일분의 밀리초
 		newUser.setUs_limit(date);
 		userService.updateUserCookie(newUser);
-			
-		
+		System.out.println("쿠키 " +  cookie);	
+		*/
 	}
 
 	//컨트롤러로 들어가기전 가로채는 경우 호출이 됨

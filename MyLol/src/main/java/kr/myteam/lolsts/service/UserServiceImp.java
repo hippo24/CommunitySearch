@@ -72,7 +72,7 @@ public class UserServiceImp implements UserService{
 	@Override
 	public UserVO getUserByCookie(String us_cookie) {
 		if(us_cookie == null) return null;
-		
+		System.out.println("cookie:"+us_cookie);
 		return userDao.selectUserByCookie(us_cookie);
 	}
 

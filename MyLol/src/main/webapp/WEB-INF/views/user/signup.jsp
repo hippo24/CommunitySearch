@@ -43,7 +43,7 @@
 			
 			<div class="form-group mt-3">
 			  <label for="name">유저명</label>
-			  <input type="text" class="form-control" id="name" name="us_name">	
+			  <input type="text" class="form-control" id="name" name="us_name" placeholder="미입력 시 임의의 이름으로 등록됩니다.">	
 			  <label id="checkName" class="red"></label>	
 			</div>
 			

@@ -107,6 +107,18 @@ CREATE TABLE `POSITION` (
     `PS_LINE` ENUM("TOP","JNG","MID","ADC","SPT") NOT NULL
 );
 
+
+# 첨부파일(차후 추가)
+
+DROP TABLE IF EXISTS `FILE`;
+
+CREATE TABLE `FILE` (
+	`fi_key`	int  primary key auto_increment	NOT NULL,
+	`fi_ori_name`	varchar(255) not	NULL,
+	`fi_name`	varchar(255) not	NULL,
+	`fi_po_key`	int	NOT NULL
+);
+
 # 외래키 등록
 
 
@@ -185,3 +197,11 @@ REFERENCES `SUMMONER_SEARCHED` (
 	`SS_KEY`
 );
 
+
+#차후 추가된 파일 외래키
+ALTER TABLE `FILE` ADD CONSTRAINT `FK_POST_TO_FILE_1` FOREIGN KEY (
+	`fi_po_key`
+)
+REFERENCES `POST` (
+	`po_key`
+);

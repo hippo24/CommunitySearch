@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.myteam.lolsts.dao.PostDao">
+
+  
+	<select id="selectBoardList" resultType="BoardVO">
+		select * from board order by bo_key	
+	</select>
+	
+	<insert id="insertBoard">
+		insert into board(bo_name) values(#{bo_name})
+	</insert>
+
+	<update id="updateBoard">
+		update board set bo_name = #{board.bo_name} where bo_key = #{board.bo_key}
+	</update>
+	
+	<delete id="deleteBoard">
+		delete from board where bo_key = #{bo_key}
+	</delete>
+	
+</mapper>

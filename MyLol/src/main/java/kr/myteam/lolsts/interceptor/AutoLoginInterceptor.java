@@ -20,7 +20,7 @@ public class AutoLoginInterceptor extends HandlerInterceptorAdapter{
 	
 	
 	@Override
-	public void postHandle(	//PostHadle은 컨트롤러에서 나올 때 가로채는 경우 호출
+	public void postHandle(	
 	    HttpServletRequest request, 
 	    HttpServletResponse response, 
 	    Object handler, 
@@ -32,12 +32,9 @@ public class AutoLoginInterceptor extends HandlerInterceptorAdapter{
 		
 	}
 
-	//컨트롤러로 들어가기전 가로채는 경우 호출이 됨
-	//리턴이 true이면 가던 URL로 가서 실행
-	//리턴이 false이면 가던 URL로 가지 못함. 보통 이 경우는 redirect로 다른 URL로 가라고 함.
+	
 	@Override
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)	//preHandler 컨트롤러로 들어가기 전 가로채는 경우 호출
-		throws Exception {																			//리턴 true이면 가던 url로 그대로 가서 실행. false이면 가던 url로 안감.(보통 이경우는 redirect로 다른 url로 보냄)(로그인 된 회원만 들어갈수 있는 페이지 같은 경우)
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {																			
 			
 			//세션에 있는 회원 정보를 가져옴
 			HttpSession session = request.getSession();
@@ -49,10 +46,10 @@ public class AutoLoginInterceptor extends HandlerInterceptorAdapter{
 			Cookie cookie = WebUtils.getCookie(request, "LC");	//로그인쿠키
 			//LC쿠키가 없으면 => 자동로그인 체크한적 없으면
 			if(cookie==null) return true;
-			
+			System.out.println(cookie);
 			String cookieId = cookie.getValue();
 			newUser = userService.getUserByCookie(cookieId);
-			
+			System.out.println(newUser);
 			if(newUser != null) {					//쿠키 기한인 1주일이 지나면 
 				session.setAttribute("user", newUser);
 			}

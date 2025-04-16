@@ -1,11 +1,13 @@
 package kr.myteam.lolsts.controller;
 
+import java.util.Date;
+
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,9 +26,10 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	
+	/*
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	*/
 	
 	/*
 	@Autowired
@@ -79,7 +82,7 @@ public class UserController {
 	public boolean checkName(@RequestParam("us_name") String us_name){
 		return userService.checkBy(us_name, "us_name");
 	}
-	
+	/*
 	@PostMapping("/login")
 	public String loginPost(Model model, UserVO user) {
 		
@@ -97,7 +100,39 @@ public class UserController {
 			model.addAttribute("msg", "로그인에 실패했습니다.");
 		}
 		return "message";
+	}*/
+	
+	@PostMapping("/login")
+	public String loginPost(HttpServletRequest request, HttpServletResponse response, Model model, UserVO user) {
+	    UserVO newUser = userService.login(user);
+
+	    if (newUser != null) {
+	        HttpSession session = request.getSession();
+	        session.setAttribute("user", newUser);
+
+	        // 자동 로그인 설정
+	        if (user.isAuto()) {
+	            Cookie cookie = new Cookie("LC", session.getId());
+	            cookie.setPath("/");
+	            cookie.setMaxAge(60 * 60 * 24 * 7); // 7일
+	            response.addCookie(cookie);
+
+	            newUser.setUs_cookie(session.getId());
+	            Date date = new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 7);
+	            newUser.setUs_limit(date);
+	            userService.updateUserCookie(newUser);
+	        }
+
+	        return "redirect:/";  // 성공 시 메인으로
+	    } else {
+	        model.addAttribute("msg", "로그인에 실패했습니다.");
+	        model.addAttribute("url", "/user/login?id=" + user.getUs_id());
+	        return "message";  // 실패 시 메시지
+	    }
 	}
+
+	
+	
 	
 	@GetMapping("/logout")
 	public String logout(Model model, HttpSession session) {	

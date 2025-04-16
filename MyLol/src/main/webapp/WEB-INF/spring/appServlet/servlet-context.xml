@@ -42,6 +42,8 @@
 	<beans:bean id="loginInterceptor" class="kr.myteam.lolsts.interceptor.LoginInterceptor"/>	
 	<beans:bean id="autoLoginInterceptor" class="kr.myteam.lolsts.interceptor.AutoLoginInterceptor"/>	
 	<beans:bean id="prevUrlInterceptor" class="kr.myteam.lolsts.interceptor.PrevUrlInterceptor"/>	
+	<beans:bean id="adminInterceptor" class="kr.myteam.lolsts.interceptor.AdminInterceptor"/>	
+	<beans:bean id="guestInterceptor" class="kr.myteam.lolsts.interceptor.GuestInterceptor"/>	
 	
 	<!-- 인터셉터 맵핑 -->
 	<interceptors>
@@ -59,6 +61,17 @@
 		<interceptor>
 			<mapping path="/user/login"/>
 			<beans:ref bean="prevUrlInterceptor"/>
+		</interceptor>
+		
+		<interceptor>
+			<mapping path="/admin/**"/>
+			<beans:ref bean="adminInterceptor"/>
+		</interceptor>
+		
+		<interceptor>
+			<mapping path="/login"/>
+			<mapping path="/signup"/>
+			<beans:ref bean="guestInterceptor"/>
 		</interceptor>
 		
 	</interceptors>
