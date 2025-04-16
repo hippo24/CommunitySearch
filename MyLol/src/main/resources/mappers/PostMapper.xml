@@ -21,4 +21,81 @@
 		delete from board where bo_key = #{bo_key}
 	</delete>
 	
+	
+	<update id="updateBoard">
+		update board 
+		set
+			bo_name = #{board.bo_name}
+		where
+			bo_key = #{board.bo_key}
+	</update>
+	<insert id="insertPost" useGeneratedKeys="true" keyProperty="post.po_key">
+		insert into post(po_title, po_content, po_us_key, po_bo_key)
+		values(#{post.po_title}, #{post.po_content}, #{post.po_us_key}, #{post.po_bo_key})
+	</insert>
+	
+	<select id="selectPost" resultType="PostVO">
+		select 
+			post.*, bo_name as po_bo_name 
+		from post
+		join board on po_bo_key = bo_key 
+		where po_key = #{po_key} and PO_UPD &lt; now()
+	</select>
+	
+	<update id="deletePost">
+		update post set PO_UPD = (now() + 9999999999999) where po_key = #{po_key}
+	</update>
+	
+	<update id="updatePost">
+		update post 
+		set
+			po_title = #{post.po_title},
+			po_content = #{post.po_content}
+		where
+			po_key = #{post.po_key}
+	</update>
+	<update id="updateView">
+		update post
+		set
+			po_view = po_view + 1
+		where
+			po_key = #{po_key}
+	</update>
+	<insert id="insertFile">
+		insert into file(fi_ori_name, fi_name, fi_po_key)
+		values(#{file.fi_ori_name},#{file.fi_name},#{file.fi_po_key})
+	</insert>
+	<select id="selectFileList" resultType="FileVO">
+		select * from file where fi_po_key = #{po_key}
+	</select>
+	<delete id="deleteFile">
+		delete from file where fi_key = #{fi_key}
+	</delete>
+	<select id="selectFile" resultType="FileVO">
+		select * from file where fi_key = #{fi_key}	
+	</select>
+	<select id="selectCountPostList" resultType="int">
+		select 
+			count(*)
+		from post
+		where  po_del = "N"
+		<if test="cri.po_bo_key != 0"> 
+			and po_bo_key = #{cri.po_bo_key}
+		</if>
+		<choose>
+			<when test="cri.type == 0">
+				and (po_title like concat('%', #{cri.search}, '%') 
+				or po_content like concat('%', #{cri.search}, '%') 
+				or po_us_key = #{cri.search})
+			</when>
+			<when test="cri.type == 1">
+				and (po_title like concat('%', #{cri.search}, '%') 
+				or po_content like concat('%', #{cri.search}, '%'))
+			</when>
+			<when test="cri.type == 2">
+				and po_us_key = #{cri.search}
+			</when>
+		</choose>
+	</select>
+	
 </mapper>
