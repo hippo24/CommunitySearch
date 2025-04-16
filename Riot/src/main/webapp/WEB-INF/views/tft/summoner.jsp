@@ -63,12 +63,14 @@ body {
 	    // 전설이와 아이템 json을 미리 한 번만 불러오기
 	    Promise.all([
 	        fetch("https://ddragon.leagueoflegends.com/cdn/15.8.1/data/en_US/tft-tactician.json").then(res => res.json()),
-	        fetch("https://ddragon.leagueoflegends.com/cdn/15.8.1/data/ko_KR/tft-item.json").then(res => res.json())
-	    ]).then(([tacticianRes, itemRes]) => {
+	        fetch("https://ddragon.leagueoflegends.com/cdn/15.8.1/data/ko_KR/tft-item.json").then(res => res.json()),
+	        fetch("https://ddragon.leagueoflegends.com/cdn/15.7.1/data/ko_KR/tft-trait.json").then(res => res.json())
+	    ]).then(([tacticianRes, itemRes, traitRes]) => {
 	        tacticianData = tacticianRes.data;
 	        itemData = itemRes.data;
+	        traitData = traitRes.data;
 			console.log(tacticianData);
-			console.log(tacticianData);
+			console.log(traitData);
 	        // 데이터를 다 불러온 후, 이제 경기를 출력
 	        //fetchMatchDetails(matchIds, 0, puuid);
 			let start = 0;
@@ -213,7 +215,7 @@ body {
 	                        	
 	              			//전설이 이미지 url
 					    	playerUrl ="https://ddragon.leagueoflegends.com/cdn/15.8.1/img/tft-tactician/" + tacticianData[player.companion.item_ID].image.full;
-		
+							
 						    matchDetailHtml += '<div style="display: flex; align-items: center; margin-bottom: 10px;">';
 							matchDetailHtml += '<figure><img src="' + playerUrl + '" alt="dkz" class="rounded-circle" style="width: 50px; height: 50px; margin-right: 10px;" />';
 							matchDetailHtml += '<span>레벨 : ' + player.level + ' / </span>';
@@ -231,7 +233,6 @@ body {
 	                            	if (unit.character_id.startsWith("TFT14_Summon")) {
 	                            	    return;
 	                            	}
-		                            	
 	                            	// "TFT14_" 제거해서 순수 챔피언 이름만 추출
 	                                var rawName = unit.character_id.replace("TFT14_", "");
 	                            	
@@ -260,7 +261,6 @@ body {
                             } else {
                                 matchDetailHtml += '<ol>유닛 정보가 없습니다.</ol>';
                             }
-	
                             matchDetailHtml += '</ul>';
                             matchDetailHtml += '<strong>시너지:</strong><div style="display: flex; flex-wrap: wrap; gap: 8px;">';
 	
@@ -272,33 +272,14 @@ body {
                                 5: "https://cdn.dak.gg/tft/images2/tft/traits/background/chromatic.svg"
                             };
 	
-                            const traitMetaMap = {
-                                "TFT14_Immortal": { name: "황금 황소", icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_goldenox.tft_set14.png" },
-                                "TFT14_Cutter": { name: "처형자", icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_4_executioner.png" },
-                                "TFT14_Strong": { name: "학살자", icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_4_slayer.png" },
-                                "TFT14_Marksman": { name: "사격수", icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_marksman.tft_set14.png" },
-                                "TFT14_Techie": { name: "기술광", icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_techie.tft_set14.png" },
-                                "TFT14_Controller": { name: "책략가", icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_9_strategist.png" },
-                                "TFT14_Armorclad": { name: "요새", icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_9_bastion.png" },
-                                "TFT14_Supercharge": { name: "증.폭.", icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_amp.tft_set14.png" },
-                                "TFT14_HotRod": { name: "니트로", icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_nitroforge.tft_set14.png" },
-                                "TFT14_Cyberboss": { name: "사이버보스", icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_cyberbosses.tft_set14.png" },
-                                "TFT14_Divinicorp": { name: "신성기업", icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_divinicorp.tft_set14.png" },
-                                "TFT14_EdgeRunner": { name: "엑소테크", icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_exotech.tft_set14.png" },
-                                "TFT14_Bruiser": { name: "난동꾼", icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_bruiser.tft_set14.png" },
-                                "TFT14_Thirsty": { name: "다이나모", icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_dynamo.tft_set14.png" },
-                                "TFT14_Mob": { name: "범죄 조직", icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_mob.tft_set14.png" },
-                                "TFT14_Netgod": { name: "네트워크의 신", icon: "https://cdn.metatft.com/file/metatft/traits/netgod.png" },
-                                "TFT14_Swift": { name: "속사포", icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_10_rapidfire.png" },
-                                "TFT14_StreetDemon": { name: "거리의 악마", icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_streetdemon.tft_set14.png" },
-                                "TFT14_AnimaSquad": { name: "동물특공대", icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_animasquad.tft_set14.png" },
-                                "TFT14_Suits": { name: "사이퍼", icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_cypher.tft_set14.png" },
-                                "TFT14_BallisTek": { name: "폭발 봇", icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_boombots.tft_set14.png" },
-                                "TFT14_Vanguard": { name: "선봉대", icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_12_vanguard.tft_set12.png" },
-                                "TFT14_ViegoUniqueTrait": { name: "영혼 살해자", icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_soulkiller.tft_set14.png" },
-                                "TFT14_Overlord": { name: "군주", icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_overlord.tft_set14.png" },
-                                "TFT14_Virus": { name: "바이러스", icon: "https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_14_virus.tft_set14.png" }
-                            };
+                            const traitMetaMap = {};
+                            for (const key in traitData) {
+                                const trait = traitData[key];
+                                traitMetaMap[key] = {
+                                    name: trait.name,
+                                    icon: "https://ddragon.leagueoflegends.com/cdn/15.7.1/img/tft-trait/"+ trait.image.full
+                                };
+                            }
 							//시너지
                             const stylePriority = {
                                 3: 1, //유니크
@@ -346,13 +327,6 @@ body {
 		                    $('#gameInfo').append(matchDetailHtml);
                        	}
                    	})
-                	/* .finally(res=>{
-                		$(".btn-more").remove();
-	                		const btn = '<button class="btn btn-outline-success btn-more">더보기</button>';
-	    	     	 	   	$('#gameInfo').append(btn);
-                	
-                   	}); */
-        			//내용들 막 우겨넣은 matchDetailHtml 화면에 출력시키기.
                 }
                 // 다음 경기 ID로 넘어가기
                 fetchMatchDetails(matchIds, index + 1, puuid);
