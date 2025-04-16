@@ -43,6 +43,7 @@
 	        <a class="dropdown-item" href="<c:url value="/exampleboard/1" />">게시판1</a>
 	        <a class="dropdown-item" href="<c:url value="/exampleboard/2" />">게시판2</a>
 	        <a class="dropdown-item" href="<c:url value="/exampleDUO" />">듀오모집게시판1</a>
+	        <a class="dropdown-item" href="<c:url value="/exampleTFT" />">TFT 배치 툴</a>
 	        
 	      </div>
 	    </li>

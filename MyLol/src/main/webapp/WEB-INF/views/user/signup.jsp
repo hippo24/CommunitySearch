@@ -38,7 +38,7 @@
 		
 		<!-- 이 밑의 내용은 아이디 중복검사, 비밀번호 비밀번호 확인 regex가 통과된 뒤에 c:if로 띄울 것임 -->
 		
-		<c:if test="true">
+		<c:if test="${true}">
 			
 			<div class="form-group mt-3">
 			  <label for="name">유저명</label>
@@ -73,10 +73,9 @@
 			}
 			
 			let res = false;		
-			//비동기 통신으로 아이디를 전송하고, 서버에서 보낸 결과를 이용하여 처리
-			$.ajax({	//여기는 j쿼리 코드
-				async : false, // true(비동기), false(동기)	//중복검사 마친 뒤에 회원가입 해야 하니 동기로 
-				//비동기로 하면 이거 이뤄지기 전에 다음꺼 해버리니 무조건 있는 아이디라고 출력됨
+			
+			$.ajax({
+				async : false, 
 				url : '<c:url value="/user/check/id"/>', 
 				type : 'post', 
 				data : { us_id : id }, 
@@ -92,125 +91,140 @@
 			
 			if(res){	
 				str = "사용 가능한 아이디입니다.";	
-				$("#checkId").addClass("green");
-				$("#checkId").removeClass("red");
+
+				$("#checkId").removeClass("green red").addClass(res ? "green" : "red");
 			}else{
 				str = "이미 사용중인 아이디입니다.";
-				$("#checkId").addClass("red");
-				$("#checkId").removeClass("green");
+				
+				$("#checkId").removeClass("green red").addClass(res ? "green" : "red");
 			}
 			$("#checkId").text(str);	
 			
 			return res;
-		}
-		
-		$("#name").on("input", function(e){	//#check -> #id : 중복체크 버튼 없애려고
-			let us_name = $("#name").val();
-			checkName(us_name);			//중복체크는 나중에
-		});
-		
-		function checkName(value){
-			// 입력한 아이디를 가져옴
-			$("#checkName").text("");	//시작 전 빈문자열로
-		
-			let res = false;		
-			//비동기 통신으로 아이디를 전송하고, 서버에서 보낸 결과를 이용하여 처리
-			$.ajax({	//여기는 j쿼리 코드
-				async : false, // true(비동기), false(동기)	//중복검사 마친 뒤에 회원가입 해야 하니 동기로 
-				//비동기로 하면 이거 이뤄지기 전에 다음꺼 해버리니 무조건 있는 아이디라고 출력됨
-				url : '<c:url value="/user/check/name"/>', 
-				type : 'post', 
-				data : { us_name : value }, 
-				success : function (data){
-					if(data){
-						res = true;
-					}
-				}, 
-				error : function(jqXHR, textStatus, errorThrown){
-				}
+			}
+			
+			$("#name").on("input", function(e){	//#check -> #id : 중복체크 버튼 없애려고
+				let us_name = $("#name").val();
+				checkName(us_name);			//중복체크는 나중에
 			});
-			let str;
 			
-			if(res){	
-				str = "사용 가능한 유저명입니다.";	
-				$("#checkName").addClass("green");
-				$("#checkName").removeClass("red");
-			}else{
-				str = "이미 사용중인 유저명입니다.";
-				$("#checkName").addClass("red");
-				$("#checkName").removeClass("green");
+			function checkName(value){
+				// 입력한 아이디를 가져옴
+				$("#checkName").text("");	//시작 전 빈문자열로
+			
+				let res = false;		
+				//비동기 통신으로 아이디를 전송하고, 서버에서 보낸 결과를 이용하여 처리
+				$.ajax({	//여기는 j쿼리 코드
+					async : false, // true(비동기), false(동기)	//중복검사 마친 뒤에 회원가입 해야 하니 동기로 
+					//비동기로 하면 이거 이뤄지기 전에 다음꺼 해버리니 무조건 있는 아이디라고 출력됨
+					url : '<c:url value="/user/check/name"/>', 
+					type : 'post', 
+					data : { us_name : value }, 
+					success : function (data){
+						if(data){
+							res = true;
+						}
+					}, 
+					error : function(jqXHR, textStatus, errorThrown){
+					}
+				});
+				let str;
+				
+				if(res){	
+					str = "사용 가능한 유저명입니다.";	
+	
+					$("#checkName").removeClass("green red").addClass(res ? "green" : "red");
+				}else{
+					str = "이미 사용중인 유저명입니다.";
+					
+					$("#checkName").removeClass("green red").addClass(res ? "green" : "red");
+				}
+				$("#checkName").text(str);	
+				
+				return res;
 			}
-			$("#checkName").text(str);	
 			
-			return res;
-		}
-		
-		
-		
-		
-		
-		$("form").validate({			//23.회원가입_validate 가져옴
-			rules : {
-				us_id : {
-					required : true,
-					regex : /^[a-zA-Z0-9]{5,13}$/ 
-
+			
+			
+			
+			
+			$("form").validate({			//23.회원가입_validate 가져옴
+				rules : {
+					us_id : {
+						required : true,
+						regex : /^[a-zA-Z0-9]{5,13}$/ 
+	
+					},	
+					us_pw : {	
+						required : true,
+						regex : /^[a-zA-Z0-9!@#$]{8,20}$/ 
+					},
+					us_pw2 : {
+						equalTo : pw		// 아이디값이라 us_pw아니라 pw(name은 중복될 수 있지만 id는 하나만 있을수 있어서)
+					},
+					us_name : {	
+						required : false,				//필수는 아닌게 .trim()이 ""이면 service에서 소환사(10자리 랜덤 문자열) 로 넣어줄 예정 -> 빈 문자열인 유저명은 없으니 중복검사에 안 걸림
+						chkDup : true
+					},
+					us_email : {
+						required : true,
+						email : true
+					}
 				},	
-				us_pw : {	
-					required : true,
-					regex : /^[a-zA-Z0-9!@#$]{8,20}$/ 
+				messages : {
+					us_id : {
+						required : "필수 항목입니다.",
+						regex : "아이디는 영문, 숫자만 가능하며, 5~13자입니다."
+					},
+					us_pw : {
+						required : "필수 항목입니다.",
+						regex : "비번은 영문, 숫자, 특수문자(!@#$)만 가능하며, 8~20자입니다."
+					},
+					us_pw2 : {
+						equalTo : "비번과 비번확인이 일치하지 않습니다."
+					},
+					us_name : {
+						chkDup : "중복된 아이디입니다."
+					},
+					us_email : {
+						required : "필수 항목입니다.",
+						email : "이메일 형식이 아닙니다."
+					}
+	
 				},
-				us_pw2 : {
-					equalTo : pw		// 아이디값이라 us_pw아니라 pw(name은 중복될 수 있지만 id는 하나만 있을수 있어서)
-				},
-				us_name : {	
-					required : false,				//필수는 아닌게 .trim()이 ""이면 service에서 소환사(10자리 랜덤 문자열) 로 넣어줄 예정 -> 빈 문자열인 유저명은 없으니 중복검사에 안 걸림
-					chkDup : true
-				},
-				us_email : {
-					required : true,
-					email : true
+				submitHandler : function(){	//submitHandler : 유효성 검사 후 전송하기 직전 확인하고 싶을때 : return true여야 전송.
+	
+					//return checkId();		//일단 회원가입 기능 구현만 하고 체크는 나중에
+					return true;
 				}
-			},	
-			messages : {
-				us_id : {
-					required : "필수 항목입니다.",
-					regex : "아이디는 영문, 숫자만 가능하며, 5~13자입니다."
-				},
-				us_pw : {
-					required : "필수 항목입니다.",
-					regex : "비번은 영문, 숫자, 특수문자(!@#$)만 가능하며, 8~20자입니다."
-				},
-				us_pw2 : {
-					equalTo : "비번과 비번확인이 일치하지 않습니다."
-				},
-				us_name : {
-					chkDup : "중복된 아이디입니다."
-				},
-				us_email : {
-					required : "필수 항목입니다.",
-					email : "이메일 형식이 아닙니다."
-				}
-
-			},
-			submitHandler : function(){	//submitHandler : 유효성 검사 후 전송하기 직전 확인하고 싶을때 : return true여야 전송.
-
-				//return checkId();		//일단 회원가입 기능 구현만 하고 체크는 나중에
-				return true;
-			}
-		})
-		$.validator.addMethod("regex", function(value, element, regex){
-			var re = new RegExp(regex);	//정규표현식 생성자 RegEXP
-			return this.optional(element) || re.test(value);
-		}, "정규표현식을 확인하세요.")
-		
-		$.validator.addMethod("chkDup", function(value, element) {
-        	checkName(value);
+			})
+			$.validator.addMethod("regex", function(value, element, regex){
+				var re = new RegExp(regex);	//정규표현식 생성자 RegEXP
+				return this.optional(element) || re.test(value);
+			}, "정규표현식을 확인하세요.")
 			
-        }
-        return true;
-});
-		
+			$.validator.addMethod("chkDup", function(value, element) {
+	        	return checkName(value);
+				
+			}, "이미 사용 중인 유저명입니다.");
+		});
+			
+	</script>
+	
+	
+	<script type="text/javascript">
+		$(document).ready(function() {
+		    // 아이디 칸에서 빠져나가면 중복 체크
+		    $("#id").on("blur", function() {
+		        checkId();
+		    });
+	
+		    // 이름 칸에서도 같은 방식 적용
+		    $("#name").on("blur", function() {
+		        checkName($("#name").val());
+		    });
+		});
+	
 	</script>
 	
 </body>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+  <!-- typealias 등록 -->
+<configuration>
+	<typeAliases>
+		<typeAlias type="kr.myteam.lolsts.model.vo.UserVO" alias="UserVO"/>	
+
+
+	</typeAliases>
+</configuration>
