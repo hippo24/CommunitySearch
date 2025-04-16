@@ -1,62 +1,72 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%request.setAttribute("pageType", "lol");%>
+	pageEncoding="UTF-8"%>
+<%
+request.setAttribute("pageType", "lol");
+%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8" />
-    <title>소환사 정보</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<style>
-		 body {
-	        font-family: "Segoe UI", sans-serif;
-	      }
-		.champ-img {
-			width: 60px;
-			height: 60px;
-			object-fit: cover;
-			object-position: 90% top; 
-			border-radius: 5px;
-		}
-		.infoBox{
-			min-height: auto; height: auto; 
-			background-color: #f8f9fa; 
-			box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
-			border-radius: 12px;
-		}
-	</style>
+<meta charset="UTF-8" />
+<title>소환사 정보</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+body {
+	font-family: "Segoe UI", sans-serif;
+}
+
+.champ-img {
+	width: 60px;
+	height: 60px;
+	object-fit: cover;
+	object-position: 90% top;
+	border-radius: 5px;
+}
+
+.infoBox {
+	min-height: auto;
+	height: auto;
+	background-color: #f8f9fa;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	border-radius: 12px;
+}
+</style>
 </head>
 <body>
-    <h3>🔍 TFT 전적 상세 조회</h3>
-    <p>소환사 이름을 <strong>게임이름#태그라인</strong> 형식으로 입력하세요 (예 : 바다새#KR1)</p>
-    <form id="summonerForm">
-    	<div>
-	        <label for="gameName">게임 이름:</label>
-	        <input type="text" id="gameName" name="gameName" required>
-    	</div>
-    	<div>
-	        <label for="tagLine">태그라인:</label>
-	        <input type="text" id="tagLine" name="tagLine" required>
-    	</div>
-        <button class="btn-search" type="submit">조회</button>
-    </form>
-    <div id="summonerProfile" style="margin-top: 20px;">
-        <!-- 소환사 정보가 여기에 표시됩니다. -->
-    </div>
+	<h3>🔍 TFT 전적 상세 조회</h3>
+	<p>
+		소환사 이름을 <strong>게임이름#태그라인</strong> 형식으로 입력하세요 (예 : 바다새#KR1)
+	</p>
+	<form id="summonerForm">
+		<div>
+			<label for="gameName">게임 이름:</label> <input type="text" id="gameName"
+				name="gameName" required>
+		</div>
+		<div>
+			<label for="tagLine">태그라인:</label> <input type="text" id="tagLine"
+				name="tagLine" required>
+		</div>
+		<button class="btn-search" type="submit">조회</button>
+	</form>
+	<div id="summonerProfile" style="margin-top: 20px;">
+		<!-- 소환사 정보가 여기에 표시됩니다. -->
+	</div>
 
-    <div id="gameInfo" style="margin-top: 20px;">
-        <!-- 게임 정보가 여기에 표시됩니다. -->
-    </div>
+	<div id="gameInfo" style="margin-top: 20px;">
+		<!-- 게임 정보가 여기에 표시됩니다. -->
+	</div>
 
-    <script type="text/javascript">
+	<script type="text/javascript">
 	    let start = 0;
 	    let gameName = "";
 	    let tagLine = "";
     	$('#summonerForm').on('submit', function (e) {
+		    $('#summonerProfile').html('');
+		    $('#gameInfo').html('');
 	        e.preventDefault();
-	        let gameName = $('#gameName').val();
-	        let tagLine = $('#tagLine').val();
+	        
+	        gameName = $('#gameName').val();
+	        tagLine = $('#tagLine').val();
 	        start = 0; // 처음부터 시작
 
 	        // 1. PUUID, Summoner ID 조회
@@ -71,17 +81,17 @@
 	                getMatchInfo(puuid, start); // 경기 정보
 	            }
 	        });
-	      	//더보기 누르면 start +10 해주고 getMatchInfo 호출
-	        $(document).on("click", ".btn-more", function () {
-	            start += 10;
-	            console.log(start);
-	            searchMore(start, gameName, tagLine); // 값 전달
-	        });
 	    });
+      	//더보기 누르면 start +10 해주고 getMatchInfo 호출
+        $(document).on("click", ".btn-more", function () {
+            start += 10;
+            console.log(start);
+            searchMore(start, gameName, tagLine); // 값 전달
+        });
     	
     </script>
-    
-    <script type="text/javascript">
+
+	<script type="text/javascript">
 	    function searchMore(start, gameName, tagLine) {
 	        console.log(gameName);
 	    	$.ajax({
@@ -95,10 +105,10 @@
 	        });
 	    }
     </script>
-    
-    
- 	<!-- 2. 소환사 정보 출력 함수 -->
-    <script type="text/javascript">
+
+
+	<!-- 2. 소환사 정보 출력 함수 -->
+	<script type="text/javascript">
 	    function getSummonerProfile(puuid, gameName, tagLine) {
 	        $.ajax({
 	        	async : false,
@@ -122,9 +132,9 @@
 	            }
 	        });
 	    }
-    </script> 
-	
-    <script type="text/javascript">
+    </script>
+
+	<script type="text/javascript">
    		 // TFT 경기 ID 요청
     	function getMatchInfo(puuid, start) {	 	    
    			$.ajax({
@@ -145,12 +155,16 @@
 		            $('#summonerMatchInfo').append('<p style="color: red;">경기 ID를 가져오는 중 오류가 발생했습니다.</p>');
 		        }
 		    });
-		    
-   			
+    	}
+   		// 유닛 아이디가 TFT14로 시작하지않으면 14시즌 게임이 아님
+    	function isSet14Game(matchInfo) {
+    	    return matchInfo.participants.some(p =>
+    	        p.units.some(unit => unit.character_id.startsWith("TFT14_"))
+    	    );
     	}
     </script>
-    
-    <script type="text/javascript">
+
+	<script type="text/javascript">
     function fetchMatchDetails(matchIds, index, puuid) {
         if (index >= matchIds.length) return; // 모든 경기를 처리했으면 종료
 
@@ -165,6 +179,11 @@
                 if (matchDetailResponse.error) {
                     $('#summonerMatchInfo').append('<p style="color: red;">경기 ID ' + matchId + ': ' + matchDetailResponse.error + '</p>');
                 } else {
+                	if (!isSet14Game(matchDetailResponse.info)) {
+                        console.log("13시즌 경기이므로 제외: " + matchId);
+                        $(".btn-more").remove();
+                        return;
+                    }
                 	
                     var matchDetailHtml = '<div class="infoBox form-control mt-3 mb-3">'+
                     '<h3>경기 상세 정보 (경기 ID: ' + matchId + ')</h3>';
@@ -312,16 +331,12 @@
 	                            });
 	                            matchDetailHtml += '</div></div>';
 			                    $('#gameInfo').append(matchDetailHtml);
-			                    
                         	}
-	                        
 	                	})
 	                	.finally(res=>{
 	                		$(".btn-more").remove();
 		                		const btn = '<button class="btn btn-outline-success btn-more">더보기</button>';
 		    	     	 	   	$('#gameInfo').append(btn);
-	                			
-	                		
 	                	})
                     });
         			//내용들 막 우겨넣은 matchDetailHtml 화면에 출력시키기.
@@ -342,8 +357,8 @@
     
     
     </script>
-    
-    <script type="text/javascript">
+
+	<script type="text/javascript">
 	    
 	   
     </script>
