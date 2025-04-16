@@ -49,9 +49,9 @@ public class TFTApiController {
     // PUUID로 최근 TFT 경기 ID 가져오기 -> 10개 이후 또 10개 가져오게 하는 법 필요함.
     @GetMapping("/recentTftMatchIds")
     @ResponseBody
-    public List<String> getRecentTftMatchIds(@RequestParam String puuid) {
+    public List<String> getRecentTftMatchIds(@RequestParam String puuid, @RequestParam int start) {
         try {
-        	return tftApiService.getRecentTftMatchIds(puuid);
+        	return tftApiService.getRecentTftMatchIds(puuid, start);
         } catch (Exception e) {
             return List.of("소환사 정보를 가져오는 중 오류가 발생했습니다.");
         }
@@ -86,8 +86,9 @@ public class TFTApiController {
 		try {
 			// 서비스에서 소환사 정보 가져오기
 			Map<String, Object> summoner = tftApiService.getSummonerByPuuid(puuid);
+			// 나중에 puuid로 가져오는 api로 수정하기(결과 자체는 똑같음)
 			List<Map<String, Object>> leagueInfo = tftApiService.getTFTLeagueInfo(summonerId);
-			System.out.println(summoner);
+			
 			// 가져온 데이터를 JSP에 보내기
 			model.addAttribute("dto", leagueInfo.get(0)); // 첫 번째 데이터만 보낸다고 가정
 			model.addAttribute("gameName", gameName);

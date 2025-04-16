@@ -33,9 +33,8 @@ public class TFTApiServiceImp implements TFTApiService {
     }
 
     @Override
-    public List<String> getRecentTftMatchIds(String puuid) throws Exception {
+    public List<String> getRecentTftMatchIds(String puuid, int start) throws Exception {
     	//(start+1)번째 경기부터 시작해 count개까지
-    	int start = 0;
     	int count = 10;
         String url = String.format("https://asia.api.riotgames.com/tft/match/v1/matches/by-puuid/%s/ids?start="+start+"&count="+count+"&api_key=%s",
                                    puuid, apiKey);
