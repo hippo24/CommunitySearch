@@ -4,20 +4,21 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+	<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.min.js"></script>
 </head>
 <body>
-	<form action="<c:url value="/login"/>" method="post">	
+	<form action="<c:url value="/user/login"/>" method="post">	
 
 		<h1>로그인</h1>
 		<div class="form-group mt-3">
 			<label for="id" class="form-label">아이디</label> 
-			<input type="text" class="form-control" id="id" name="me_id">	
+			<input type="text" class="form-control" id="id" name="us_id" value="${id}">	
 		</div>
 
 		<div class="form-group mt-3">
 			<label for="pw" class="form-label">비밀번호</label> 
-			<input type="password" class="form-control" id="pw" name="me_pw">
+			<input type="password" class="form-control" id="pw" name="us_pw">
 		</div>
 		
 		<div class="form-check">

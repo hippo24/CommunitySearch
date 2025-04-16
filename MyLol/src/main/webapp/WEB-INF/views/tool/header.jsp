@@ -7,6 +7,9 @@
 <meta charset="UTF-8">
 </head>
 <body>
+
+
+<!-- 헤더를 따로 작성해서 로그인->이 헤더에서 바로(정보만 컨트롤러 통해 login.jsp로 넘겨서 로그인)하고 홈으로 돌아가기 버튼 정도만 남기기 (우선 tiles-def에서 헤더로 연결해야됨) -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
     <a class="navbar-brand" href="<c:url value="/" />">Home</a>

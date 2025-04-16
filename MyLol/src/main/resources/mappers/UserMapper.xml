@@ -12,4 +12,13 @@
 	 	select * from User where ${type} = #{checker}
 	</select>
 
+	<update id="updateUserCookie">
+		update user set us_cookie = #{user.us_cookie}, us_limit = #{user.us_limit} where us_id = #{user.us_id}
+	</update>
+	
+	<select id="selectUserByCookie" resultType="UserVO">
+		select * from user where us_cookie = #{us_cookie} and us_limit > now()
+	</select>
+	
+	
 </mapper>

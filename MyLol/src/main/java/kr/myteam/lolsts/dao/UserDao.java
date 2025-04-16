@@ -10,4 +10,8 @@ public interface UserDao {
 
 	UserVO selectUserBy(@Param("checker")String checker, @Param("type")String type);
 
+	boolean updateUserCookie(@Param("user")UserVO user);
+
+	UserVO selectUserByCookie(@Param("us_cookie")String us_cookie);
+
 }

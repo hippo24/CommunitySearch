@@ -1,0 +1,5 @@
+db.username=
+db.password=
+file.location=d:\\
+email.username=@
+email.password=

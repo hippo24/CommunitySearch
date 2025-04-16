@@ -8,4 +8,10 @@ public interface UserService {
 
 	boolean checkBy(String checker, String type);
 
+	UserVO login(UserVO user);
+
+	boolean updateUserCookie(UserVO newUser);
+
+	UserVO getUserByCookie(String cookieId);
+
 }

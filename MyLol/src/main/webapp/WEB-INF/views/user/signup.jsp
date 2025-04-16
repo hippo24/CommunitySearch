@@ -43,7 +43,7 @@
 			
 			<div class="form-group mt-3">
 			  <label for="name">유저명</label>
-			  <input type="text" class="form-control" id="name" name="us_name" value="${name}">	
+			  <input type="text" class="form-control" id="name" name="us_name">	
 			  <label id="checkName" class="red"></label>	
 			</div>
 			

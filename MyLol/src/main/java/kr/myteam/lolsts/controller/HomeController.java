@@ -38,8 +38,9 @@ public class HomeController {
 	
 	@GetMapping("/exampleTFT")
 	public String toolTFT() {
-		return "/tool/tftTool";
+	    return "exampleTFT"; 
 	}
+
 	
 	
 }
