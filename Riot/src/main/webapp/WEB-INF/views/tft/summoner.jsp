@@ -19,7 +19,7 @@ body {
 	width: 60px;
 	height: 60px;
 	object-fit: cover;
-	object-position: 90% top;
+	object-position: 75% top;
 	border-radius: 5px;
 }
 
@@ -64,15 +64,16 @@ body {
 	    Promise.all([
 	        fetch("https://ddragon.leagueoflegends.com/cdn/15.8.1/data/en_US/tft-tactician.json").then(res => res.json()),
 	        fetch("https://ddragon.leagueoflegends.com/cdn/15.8.1/data/ko_KR/tft-item.json").then(res => res.json()),
-	        fetch("https://ddragon.leagueoflegends.com/cdn/15.7.1/data/ko_KR/tft-trait.json").then(res => res.json())
-	    ]).then(([tacticianRes, itemRes, traitRes]) => {
+	        fetch("https://ddragon.leagueoflegends.com/cdn/15.7.1/data/ko_KR/tft-trait.json").then(res => res.json()),
+	        fetch("https://ddragon.leagueoflegends.com/cdn/15.7.1/data/ko_KR/tft-champion.json").then(res => res.json())
+	    ]).then(([tacticianRes, itemRes, traitRes, championRes]) => {
 	        tacticianData = tacticianRes.data;
 	        itemData = itemRes.data;
 	        traitData = traitRes.data;
-			console.log(tacticianData);
-			console.log(traitData);
+	        championData = championRes.data;
+			//console.log(itemData);
+				
 	        // 데이터를 다 불러온 후, 이제 경기를 출력
-	        //fetchMatchDetails(matchIds, 0, puuid);
 			let start = 0;
 		    let gameName = "";
 		    let tagLine = "";
@@ -190,7 +191,6 @@ body {
         if (index >= matchIds.length) return; // 모든 경기를 처리했으면 종료
 
         var matchId = matchIds[index];
-    	console.log(matchId);
         $.ajax({
         	async : false,
             url: '<c:url value="/tft/matchDetail"/>',
@@ -223,39 +223,63 @@ body {
 							matchDetailHtml += '</figure></div>';
 								
                            	matchDetailHtml += '<strong>사용 유닛:</strong><ul>';
-                            
-                            //API에서 이름을 JSON과 다른 이름으로 가져오는 경우가 있음.
-                            const championImageNameMap = {"Chogath": "ChoGath"};
+                           	const championMetaMap = {}; //챔피언
+                           	const itemDataById = {};	//아이템
+                           	for (const key in championData) {
+                           	    const champ = championData[key];
+                           	    championMetaMap[champ.id] = champ;
+                           	}
+                           	for (const key in itemData) {
+                           	    const item = itemData[key];
+                           	    if (item.id) {
+                           	        itemDataById[item.id] = item;
+                           	    }
+                           	}
+
                             if (player.units && player.units.length > 0) {
                                 player.units.forEach(function(unit) {
-	                            	
-	                            	//이미지 정보가 없는 유닛들은 표시하지 않기로 함.
-	                            	if (unit.character_id.startsWith("TFT14_Summon")) {
-	                            	    return;
-	                            	}
-	                            	// "TFT14_" 제거해서 순수 챔피언 이름만 추출
-	                                var rawName = unit.character_id.replace("TFT14_", "");
-	                            	
-	                            	// 매핑이 있으면 수정된 이름 사용 ex) Chogath => ChoGath
-	                                var correctedName = championImageNameMap[rawName] || rawName;
-	                            	
-	                             	// 다시 "TFT14_" 붙여서 이미지 URL 생성
-	                                var champImageUrl = "https://ddragon.leagueoflegends.com/cdn/15.7.1/img/tft-champion/TFT14_" 
-	                                    + correctedName + ".TFT_Set14.png";	
+                                	//console.log(unit);
+                                	//console.log(championMetaMap[unit.character_id]);
+	                            	// 소환수는 0 코스트 취급. 테두리는 1코스트처럼 두기.
+	                            	if (unit.character_id.startsWith("TFT14_Summon")){unit.rarity = 0; };
+
+								  	// championMetaMap에서 유닛 데이터 찾기
+								  	const champMeta = championMetaMap[unit.character_id];
+								
+								  	if (!champMeta) return; // 매칭 안 되면 스킵
+								
+								  	const champName = champMeta.name;
+								  	const champTier = champMeta.tier;
+								  	const champImageUrl = "https://ddragon.leagueoflegends.com/cdn/15.7.1/img/tft-champion/" + champMeta.image.full;
 		                            	
 	                            	var borderColor; //이미지만 감싸는 div 태그에 스타일 넣기 위함
 	                            	switch (unit.rarity) {
 	                                    case 0: borderColor = 'gray'; break;
 	                                    case 1: borderColor = 'lightgreen'; break;
-	                                    case 2: borderColor = 'skyblue'; break;
+	                                    case 2: borderColor = 'blue'; break;
 	                                    case 4: borderColor = 'purple'; break;
 	                                    case 6: borderColor = 'gold'; break;
 	                                    default: borderColor = 'transparent';
 	                            	}	
 		                                
 	                            	matchDetailHtml += '<div style="display: inline-block; text-align: center; margin-right: 8px;">';
-	                                matchDetailHtml += '<img src="' + champImageUrl + '" class="champ-img" alt="' + correctedName + '" width="55" style="border: 4px solid ' + borderColor + '; vertical-align: middle;">';
+	                                matchDetailHtml += '<img src="' + champImageUrl + '" class="champ-img" alt="' + champName + '" width="55" style="border: 4px solid ' + borderColor + '; vertical-align: middle;">';
+	                                
+	                                
+	                             	// 아이템 이미지들 출력
+	                                if (unit.itemNames && unit.itemNames.length > 0) {
+	                                    matchDetailHtml += '  <div style="margin-top: 4px;">';
+	                                    unit.itemNames.forEach(function(itemId) {
+	                                        const itemMeta = itemDataById[itemId];
+	                                        if (!itemMeta) return;
+
+	                                       const itemImgUrl = "https://ddragon.leagueoflegends.com/cdn/15.8.1/img/tft-item/" + itemMeta.image.full;;
+	                                        matchDetailHtml += '<img src="' + itemImgUrl + '" alt="' + itemMeta.name + '" width="22" height="22" style="margin: 1px; border-radius: 4px;">';
+	                                    });
+	                                    matchDetailHtml += '  </div>';
+	                                }
 	                                matchDetailHtml += '<div>' + '★' + unit.tier + '</div>';
+	                                
 	                                matchDetailHtml += '</div>';
                                 });
                             } else {
@@ -330,7 +354,7 @@ body {
                 }
                 // 다음 경기 ID로 넘어가기
                 fetchMatchDetails(matchIds, index + 1, puuid);
-                
+
             },
             error: function() {
                 $('#gameInfo').append('<p style="color: red;">경기 ID ' + matchId + '의 데이터를 가져오는 중 오류가 발생했습니다.</p>');
@@ -342,17 +366,8 @@ body {
                 const btn = '<button class="btn btn-outline-success btn-more">더보기</button>';
                 $('#gameInfo').append(btn);
             }
-
-        });
-        
+        });  
     }
-    
-    
-    </script>
-
-	<script type="text/javascript">
-	    
-	   
     </script>
 </body>
 </html>
