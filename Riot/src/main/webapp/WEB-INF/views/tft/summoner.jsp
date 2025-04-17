@@ -251,7 +251,7 @@ request.setAttribute("pageType", "lol");
 							                                '<div class="unit-image unit" style="border-color: '+ borderColor + '">'+
 		                            							//챔피언
 		                            							'<img src="' + champImageUrl + '" class="champ-img " alt="' + champName + '" />'+
-		                            							'<div class="tooltip">'+champName+'</div>'+
+		                            							
                             								'</div>'+
                                     						'<div class="unit-items item">';
 	                             	// 아이템 이미지들 출력
@@ -262,8 +262,10 @@ request.setAttribute("pageType", "lol");
 	                                        if (!itemMeta) return;
 	                                       	const itemImgUrl = "https://ddragon.leagueoflegends.com/cdn/15.8.1/img/tft-item/" + itemMeta.image.full;;
 	                                        //아이템
-	                                       	matchDetailHtml += '<img src="' + itemImgUrl + '" alt="' + itemMeta.name + '" />'+
-	                                       						'<div class="tooltip">'+itemMeta.name+'</div>';
+	                                       	matchDetailHtml += '<div class="item-wrapper">' +
+						                                        '<img src="' + itemImgUrl + '" alt="' + itemMeta.name + '" />' +
+						                                        '<div class="tooltip">' + itemMeta.name + '</div>' +
+						                                    '</div>';
 	                                    });
 	                                }
 	                                matchDetailHtml += '</div></div>';
