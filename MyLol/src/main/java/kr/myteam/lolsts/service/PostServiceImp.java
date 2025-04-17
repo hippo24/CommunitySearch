@@ -177,15 +177,15 @@ public class PostServiceImp implements PostService{
 				return true;
 			}
 			//x버튼 눌러서 제거한 첨부파일 제거
-			for(int fi_num : delNums) {
-				FileVO fileVo = postDao.selectFile(fi_num);
+			for(int fi_key : delNums) {
+				FileVO fileVo = postDao.selectFile(fi_key);
 				deleteFile(fileVo);
 			}
 			
 			return true;
 		}
 
-	private void uploadFile(MultipartFile file, int po_num) {
+	private void uploadFile(MultipartFile file, int po_key) {
 		String fi_ori_name = file.getOriginalFilename();
 		//파일명이 없으면
 		if(fi_ori_name == null || fi_ori_name.length() == 0) {
@@ -193,7 +193,7 @@ public class PostServiceImp implements PostService{
 		}
 		try {
 			String fi_name = UploadFileUtils.uploadFile(uploadPath, fi_ori_name, file.getBytes());
-			FileVO fileVo = new FileVO(fi_ori_name, fi_name, po_num);
+			FileVO fileVo = new FileVO(fi_ori_name, fi_name, po_key);
 			postDao.insertFile(fileVo);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -208,6 +208,6 @@ public class PostServiceImp implements PostService{
 		UploadFileUtils.deleteFile(uploadPath, fileVo.getFi_name());
 		
 		//db에서 해당 첨부파일을 삭제
-		postDao.deleteFile(fileVo.getFi_num());
+		postDao.deleteFile(fileVo.getFi_key());
 	}
 }

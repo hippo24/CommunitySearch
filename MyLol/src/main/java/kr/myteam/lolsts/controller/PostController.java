@@ -31,17 +31,24 @@ public class PostController {
 	private PostService postService;
 	
 	@GetMapping("/list")
-	public String list(Model model, PostCriteria cri) {
-		cri.setPerPageNum(2);
+	public String list(Model model, PostCriteria cri, Integer num) {
+		//cri.setPerPageNum(2);
 		List<PostVO> list = postService.getPostList(cri);
 		
 		List<BoardVO> boardList = postService.getBoardList();
 		
 		PageMaker pm = postService.getPageMaker(cri);
 		
-		model.addAttribute("list", list);
+		int lastBoardNum = boardList.get(boardList.size()-1).getBo_key();
+				
+		num = num == null ? 0 : num;
+		if(num<0 || lastBoardNum < num) num = 0;
+		
+		model.addAttribute("postList", list);
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("pm", pm);
+		model.addAttribute("boardNum", num);
+		
 		
 		return "/post/list";
 	}
@@ -82,7 +89,7 @@ public class PostController {
 		List<FileVO> list = postService.getFileList(po_key);
 		
 		model.addAttribute("post", post);
-		model.addAttribute("list", list);
+		model.addAttribute("fileList", list);
 		return "/post/detail";
 	}
 	
@@ -114,7 +121,7 @@ public class PostController {
 		List<FileVO> list = postService.getFileList(po_key);
 		
 		model.addAttribute("post", post);
-		model.addAttribute("list", list);
+		model.addAttribute("fileist", list);
 		return "/post/update";
 	}
 	
@@ -141,5 +148,26 @@ public class PostController {
 		return postService.updateLike(like, user);
 	}*/
 
-	
+	@GetMapping("/duo")
+	public String duo(Model model, PostCriteria cri, Integer num) {
+		cri.setPerPageNum(2);
+		List<PostVO> list = postService.getPostList(cri);
+		
+		List<BoardVO> boardList = postService.getBoardList();
+		
+		PageMaker pm = postService.getPageMaker(cri);
+		
+		int lastBoardNum = boardList.get(boardList.size()-1).getBo_key();
+				
+		num = num == null ? 0 : num;
+		if(num<0 || lastBoardNum < num) num = 0;
+		
+		model.addAttribute("postList", list);
+		model.addAttribute("boardList", boardList);
+		model.addAttribute("pm", pm);
+		model.addAttribute("boardNum", num);
+		
+		
+		return "/post/duo";
+	}
 }

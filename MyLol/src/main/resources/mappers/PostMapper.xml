@@ -22,13 +22,9 @@
 	</delete>
 	
 	
-	<update id="updateBoard">
-		update board 
-		set
-			bo_name = #{board.bo_name}
-		where
-			bo_key = #{board.bo_key}
-	</update>
+	
+	
+	
 	<insert id="insertPost" useGeneratedKeys="true" keyProperty="post.po_key">
 		insert into post(po_title, po_content, po_us_key, po_bo_key)
 		values(#{post.po_title}, #{post.po_content}, #{post.po_us_key}, #{post.po_bo_key})
@@ -54,13 +50,40 @@
 		where
 			po_key = #{post.po_key}
 	</update>
-	<update id="updateView">
-		update post
-		set
-			po_view = po_view + 1
-		where
-			po_key = #{po_key}
-	</update>
+
+	<select id="selectPostList" resultType="PostVO">
+		select post.*, bo_name as po_bo_name 
+		from post
+		join board on po_bo_key = bo_key 
+		where po_upd &lt; now()
+		<if test="criteria.bo_key != 0">
+			and po_bo_key = #{criteria.bo_key}
+		</if>
+		<choose>
+			<when test="criteria.type == 'all'">
+				and (po_title like concat('%', #{criteria.search}, '%')
+					or po_content like concat('%', #{criteria.search}, '%')
+					or po_me_id = #{criteria.search}
+				)
+			</when>
+			<when test="criteria.type == 'title'">
+				and (po_title like concat('%', #{criteria.search}, '%')
+				)
+			</when>
+			<when test="criteria.type == 'content'">
+				and (po_title like concat('%', #{criteria.search}, '%')
+					or po_content like concat('%', #{criteria.search}, '%')
+				)
+			</when>
+			<when test="criteria.type == 'name'">
+				and po_me_id = #{criteria.search}
+			</when>
+		</choose>
+		order by po_key desc
+		limit #{criteria.pageStart},#{criteria.perPageNum}
+	</select>
+
+	
 	<insert id="insertFile">
 		insert into file(fi_ori_name, fi_name, fi_po_key)
 		values(#{file.fi_ori_name},#{file.fi_name},#{file.fi_po_key})
@@ -74,26 +97,28 @@
 	<select id="selectFile" resultType="FileVO">
 		select * from file where fi_key = #{fi_key}	
 	</select>
+
+
 	<select id="selectCountPostList" resultType="int">
 		select 
 			count(*)
 		from post
-		where  po_del = "N"
-		<if test="cri.po_bo_key != 0"> 
-			and po_bo_key = #{cri.po_bo_key}
+		where po_upd &lt; now()
+		<if test="criteria.po_bo_key != 0"> 
+			and po_bo_key = #{criteria.po_bo_key}
 		</if>
 		<choose>
-			<when test="cri.type == 0">
-				and (po_title like concat('%', #{cri.search}, '%') 
-				or po_content like concat('%', #{cri.search}, '%') 
-				or po_us_key = #{cri.search})
+			<when test="criteria.type == 0">
+				and (po_title like concat('%', #{criteria.search}, '%') 
+				or po_content like concat('%', #{criteria.search}, '%') 
+				or po_us_key = #{criteria.search})
 			</when>
-			<when test="cri.type == 1">
-				and (po_title like concat('%', #{cri.search}, '%') 
-				or po_content like concat('%', #{cri.search}, '%'))
+			<when test="criteria.type == 1">
+				and (po_title like concat('%', #{criteria.search}, '%') 
+				or po_content like concat('%', #{criteria.search}, '%'))
 			</when>
-			<when test="cri.type == 2">
-				and po_us_key = #{cri.search}
+			<when test="criteria.type == 2">
+				and po_us_key = #{criteria.search}
 			</when>
 		</choose>
 	</select>

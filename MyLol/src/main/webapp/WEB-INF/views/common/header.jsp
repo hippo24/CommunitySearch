@@ -58,14 +58,16 @@
 			      <a class="dropdown-item dropdown-toggle" href="#">커뮤니티게시판</a>
 			      <div class="dropdown-menu">
 			      	<!-- 인터셉터로 모든 페이지 갈 때마다 게시판 메뉴를 session에 뿌려주고 그걸 foreach로 받아옴(게시판 구분은 뒤에 숫자로) -> 이렇게 하는 이유는 각 게시판에도 좌측 메뉴에 띄울거기때문(듀오모집은 별개) -->
-			        <a class="dropdown-item" href="<c:url value='/exampleboard/1' />">게시판1</a>
-			        <a class="dropdown-item" href="<c:url value='/exampleboard/2' />">게시판2</a>
-			        <a class="dropdown-item" href="<c:url value='/exampleboard/3' />">게시판3</a>
+			        <a class="dropdown-item" href="<c:url value='/post/list?num=0' />">전체 게시판</a>
+			       	<c:forEach items="${boardList}" var="board">
+			        	<a class="dropdown-item" href="<c:url value='/post/list?num=${board.bo_key}' />">게시판 ${board.bo_key} = ${board.bo_name }</a>
+
+					</c:forEach>			       
 			      </div>
 			    </div>
 			
 			    <!-- 일반 메뉴 -->
-			    <a class="dropdown-item" href="<c:url value='/exampleDUO' />">듀오모집게시판1</a>
+			    <a class="dropdown-item" href="<c:url value='/post/duo' />">듀오모집게시판1</a>
 			    <a class="dropdown-item" href="<c:url value='/exampleTFT' />">TFT 배치 툴</a>
 			  </div>
 			</li>

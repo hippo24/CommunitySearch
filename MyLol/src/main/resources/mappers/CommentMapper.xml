@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.kh.spring.dao.CommentDAO">
+	
+	<insert id="insertComment">
+		insert into comment(co_key, co_content, co_us_id, co_ori_key, co_po_key)
+		select 
+			ifnull(max(co_key),0) + 1, 
+			#{comment.co_content}, 
+			#{comment.co_us_id},
+			<choose>
+				<when test="comment.co_ori_key eq 0">
+					ifnull(max(co_key),0) + 1,	
+				</when>
+				<otherwise>
+					#{comment.co_ori_key},
+				</otherwise>
+			</choose>
+			#{comment.co_po_key}
+		from comment
+	</insert>
+	<select id="selectCommentList" resultType="CommentVO">
+		select * from comment 
+		where co_po_key = #{cri.search}
+		order by co_ori_key desc, co_key
+		limit #{cri.pageStart}, #{cri.perPageNum}
+	</select>
+	<select id="selectComment" resultType="CommentVO">
+		select * from comment where co_key = #{co_key} and co_upd &lt; now()
+	</select>
+	<update id="deleteComment">
+		update comment set co_upd = DATE_ADD(now(), INTERVAL 100 YEAR) where co_key = #{co_key}
+	</update>
+	<select id="selectCountCommentList" resultType="int">
+		select count(*) from comment 
+		where co_po_key = #{cri.search}
+	</select>
+	<update id="updateComment">
+		update comment set co_content = #{comment.co_content} where co_key = #{comment.co_key}
+	</update>
+</mapper>

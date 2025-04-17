@@ -37,10 +37,10 @@ public interface PostDao {
 
 	FileVO selectFile(@Param("fi_key")int fi_key);
 
-	int selectCountPostList(@Param("cri")Criteria cri);
+	int selectCountPostList(@Param("criteria")Criteria cri);
 
 	void updateUpDown(@Param("po_key")int po_key);
 
-	List<PostVO> selectPostList(@Param("cri")Criteria cri);
+	List<PostVO> selectPostList(@Param("criteria")Criteria cri);
 
 }
