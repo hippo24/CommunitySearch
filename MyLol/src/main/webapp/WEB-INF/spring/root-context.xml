@@ -32,8 +32,7 @@
 	<mybatis-spring:scan base-package="kr.myteam.lolsts.dao"/>
 
 		
-	<!-- root-context.xml -->
-	<!-- 
+	<!-- 메일 정보 -->
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 	    <property name="host" value="smtp.gmail.com" />
 	    <property name="port" value="587" />
@@ -48,7 +47,7 @@
 	            <prop key="mail.smtp.ssl.protocols">TLSv1.2</prop>
 	        </props>
 	    </property>
-	</bean>	 -->
+	</bean>	
 		
 
 </beans>

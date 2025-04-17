@@ -158,5 +158,35 @@ public class UserController {
 		return "message";
 	}
 	
+	@GetMapping("/find/pw")
+	public String findPw() {
+		return "/user/pw";
+	}
+	
+	@ResponseBody
+	@PostMapping("/find/pw")
+	public boolean findPwPost(@RequestParam String id) {
+		System.out.println(id);
+		return userService.findPw(id);
+	}
+	
+	@GetMapping("/mypage")
+	public String mypage() {
+		return "/user/mypage";		//이메일도 수정하게
+	}
+	
+	@PostMapping("/mypage")
+	public String mypagePost(Model model, UserVO member, HttpSession session) {
+		UserVO user = (UserVO)session.getAttribute("user");
+		if(userService.updateUser(user, member)) {
+			model.addAttribute("msg","회원 정보 변경.");
+		}else {
+			model.addAttribute("msg","회원 정보 변경 실패.");
+		}
+		model.addAttribute("url","/mypage");
+		
+		return "/msg/msg";		//알림창 띄우기 위해 msg.jsp로
+	}
+	
 	
 }

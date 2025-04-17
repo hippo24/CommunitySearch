@@ -29,7 +29,7 @@
 
 		<button type = "submit" class="btn btn-outline-success mt-3 col-12">로그인</button>
 	</form>
-	<a href="<c:url value="/find/pw"/>">비밀번호 찾기</a>
+	<a href="<c:url value="/user/find/pw"/>">비밀번호 찾기</a>
 
 </body>
 </html>

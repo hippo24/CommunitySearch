@@ -14,4 +14,8 @@ public interface UserService {
 
 	UserVO getUserByCookie(String cookieId);
 
+	boolean findPw(String id);
+
+	boolean updateUser(UserVO user, UserVO member);
+
 }

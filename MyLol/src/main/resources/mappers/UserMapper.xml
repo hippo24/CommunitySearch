@@ -13,12 +13,16 @@
 	</select>
 
 	<update id="updateUserCookie">
-		update user set us_cookie = #{user.us_cookie}, us_limit = #{user.us_limit} where us_id = #{user.us_id}
+		update user set us_cookie = #{user.us_cookie}, us_limit = #{user.us_limit} where us_key = #{user.us_key}
 	</update>
 	
 	<select id="selectUserByCookie" resultType="UserVO">
 		select * from user where us_cookie = #{us_cookie} and us_limit > now()
 	</select>
+	
+	<update id="updateUser">
+		update user set US_PW = #{user.us_pw}, US_NAME = #{user.us_name}, US_EMAIL = #{user.us_email} where us_key = #{user.us_key}
+	</update>
 	
 	
 </mapper>

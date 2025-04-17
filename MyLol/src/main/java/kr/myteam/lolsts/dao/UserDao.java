@@ -14,4 +14,6 @@ public interface UserDao {
 
 	UserVO selectUserByCookie(@Param("us_cookie")String us_cookie);
 
+	boolean updateUser(@Param("user")UserVO user);
+
 }
