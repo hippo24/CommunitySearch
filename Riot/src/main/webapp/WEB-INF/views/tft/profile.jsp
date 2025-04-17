@@ -19,7 +19,7 @@
 <body>
     <div id="summonerProfile" style="margin-top: 20px;">
         <!-- 소환사 정보가 여기에 표시됩니다. -->
-        <div class="infoBox form-control mt-3 mb-3 d-flex align-items-center">'
+        <div class="infoBox form-control mt-3 mb-3 d-flex align-items-center">
         	<img class="mr-3 rounded-circle me-3" src="http://ddragon.leagueoflegends.com/cdn/14.6.1/img/profileicon/${summoner.profileIconId}.png" alt="프로필 아이콘" width="64" height="64">
 			<div>
 			    <div class="fw-bold fs-5 mb-1">${gameName}#${tagLine}</div>
