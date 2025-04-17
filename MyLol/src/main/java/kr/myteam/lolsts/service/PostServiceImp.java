@@ -85,12 +85,13 @@ public class PostServiceImp implements PostService{
 				return false;
 			}
 			post.setPo_us_key(user.getUs_key());
+			System.out.println(post);
 			boolean res = postDao.insertPost(post);
-			
+			System.out.println(post);
 			if(!res) {
 				return false;
 			}
-			
+			 
 			if(fileList == null || fileList.length == 0) {
 				return true;
 			}

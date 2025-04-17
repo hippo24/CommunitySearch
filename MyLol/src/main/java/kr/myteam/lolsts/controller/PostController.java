@@ -32,6 +32,17 @@ public class PostController {
 	private PostService postService;
 	
 	@GetMapping("/list")
+	public String list(Model model) {
+		
+		//게시판 목록을 서비스에게 요청하여 가져온 후 화면에 전송
+		List<BoardVO> boardList = postService.getBoardList();
+		model.addAttribute("boardList", boardList);
+		
+		return "/post/list";		//"post/list" 처럼 슬래시 빼먹을 경우 타일즈 적용 안됨...
+	}
+	
+	/*
+	@PostMapping("/list")
 	public String list(Model model, PostCriteria cri, Integer num) {
 		//cri.setPerPageNum(2);
 		List<PostVO> list = postService.getPostList(cri);
@@ -52,6 +63,19 @@ public class PostController {
 		
 		
 		return "/post/list";
+	}
+	*/
+	@PostMapping("/list")
+	public Object PostList(Model model, @RequestBody PostCriteria cri) {			
+		cri.setPerPageNum(2);
+		List<PostVO> postList = postService.getPostList(cri);
+		PageMaker pm = postService.getPageMaker(cri);
+		
+		model.addAttribute("postList", postList);
+		model.addAttribute("pm",pm);
+		
+		
+		return"post/sub";					
 	}
 	
 	@GetMapping("/insert")

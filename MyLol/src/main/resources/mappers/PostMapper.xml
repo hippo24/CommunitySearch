@@ -6,7 +6,7 @@
 
   
 	<select id="selectBoardList" resultType="BoardVO">
-		select * from board order by bo_key	
+		select * from board order by bo_key	asc
 	</select>
 	
 	<insert id="insertBoard">
@@ -32,9 +32,10 @@
 	
 	<select id="selectPost" resultType="PostVO">
 		select 
-			post.*, bo_name as po_bo_name 
+			post.*, bo_name as po_bo_name, us_name as po_us_name from post
 		from post
 		join board on po_bo_key = bo_key 
+		join user on us_key = po_us_key
 		where po_key = #{po_key} and PO_UPD &lt; now()
 	</select>
 	
@@ -47,42 +48,27 @@
 		set
 			po_title = #{post.po_title},
 			po_content = #{post.po_content}
+			po_bo_key = #{post.po_bo_key}
 		where
 			po_key = #{post.po_key}
 	</update>
 
 	<select id="selectPostList" resultType="PostVO">
-		select post.*, bo_name as po_bo_name 
-		from post
-		join board on po_bo_key = bo_key 
+		select post.*, fi_name as po_fi_name, us_name as po_us_name from post
+		left join file on po_key = fi_po_key
+		join user on po_us_key = us_key
+		
 		where po_upd &lt; now()
-		<if test="criteria.bo_key != 0">
-			and po_bo_key = #{criteria.bo_key}
+		<if test="criteria.po_bo_key != 0">
+			and po_bo_key = #{criteria.po_bo_key}
 		</if>
-		<choose>
-			<when test="criteria.type == 'all'">
-				and (po_title like concat('%', #{criteria.search}, '%')
-					or po_content like concat('%', #{criteria.search}, '%')
-					or po_me_id = #{criteria.search}
-				)
-			</when>
-			<when test="criteria.type == 'title'">
-				and (po_title like concat('%', #{criteria.search}, '%')
-				)
-			</when>
-			<when test="criteria.type == 'content'">
-				and (po_title like concat('%', #{criteria.search}, '%')
-					or po_content like concat('%', #{criteria.search}, '%')
-				)
-			</when>
-			<when test="criteria.type == 'name'">
-				and po_me_id = #{criteria.search}
-			</when>
-		</choose>
-		order by po_key desc
-		limit #{criteria.pageStart},#{criteria.perPageNum}
-	</select>
+		group by po_key
+		order by ${criteria.orderBy}
+		limit #{criteria.pageStart}, #{criteria.perPageNum}
+		
 
+				
+	</select>
 	
 	<insert id="insertFile">
 		insert into file(fi_ori_name, fi_name, fi_po_key)
@@ -100,27 +86,10 @@
 
 
 	<select id="selectCountPostList" resultType="int">
-		select 
-			count(*)
-		from post
-		where po_upd &lt; now()
-		<if test="criteria.po_bo_key != 0"> 
+		select count(*) from post where po_upd &lt; now() 
+		<if test="criteria.po_bo_key != 0">
 			and po_bo_key = #{criteria.po_bo_key}
 		</if>
-		<choose>
-			<when test="criteria.type == 0">
-				and (po_title like concat('%', #{criteria.search}, '%') 
-				or po_content like concat('%', #{criteria.search}, '%') 
-				or po_us_key = #{criteria.search})
-			</when>
-			<when test="criteria.type == 1">
-				and (po_title like concat('%', #{criteria.search}, '%') 
-				or po_content like concat('%', #{criteria.search}, '%'))
-			</when>
-			<when test="criteria.type == 2">
-				and po_us_key = #{criteria.search}
-			</when>
-		</choose>
 	</select>
 	
 </mapper>

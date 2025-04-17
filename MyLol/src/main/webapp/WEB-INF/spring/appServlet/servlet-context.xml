@@ -69,8 +69,8 @@
 		</interceptor>
 		
 		<interceptor>
-			<mapping path="/login"/>
-			<mapping path="/signup"/>
+			<mapping path="/user/login"/>
+			<mapping path="/user/signup"/>
 			<beans:ref bean="guestInterceptor"/>
 		</interceptor>
 		

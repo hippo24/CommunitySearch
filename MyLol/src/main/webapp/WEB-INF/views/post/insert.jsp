@@ -20,7 +20,7 @@
 			<form action="<c:url value="/post/insert"/>" method="post" enctype="multipart/form-data"> 
 				<div class="form-group mt-3">
 					<label for="board" class="form-label">게시판</label> 
-					<select class="form-control" id="board" name="po_bo_num">
+					<select class="form-control" id="board" name="po_bo_key">
 					  	<c:forEach items="${boardList}" var="board">
 					  		<option value="${board.bo_key}" <c:if test="${board.bo_key eq bo_key }">selected</c:if> >
 					  			${board.bo_name }

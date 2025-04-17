@@ -47,10 +47,11 @@ public class UserController {
 	@GetMapping("/login")
 	public String login(Model model, String id, HttpServletRequest request) {
 		String prevUrl = request.getHeader("Referer");
-		if(prevUrl != null && !prevUrl.contains("/login")) {		
+		if(prevUrl != null && !prevUrl.contains("/user/login")) {		
 			request.getSession().setAttribute("prevUrl", prevUrl);	
 		}
 		model.addAttribute("id", id);
+		System.out.println(id);
 		return "/user/login";
 	}
 	
@@ -61,6 +62,7 @@ public class UserController {
 		if(userService.signup(user)) {				//성공시
 			model.addAttribute("msg", "회원 가입을 했습니다.");
 			model.addAttribute("url", "/");
+			
 			//return "redirect:/";			//나중에 이부분 제거
 		}else {
 			model.addAttribute("url", "/user/signup?id=" + user.getUs_id());
@@ -108,8 +110,10 @@ public class UserController {
 
 	    if (newUser != null) {
 	        HttpSession session = request.getSession();
-	        session.setAttribute("user", newUser);
 
+	        newUser.setAuto(user.isAuto());
+	        session.setAttribute("user", newUser);
+	        
 	        // 자동 로그인 설정
 	        if (user.isAuto()) {
 	            Cookie cookie = new Cookie("LC", session.getId());
@@ -123,6 +127,7 @@ public class UserController {
 	            userService.updateUserCookie(newUser);
 	        }
 	        
+	        model.addAttribute("url","/");
 	        model.addAttribute("msg", "로그인 성공.");
 	        return "message";  // 성공 시 메인으로
 	    } else {

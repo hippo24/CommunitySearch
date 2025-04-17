@@ -12,8 +12,9 @@ public class PostVO {
 	String po_content;
 	Date po_time, po_upd;
 	String po_bo_name;
-	String po_del;
 	
+	String po_fi_name;
 	
+	String po_us_name;
 	
 }

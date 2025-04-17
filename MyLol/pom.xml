@@ -41,6 +41,13 @@
 			<version>${org.aspectj-version}</version>
 		</dependency>	
 		
+		<!-- log4j2 -->
+		<dependency>
+			<groupId>org.bgee.log4jdbc-log4j2</groupId>
+			<artifactId>log4jdbc-log4j2-jdbc4</artifactId>
+			<version>1.16</version>
+		</dependency>		
+		
 		<!-- Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -239,12 +246,7 @@
 		    <artifactId>jackson-annotations</artifactId>
 		    <version>2.15.2</version>
 		</dependency>
-		<!-- log4j -->
-		<dependency>
-			<groupId>org.bgee.log4jdbc-log4j2</groupId>
-			<artifactId>log4jdbc-log4j2-jdbc4</artifactId>
-			<version>1.16</version>
-		</dependency>		
+	
 		
 		
 <!--                                                                 -->		      

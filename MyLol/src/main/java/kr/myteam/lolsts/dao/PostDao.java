@@ -27,8 +27,6 @@ public interface PostDao {
 
 	boolean updatePost(@Param("post")PostVO post);
 
-	void updateView(@Param("po_key")int po_key);
-
 	void insertFile(@Param("file")FileVO fileVo);
 
 	List<FileVO> selectFileList(@Param("po_key")int po_key);
@@ -38,8 +36,6 @@ public interface PostDao {
 	FileVO selectFile(@Param("fi_key")int fi_key);
 
 	int selectCountPostList(@Param("criteria")Criteria cri);
-
-	void updateUpDown(@Param("po_key")int po_key);
 
 	List<PostVO> selectPostList(@Param("criteria")Criteria cri);
 
