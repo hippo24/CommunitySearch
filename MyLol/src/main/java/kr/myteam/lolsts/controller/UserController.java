@@ -122,8 +122,9 @@ public class UserController {
 	            newUser.setUs_limit(date);
 	            userService.updateUserCookie(newUser);
 	        }
-
-	        return "redirect:/";  // 성공 시 메인으로
+	        
+	        model.addAttribute("msg", "로그인 성공.");
+	        return "message";  // 성공 시 메인으로
 	    } else {
 	        model.addAttribute("msg", "로그인에 실패했습니다.");
 	        model.addAttribute("url", "/user/login?id=" + user.getUs_id());

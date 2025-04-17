@@ -22,6 +22,7 @@ import kr.myteam.lolsts.model.vo.UserVO;
 import kr.myteam.lolsts.pagination.PageMaker;
 import kr.myteam.lolsts.pagination.PostCriteria;
 import kr.myteam.lolsts.service.PostService;
+import lombok.extern.log4j.Log4j;
 
 @Controller
 @RequestMapping("/post")

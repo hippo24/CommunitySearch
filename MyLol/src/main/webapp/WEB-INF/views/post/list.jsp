@@ -9,7 +9,7 @@
 		/* 사이드바 고정 위치 */
 		.sidebar-sticky {
 		  position: sticky;
-		  top: 100px; 
+		  top: 100px; /* 상단 고정 기준 (네비게이션이 있다면 약간 아래로) */
 		  max-height: 80vh;
 		  overflow-y: auto;
 		}
@@ -49,7 +49,7 @@
 	<div class="container-fluid">
 	  <div class="row">
 	    
-	    <!-- 좌측 사이드바 -->
+	    <!-- 좌측 사이드바 
 	   <div class="col-md-3">
 	      <div class="sidebar-sticky border rounded p-3 bg-light">
 	        <h5>게시판</h5>
@@ -61,6 +61,7 @@
 	        </c:forEach>
 	      </div>
 	    </div>
+	    -->
 	    
 	    <!-- 우측 게시글 컨텐츠 -->
 	    <div class="col-md-9">

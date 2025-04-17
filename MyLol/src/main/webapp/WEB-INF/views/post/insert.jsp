@@ -4,24 +4,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs4.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs4.min.js"></script>
+    
 	<style type="text/css">
-		.file-label>.base-img{
-			display : block;
-			width: 150px; height: 200px; border: 3px solid black;
-			text-align: center; line-height: 190px; font-size: 50px;
-			
-		}
-		.file-label>img{
-			display: none;
-		}
-		.file-label>input{
-			display: none;
-		}
-		.base-img:hover{
-			background-color: slategray;
-		}
+
 	
 	</style>
 
@@ -31,10 +20,12 @@
 			<form action="<c:url value="/post/insert"/>" method="post" enctype="multipart/form-data"> 
 				<div class="form-group mt-3">
 					<label for="board" class="form-label">게시판</label> 
-					<select class="form-control" id="board" name="po_bo_key">
-						<c:forEach items="${boardList}" var="board">
-							<option value="${board.bo_key}">${board.bo_name}</option>
-						</c:forEach>
+					<select class="form-control" id="board" name="po_bo_num">
+					  	<c:forEach items="${boardList}" var="board">
+					  		<option value="${board.bo_key}" <c:if test="${board.bo_key eq bo_key }">selected</c:if> >
+					  			${board.bo_name }
+					  		</option>
+					  	</c:forEach>
 					</select>		
 				</div>
 		
@@ -43,28 +34,16 @@
 					<input type="text" class="form-control" id="title" name="po_title">	
 				</div>
 		
-				<!-- 이번엔 내용은 생략 -->
-		
-				<div class="form-group mt-3">
-					<div class="form-label">첨부파일</div> 
-					<label class="file-label mr-3">
-						<span class="base-img">+</span>
-						<img alt="" src="" class="sel-img" width="150" height="200"><!-- 미리보기용 -->
-						<input type="file" class="form-control" name="fileList" accept="image/*"><!-- image로 제한 -->
-					</label>
-					<label class="file-label mr-3">
-						<span class="base-img">+</span>
-						<img alt="" src="" class="sel-img" width="150" height="200">
-						<input type="file" class="form-control" name="fileList" accept="image/*">
-					</label>
-					<label class="file-label mr-3">
-						<span class="base-img">+</span>
-						<img alt="" src="" class="sel-img" width="150" height="200">
-						<input type="file" class="form-control" name="fileList" accept="image/*">
-					</label>
-					
-					
+				<div class="form-group">
+				  <label for="content">내용:</label>
+				  <textarea class="form-control" id="content" name="po_content"></textarea>
 				</div>
+		
+				<div class="form-group">
+					<input type="file" name="fileList" class="form-control">
+					<input type="file" name="fileList" class="form-control">
+					<input type="file" name="fileList" class="form-control">
+				</div>	
 		
 		
 				<button type = "submit" class="btn btn-outline-sucess mt-3 col-12">게시글 등록</button>
@@ -89,23 +68,43 @@
 			}
 			
 		});
-			$("form").submit(function(e){
-				//첨부파일 1개 이상인지 확인
-				let count = 0;
-				$("[name=fileList]").each(function(e){
-					count += this.files.length;
-				})
-				//console.log(count);
-				
-				if(count == 0) {
-					alert("이미지는 1개 이상 선택하세요.")
-					return false;
-				}
-			})
 		
 		
 		
 		
 	</script>
+	
+	<script>
+      $('[name=po_content]').summernote({
+        placeholder: '내용을 입력하세요.',
+        tabsize: 2,
+        height: 400
+      });
+      $("form").submit(function(e) {
+    	  let obj = $("[name=po_title]");
+	      let title = obj.val().trim();
+	      
+	      if(title.length == 0){
+	    	  alert("제목을 입력하세요.");
+	    	  obj.focus();
+	    	  return false;
+	      }
+	      
+	    //첨부파일 1개 이상인지 확인
+		let count = 0;
+		$("[name=fileList]").each(function(e){
+			count += this.files.length;
+		})
+		//console.log(count);
+		
+		if(count == 0) {
+			alert("이미지는 1개 이상 선택하세요.")
+			return false;
+		}
+    	  
+      })
+		
+		
+    </script>
 </body>
 </html>

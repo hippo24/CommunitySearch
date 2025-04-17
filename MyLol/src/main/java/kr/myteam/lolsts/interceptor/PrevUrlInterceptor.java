@@ -8,7 +8,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import kr.myteam.lolsts.model.vo.UserVO;
+import lombok.extern.log4j.Log4j;
 
+@Log4j
 public class PrevUrlInterceptor extends HandlerInterceptorAdapter{
 
 	@Override
@@ -28,7 +30,7 @@ public class PrevUrlInterceptor extends HandlerInterceptorAdapter{
 
 		//이전 url
 		String prevUrl = (String)session.getAttribute("prevUrl");
-		
+		log.info(prevUrl);
 		if(prevUrl == null) return;		//이전 url정보가 없으면
 		
 		response.sendRedirect(prevUrl);			// 이전 url로 보내고
