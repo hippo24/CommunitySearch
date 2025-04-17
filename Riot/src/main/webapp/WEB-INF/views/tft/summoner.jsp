@@ -7,115 +7,13 @@ request.setAttribute("pageType", "lol");
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8" />
-<title>소환사 정보</title>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<style>
-body {
-	font-family: "Segoe UI", sans-serif;
-}
-figure {
-    position: relative; /* 레벨 텍스트를 이미지에 오버랩하기 위해 위치 설정 */
-    display: inline-block; /* 인라인 블록으로 여러 개를 나란히 배치 가능 */
-    /* margin: 10px; */ /* 여백 설정 */
-    bottom: -8px;
-}
-.legend {
-	
-    width: 65px; /* 이미지 너비 설정 */
-    height: 65px; /* 이미지 높이 설정 */
-    border-radius: 50%; /* 원형으로 만들기 위한 설정 */
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* 그림자 추가 */
-}
+    <meta charset="UTF-8" />
+    <title>소환사 정보</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/TFT_Info_Styles.css">
 
-.level {
-    position: absolute; /* 이미지 위에 오버랩하기 위해 절대 위치 설정 */
-    bottom: 0px; /* 이미지 하단에서의 위치 */
-    right: 2px; /* 이미지 오른쪽에서의 위치 */
-    background-color: black; /* 배경색 (브라운 계열) */
-    color: #8B5A3A; /* 글자 색상 */
-    border: 1px solid;
-    border-color: #8B5A3A;
-    border-radius: 50%; /* 원형 배경 */
-    width: 27px; /* 배경 너비 */
-    height: 27px; /* 배경 높이 */
-    display: flex; /* 중앙 정렬을 위해 flex 사용 */
-    justify-content: center; /* 가로 중앙 정렬 */
-    align-items: center; /* 세로 중앙 정렬 */
-    font-size: 16px; /* 글자 크기 */
-    font-weight: bold; /* 글자 두께 */
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* 그림자 추가 */
-}
-.unit-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.unit-box {
-  width: 70px;
-  text-align: center;
-  position: relative;
-}
-
-.unit-star {
-  position: absolute;
-  top: -20px;
-  left: 0;
-  right: 0;
-  font-size: 14px;
-  font-weight: bold;
-  /* color: gold; */
-  text-align: center;
-}
-
-.unit-image {
-  border: 3px solid;
-  border-radius: 8px;
-  overflow: hidden;
-  width: 60px;
-  height: 60px;
-  margin: 0 auto;
-}
-
-.unit-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.unit-items {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 2px;
-  margin-top: 4px;
-}
-
-.unit-items img {
-  width: 17px;
-  height: 17px;
-  border-radius: 4px;
-}
-
-.champ-img {
-	width: 60px;
-	height: 60px;
-	object-fit: cover;
-	object-position: 75% top;
-	border-radius: 5px;
-}
-
-.infoBox {
-	min-height: auto;
-	height: auto;
-	background-color: #f8f9fa;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-	border-radius: 12px;
-} 
-</style>
 </head>
+
 <body>
 	<h3>🔍 TFT 전적 상세 조회</h3>
 	<p>
@@ -144,7 +42,7 @@ figure {
 		let tacticianData = null;
 	    let itemData = null;
 	
-	    // 전설이와 아이템 json을 미리 한 번만 불러오기
+	    // 전설이와 아이템 등의 json을 미리 한 번만 불러오기
 	    Promise.all([
 	        fetch("https://ddragon.leagueoflegends.com/cdn/15.8.1/data/en_US/tft-tactician.json").then(res => res.json()),
 	        fetch("https://ddragon.leagueoflegends.com/cdn/15.8.1/data/ko_KR/tft-item.json").then(res => res.json()),
@@ -155,7 +53,7 @@ figure {
 	        itemData = itemRes.data;
 	        traitData = traitRes.data;
 	        championData = championRes.data;
-			//console.log(itemData);
+			//console.log(traitData);
 				
 	        // 데이터를 다 불러온 후, 이제 경기를 출력
 			let start = 0;
@@ -292,10 +190,13 @@ figure {
                         
 	                   	// 입력한 유저의 정보만 표시
 	                   	if (player.puuid === puuid) {
-	                        	
+	                        
+	                   		//시너지
+	                   		
+	                   		
 	              			//전설이 이미지 url
 					    	playerUrl ="https://ddragon.leagueoflegends.com/cdn/15.8.1/img/tft-tactician/" + tacticianData[player.companion.item_ID].image.full;
-					    	matchDetailHtml += '<h3>#' + player.placement + '</h3>'+' <h3>경기 상세 정보 (경기 ID: ' + matchId + ')</h3>';
+					    	matchDetailHtml += '<h3>#' + player.placement + ' 경기 상세 정보</h3>'+' <h5>경기 ID: ' + matchId + '</h5>';
 						    matchDetailHtml += '<div class="legend ml-3 mt-3" style="display: flex; align-items: center; margin-bottom: 10px;">'+
 													'<figure>'+
 														'<img src="' + playerUrl + '" alt="'+ tacticianData[player.companion.item_ID] +'" class="legend"/>'+
@@ -318,17 +219,19 @@ figure {
                            	        itemDataById[item.id] = item;
                            	    }
                            	}
+                           	
                            	matchDetailHtml += '<div class="unit-container">';
                             if (player.units && player.units.length > 0) {
                                 player.units.forEach(function(unit) {
 	                            	// 소환수는 0 코스트 취급. 테두리는 1코스트처럼 두기.
-	                            	if (unit.character_id.startsWith("TFT14_Summon")){unit.rarity = 0; };
+	                            	if (unit.character_id.startsWith("TFT14_Summon")){unit.rarity = 0;}
 
 								  	// championMetaMap에서 유닛 데이터 찾기
 								  	const champMeta = championMetaMap[unit.character_id];
-								  	if (!champMeta) return; // 매칭 안 되면 스킵
+								  	if (!champMeta) {return;} // 매칭 안 되면 스킵
 								
 								  	const champName = champMeta.name;
+								  	
 								  	//const champTier = champMeta.tier;
 								  	const champImageUrl = "https://ddragon.leagueoflegends.com/cdn/15.7.1/img/tft-champion/" + champMeta.image.full;
 		                            	
@@ -341,24 +244,26 @@ figure {
 	                                    case 6: borderColor = 'gold'; break;
 	                                    default: borderColor = 'transparent';
 	                            	}	
-		                                
+		                            
 	                            	matchDetailHtml += '<div class="unit-box mt-3">'+
 							                            	//별
 							                                '<div class="unit-star">★'+ unit.tier+ '</div>'+
-							                                '<div class="unit-image" style="border-color: '+ borderColor + '">'+
+							                                '<div class="unit-image unit" style="border-color: '+ borderColor + '">'+
 		                            							//챔피언
-		                            							'<img src="' + champImageUrl + '" class="champ-img" alt="' + champName + '" />'+
+		                            							'<img src="' + champImageUrl + '" class="champ-img " alt="' + champName + '" />'+
+		                            							'<div class="tooltip">'+champName+'</div>'+
                             								'</div>'+
-                                    						'<div class="unit-items">';
+                                    						'<div class="unit-items item">';
 	                             	// 아이템 이미지들 출력
 	                                if (unit.itemNames && unit.itemNames.length > 0) {
 	                                    unit.itemNames.forEach(function(itemId) {
 	                                        const itemMeta = itemDataById[itemId];
+	                                        console.log();
 	                                        if (!itemMeta) return;
-
 	                                       	const itemImgUrl = "https://ddragon.leagueoflegends.com/cdn/15.8.1/img/tft-item/" + itemMeta.image.full;;
 	                                        //아이템
-	                                       	matchDetailHtml += '<img src="' + itemImgUrl + '" alt="' + itemMeta.name + '" />';
+	                                       	matchDetailHtml += '<img src="' + itemImgUrl + '" alt="' + itemMeta.name + '" />'+
+	                                       						'<div class="tooltip">'+itemMeta.name+'</div>';
 	                                    });
 	                                }
 	                                matchDetailHtml += '</div></div>';
@@ -368,7 +273,7 @@ figure {
                             }
                             matchDetailHtml += '</div>'; 
                             matchDetailHtml += '</div>';
-                            matchDetailHtml += '<div style="display: flex; flex-wrap: wrap; gap: 8px;">';
+                            matchDetailHtml += '<div class="ml-3 mb-3" style="display: flex; flex-wrap: wrap;">';
 	
                             const styleBgMap = {
                                 1: "https://cdn.dak.gg/tft/images2/tft/traits/background/bronze.svg",
@@ -420,12 +325,13 @@ figure {
 
                                 if (imageUrl) {
                                     matchDetailHtml += 
-                                    '<div style="display: inline-block; width: 86px; text-align: center;">' + 
-                                        '<div style="position: relative; width: 32px; height: 32px; margin: 0 auto;">' +
+                                    '<div style="display: inline-block; width: 32px; text-align: center;">' + 
+                                        '<div style="position: relative; width: 32px; height: 32px;" class="synergy">' +
                                             '<img src="' + bgUrl + '" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">' +
                                             '<img src="' + imageUrl + '" alt="' + displayName + '" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 18px; height: 18px; filter: invert(1);" />' +
+                                        	'<div class="tooltip">'+displayName+'</div>'+
                                         '</div>' +
-                                        '<div style="font-size: 12px; margin-top: 2px;">' + trait.num_units + ' ' + displayName + '</div>' +
+                                        /* '<div style="font-size: 12px; margin-top: 2px;">' + trait.num_units + ' ' + displayName + '</div>' + */
                                     '</div>';
                                 }
                             });

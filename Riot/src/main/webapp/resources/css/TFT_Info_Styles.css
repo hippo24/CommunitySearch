@@ -1,0 +1,135 @@
+/* TFT_Info_Styles.css */
+@charset "utf-8";
+body {
+	font-family: "Segoe UI", sans-serif;
+}
+figure {
+    position: relative; /* 레벨 텍스트를 이미지에 오버랩하기 위해 위치 설정 */
+    display: inline-block; /* 인라인 블록으로 여러 개를 나란히 배치 가능 */
+    /* margin: 10px; */ /* 여백 설정 */
+    bottom: -8px;
+}
+.legend {
+	
+    width: 65px; /* 이미지 너비 설정 */
+    height: 65px; /* 이미지 높이 설정 */
+    border-radius: 50%; /* 원형으로 만들기 위한 설정 */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* 그림자 추가 */
+}
+
+.level {
+    position: absolute; /* 이미지 위에 오버랩하기 위해 절대 위치 설정 */
+    bottom: 0px; /* 이미지 하단에서의 위치 */
+    right: 2px; /* 이미지 오른쪽에서의 위치 */
+    background-color: black; /* 배경색 (브라운 계열) */
+    color: #8B5A3A; /* 글자 색상 */
+    border: 1px solid;
+    border-color: #8B5A3A;
+    border-radius: 50%; /* 원형 배경 */
+    width: 27px; /* 배경 너비 */
+    height: 27px; /* 배경 높이 */
+    display: flex; /* 중앙 정렬을 위해 flex 사용 */
+    justify-content: center; /* 가로 중앙 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+    font-size: 16px; /* 글자 크기 */
+    font-weight: bold; /* 글자 두께 */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* 그림자 추가 */
+}
+.unit-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.unit-box {
+  width: 70px;
+  text-align: center;
+  position: relative;
+}
+
+.unit-star {
+  position: absolute;
+  top: -20px;
+  left: 0;
+  right: 0;
+  font-size: 14px;
+  font-weight: bold;
+  /* color: gold; */
+  text-align: center;
+}
+
+.unit-image {
+  border: 3px solid;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto;
+}
+
+.unit-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.unit-items {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin-top: 4px;
+}
+
+.unit-items img {
+  width: 17px;
+  height: 17px;
+  border-radius: 4px;
+}
+
+.champ-img {
+	width: 60px;
+	height: 60px;
+	object-fit: cover;
+	object-position: 75% top;
+	border-radius: 5px;
+}
+
+.infoBox {
+	min-height: auto;
+	height: auto;
+	background-color: #f8f9fa;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	border-radius: 12px;
+}
+
+/* 기본 설정: 툴팁 숨기기 */
+.tooltip {
+  width: max-content;         /* 내용 길이만큼 자동 너비 */
+  min-width: 150px;           /* 너무 좁은 경우 방지 */
+  max-width: 600px;
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: break-word;  /* 긴 단어도 줄바꿈 가능 */
+}
+
+/* 이미지에 마우스를 올리면 툴팁 보이기 */
+.unit:hover .tooltip, .synergy:hover .tooltip, .item:hover .tooltip {
+  display: block;
+}
+
+/* 툴팁 위치 설정 */
+.unit .tooltip, .synergy .tooltip, .item .tooltip {
+  left: 0;
+  top: 100%;
+  transform: translateY(5px);
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* 호버시 툴팁 위치와 투명도 변경 */
+.unit:hover .tooltip, .synergy:hover .tooltip, .item:hover .tooltip {
+  opacity: 1;
+  transform: translateY(10px);
+}
