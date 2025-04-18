@@ -14,5 +14,7 @@ public interface LOLApiService {
     List<Map<String, Object>> getLOLLeagueInfo(String summonerId) throws Exception;
 	
     //경기ID 가져오기
-    List<String> getRecentLOLMatchIds(String puuid, int start);  
+    List<String> getRecentLOLMatchIds(String puuid, int start);
+	//경기 세부 내용 가져오기
+    Map<String, Object> getMatchDetail(String matchId, String puuid);  
 }

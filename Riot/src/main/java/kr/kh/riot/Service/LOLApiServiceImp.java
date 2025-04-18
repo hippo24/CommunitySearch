@@ -63,4 +63,22 @@ public class LOLApiServiceImp implements LOLApiService {
         return restTemplate.getForObject(url, List.class);
     }
 
+	@Override
+	public Map<String, Object> getMatchDetail(String matchId, String puuid) {
+	    String url = String.format("https://asia.api.riotgames.com/lol/match/v5/matches/" + matchId + "?api_key=" + apiKey);
+	    //한 게임의 전체 경기 내용
+	    Map<String, Object> match = restTemplate.getForObject(url, Map.class);
+	    //게임 정보 대부분은 match.info안에 있음
+	    Map<String, Object> info = (Map<String, Object>) match.get("info");
+	    List<Map<String, Object>> participants = (List<Map<String, Object>>) info.get("participants");
+	    //match.info.participant 안에 해당 유저의 puuid가 있음
+	    for (Map<String, Object> participant : participants) {
+	        //일단 검색한 유저의 정보만 보기 위함
+	    	if (puuid.equals(participant.get("puuid"))) {
+	            return participant; 
+	        }
+	    }
+	    return null;
+	}
+
 }

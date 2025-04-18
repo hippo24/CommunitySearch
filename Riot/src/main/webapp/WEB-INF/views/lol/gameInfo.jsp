@@ -1,50 +1,104 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%request.setAttribute("pageType", "lol");%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="com.fasterxml.jackson.databind.ObjectMapper" %>
+<%@ page import="java.util.*" %>
+<%
+    ObjectMapper mapper = new ObjectMapper();
+    String userJson = mapper.writeValueAsString(request.getAttribute("user"));
+%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<style>
-		.infoBox{
-			min-height: auto; height: auto; 
-			background-color: #f8f9fa; 
-			box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
-			border-radius: 12px;
-		}
-	</style>
+    <style>
+        .infoBox {
+            background-color: #f8f9fa;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        .rune-img {
+            width: 40px;
+            margin-right: 5px;
+        }
+    </style>
 </head>
 <body>
-    <div id="summonerProfile" style="margin-top: 20px;">
-        <div class="infoBox form-control mt-3 mb-3 d-flex align-items-center">
-        	<img class="mr-3 rounded-circle me-3" src="http://ddragon.leagueoflegends.com/cdn/14.6.1/img/profileicon/${summoner.profileIconId}.png" alt="프로필 아이콘" width="64" height="64">
-			<div>
-			    <div class="fw-bold fs-5 mb-1">${gameName}#${tagLine}</div>
-			    <div>레벨: <strong>${summoner.summonerLevel}</strong></div>
-			    <div>티어: <strong>${dto.tier} ${dto.rank}</strong> (${dto.leaguePoints} LP)</div>
-			    <div>판수: <strong>${dto.wins + dto.losses}</strong></div>
-			    <div>
-			    	승리: <strong>${dto.wins}</strong> 
-			    	패배: <strong>${dto.losses}</strong>
-			    	승률: <strong><fmt:formatNumber value="${(dto.wins / (dto.wins + dto.losses)) * 100}" type="number" maxFractionDigits="1" />%</strong>
-			    </div>
-			</div>
-      </div>
+
+<div id="summonerProfile" style="margin-top: 20px;">
+    <div class="infoBox" id="userDetailBox">
+        <div><strong>유저:</strong> ${user.riotIdGameName}#${user.riotIdTagline}</div>
+        <div><strong>챔피언:</strong> ${user.championName}</div>
+        <div><strong>라인:</strong> ${user.teamPosition}</div>
+        <div><strong>K/D/A:</strong> ${user.kills} / ${user.deaths} / ${user.assists}</div>
+        <div><strong>승리 여부:</strong> 
+            <span style="color:${user.win ? 'blue' : 'red'}">
+                ${user.win ? '승리' : '패배'}
+            </span>
+        </div>
+        <div>
+            <strong>게임 시간:</strong>
+            <fmt:formatNumber value="${user.timePlayed / 60}" maxFractionDigits="0"/>분 
+            <fmt:formatNumber value="${user.timePlayed % 60}" maxFractionDigits="0"/>초
+        </div>
     </div>
-</body>
-<script type="text/javascript">
-	/* //챔피언과 스펠 json을 미리 한 번만 불러오기
-	Promise.all([
-	    fetch("https://ddragon.leagueoflegends.com/cdn/15.7.1/data/ko_KR/champion.json").then(res => res.json()),
-	    fetch("https://ddragon.leagueoflegends.com/cdn/15.6.1/data/ko_KR/summoner.json").then(res => res.json())
-	]).then(([championRes, spellRes]) => {
-	    championData = championRes.data;
-	    spellData = spellRes.data;
-	    console.log(championData);
-		console.log(spellData);
-	}); */
+</div>
+
+<script>
+    user = <%= userJson %>;
+
+    Promise.all([
+        fetch("https://ddragon.leagueoflegends.com/cdn/15.7.1/data/ko_KR/champion.json").then(res => res.json()),
+        fetch("https://ddragon.leagueoflegends.com/cdn/15.6.1/data/ko_KR/summoner.json").then(res => res.json()),
+        fetch("https://ddragon.leagueoflegends.com/cdn/15.6.1/data/ko_KR/runesReforged.json").then(res => res.json())
+    ]).then(([championRes, spellRes, runeRes]) => {
+        renderRunes(runeRes, user.perks);
+    });
+
+    function renderRunes(runeData, userPerks) {
+        if (!userPerks || !userPerks.styles) return;
+
+        let runeHtml = "<div class='infoBox'><strong>사용한 룬</strong><br><br>";
+
+        const primaryStyleId = userPerks.styles[0].style;
+        const subStyleId = userPerks.styles[1].style;
+
+        const primaryStyle = runeData.find(r => r.id === primaryStyleId);
+        const subStyle = runeData.find(r => r.id === subStyleId);
+
+        const primaryRunes = userPerks.styles[0].selections.map(sel => {
+            for (const slot of primaryStyle.slots) {
+                const found = slot.runes.find(r => r.id === sel.perk);
+                if (found) return found;
+            }
+            return null;
+        }).filter(r => r !== null);
+
+        const subRunes = userPerks.styles[1].selections.map(sel => {
+            for (const slot of subStyle.slots) {
+                const found = slot.runes.find(r => r.id === sel.perk);
+                if (found) return found;
+            }
+            return null;
+        }).filter(r => r !== null);
+
+        runeHtml += `<div><strong>주 룬 (${primaryStyle.name})</strong><br>`;
+        runeHtml += primaryRunes.map(r => `
+            <img src="https://ddragon.leagueoflegends.com/cdn/img/${r.icon}" title="${r.name}" class="rune-img">
+        `).join("") + "</div><br>";
+
+        runeHtml += `<div><strong>보조 룬 (${subStyle.name})</strong><br>`;
+        runeHtml += subRunes.map(r => `
+            <img src="https://ddragon.leagueoflegends.com/cdn/img/${r.icon}" title="${r.name}" class="rune-img">
+        `).join("") + "</div>";
+
+        runeHtml += "</div>";
+        document.getElementById("userDetailBox").innerHTML += runeHtml;
+    }
 </script>
+
+</body>
 </html>

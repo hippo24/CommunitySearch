@@ -88,4 +88,11 @@ public class LOLApiController {
             return List.of("소환사 정보를 가져오는 중 오류가 발생했습니다.");
         }
     }
+    // 경기 ID로 세부 내용 가져오기
+    @GetMapping("/matchDetail")
+    public String getLOLMatchDetail(@RequestParam String matchId, @RequestParam String puuid, Model model) {
+        Map<String, Object> userInfo = lolApiService.getMatchDetail(matchId, puuid);
+        model.addAttribute("user", userInfo);  // 유저 정보만 따로 넘겨줌
+        return "lol/gameInfo"; 
+    }
 }

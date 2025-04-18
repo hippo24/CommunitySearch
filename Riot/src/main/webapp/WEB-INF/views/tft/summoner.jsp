@@ -145,7 +145,7 @@ request.setAttribute("pageType", "lol");
 		            if (matchIds.length > 0) {
 		                // 경기 정보를 순차적으로 가져오기
 		                console.log(matchIds);
-		                //fetchMatchDetails(matchIds, 0, puuid);
+		                fetchMatchDetails(matchIds, 0, puuid);
 		            } else {
 		                $('#summonerMatchInfo').append('<p>최근 경기 데이터가 없습니다.</p>');
 		            }

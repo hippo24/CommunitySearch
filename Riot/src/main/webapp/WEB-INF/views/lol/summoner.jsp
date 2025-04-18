@@ -115,26 +115,40 @@ request.setAttribute("pageType", "lol");
     </script>
     
     <script type="text/javascript">
-    	function getGameInfo(puuid, start) {
-    		$.ajax({
-		    	async : false,
-		        url: '<c:url value="/lol/recentLOLMatchIds"/>',
-		        method: 'GET',
-		        data: { puuid: puuid, start : start },
-		        success: function(matchIds) {
-		            if (matchIds.length > 0) {
-		                // 경기 정보를 순차적으로 가져오기
-		                console.log(matchIds);
-		                fetchMatchDetails(matchIds, 0, puuid);
-		            } else {
-		                $('#summonerMatchInfo').append('<p>최근 경기 데이터가 없습니다.</p>');
-		            }
-		        },
-		        error: function() {
-		            $('#summonerMatchInfo').append('<p style="color: red;">경기 ID를 가져오는 중 오류가 발생했습니다.</p>');
-		        }
-		    });
-		}
-    </script>
+	    function getGameInfo(puuid, start) {
+	        $.ajax({
+	            url: '<c:url value="/lol/recentLOLMatchIds"/>',
+	            method: 'GET',
+	            data: { puuid: puuid, start: start },
+	            success: function (matchIds) {
+	                if (matchIds.length > 0) {
+	                    $('#matchList').html(''); // 초기화
+	                    fetchLOLMatchDetails(matchIds, 0, puuid);
+	                } else {
+	                    $('#matchList').html('<p>최근 경기 데이터가 없습니다.</p>');
+	                }
+	            }
+	        });
+	    }
+	
+	    function fetchLOLMatchDetails(matchIds, index, puuid) {
+	        if (index >= matchIds.length) return;
+	        const matchId = matchIds[index];
+	
+	        $.ajax({
+	            url: '<c:url value="/lol/matchDetail"/>',
+	            method: 'GET',
+	            data: { matchId: matchId, puuid: puuid }, // puuid도 넘기기
+	            success: function (matchHTML) {
+	                $('#gameInfo').append(matchHTML); // JSP 조각 append
+	                fetchLOLMatchDetails(matchIds, index + 1, puuid); // 다음 경기
+	            },
+	            error: function () {
+	                $('#gameInfo').append('<p style="color:red;">경기 정보를 불러오는 데 실패했습니다. (' + matchId + ')</p>');
+	                fetchLOLMatchDetails(matchIds, index + 1, puuid); // 에러 나도 다음으로
+	            }
+	        });
+	    }
+	</script>
 </body>
 </html>
