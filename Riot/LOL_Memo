@@ -1,0 +1,18 @@
+## 플레이어 전적 조회
+1. ✅ 이름   
+2. ✅ 티어(티어, 랭크, 점수)
+3. ✅ 승률, 전체 판수
+4. ✅ 플레이어 아이콘
+5. ✅ PUUID -> 최근경기ID -> 경기 상세 정보
+
+## 과정
+1. 닉네임과 태그 -> PUUID 구하기 (lolApiService.getSummonerByRiotId(gameName, tagLine))
+   -> @ResponseBody를 써서 jsp에서 받은 값(response)을 const puuid = response.puuid; 이렇게 puuid에 담아놓음.
+
+2. PUUID -> SummonerID 구하기 (lolApiService.getSummonerByPuuid(puuid))
+   -> @ResponseBody 써서 jsp에서 받은 값(summonerProfile)을 const id = summonerProfile.id; 이렇게 id에 담아놓음.
+   -> 추가로 소환사 레벨, 프로필 아이콘도 가져올 수 있음.
+   
+3. SummonerID -> 프로필 정보 화면에 나타내기 (lolApiService.getSummonerByPuuid(puuid), lolApiService.getLOLLeagueInfo(summonerId))
+   -> 가져온 데이터를 JSP에 보내기
+   -> 티어, 랭크, 포인트 가져와짐

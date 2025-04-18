@@ -52,6 +52,15 @@ public class LOLApiServiceImp implements LOLApiService {
         return restTemplate.getForObject(url, List.class);
     }
 
-    
+	
+	@Override
+    public List<String> getRecentLOLMatchIds(String puuid, int start){
+    	//(start+1)번째 경기부터 시작해 count개까지
+    	int count = 10;
+        String url = String.format("https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/"+puuid+"/ids?start="+start+"&count="+count+"&api_key="+ apiKey);
+        System.out.println(url);
+        // REST API 호출 및 응답 받기
+        return restTemplate.getForObject(url, List.class);
+    }
 
 }

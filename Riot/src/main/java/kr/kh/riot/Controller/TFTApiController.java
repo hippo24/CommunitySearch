@@ -46,7 +46,7 @@ public class TFTApiController {
         }
     }
 
-    // PUUID로 최근 TFT 경기 ID 가져오기 -> 10개 이후 또 10개 가져오게 하는 법 필요함.
+    // PUUID로 TFT 경기 ID 가져오기
     @GetMapping("/recentTftMatchIds")
     @ResponseBody
     public List<String> getRecentTftMatchIds(@RequestParam String puuid, @RequestParam int start) {

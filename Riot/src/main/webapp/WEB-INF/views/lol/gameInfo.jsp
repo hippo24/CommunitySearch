@@ -36,18 +36,15 @@
     </div>
 </body>
 <script type="text/javascript">
-	//챔피언과 스펠 json을 미리 한 번만 불러오기
-	/* Promise.all([
+	/* //챔피언과 스펠 json을 미리 한 번만 불러오기
+	Promise.all([
 	    fetch("https://ddragon.leagueoflegends.com/cdn/15.7.1/data/ko_KR/champion.json").then(res => res.json()),
-	    fetch("https://ddragon.leagueoflegends.com/cdn/15.6.1/data/ko_KR/summoner.json").then(res => res.json()),
-	    fetch("https://ddragon.leagueoflegends.com/cdn/15.6.1/data/ko_KR/runesReforged.json").then(res => res.json())
-	]).then(([championRes, spellRes, runeRes]) => {
+	    fetch("https://ddragon.leagueoflegends.com/cdn/15.6.1/data/ko_KR/summoner.json").then(res => res.json())
+	]).then(([championRes, spellRes]) => {
 	    championData = championRes.data;
 	    spellData = spellRes.data;
-	    runeData = runeRes.data;
 	    console.log(championData);
 		console.log(spellData);
-		console.log(runeData);
 	}); */
 </script>
 </html>

@@ -42,24 +42,27 @@ request.setAttribute("pageType", "lol");
 		let tacticianData = null;
 	    let itemData = null;
 	
-	    // 전설이와 아이템 등의 json을 미리 한 번만 불러오기
+	    // 챔피언과 스펠 json을 미리 한 번만 불러오기
 	    Promise.all([
 	        fetch("https://ddragon.leagueoflegends.com/cdn/15.7.1/data/ko_KR/champion.json").then(res => res.json()),
-	        fetch("https://ddragon.leagueoflegends.com/cdn/15.6.1/data/ko_KR/summoner.json").then(res => res.json())
-	    ]).then(([championRes, spellRes]) => {
+	        fetch("https://ddragon.leagueoflegends.com/cdn/15.6.1/data/ko_KR/summoner.json").then(res => res.json()),
+	        fetch("https://ddragon.leagueoflegends.com/cdn/15.6.1/data/ko_KR/runesReforged.json").then(res => res.json())
+	    ]).then(([championRes, spellRes, runeRes]) => {
 	        championData = championRes.data;
 	        spellData = spellRes.data;
 	        console.log(championData);
 			console.log(spellData);
-				
-	        
+			console.log(runeRes);
+
+    		let start = 0;
 	    	$('#summonerForm').on('submit', function (e) {
-			    $('#summonerProfile').html('');
+	    		$('#summonerProfile').html('');
 			    $('#gameInfo').html('');
 		        e.preventDefault();
 		        
 		        gameName = $('#gameName').val();
 		        tagLine = $('#tagLine').val();
+		        start = 0;
 		        
 		        // 1. PUUID, Summoner ID 조회
 		        $.ajax({
@@ -70,8 +73,15 @@ request.setAttribute("pageType", "lol");
 		                const puuid = response.puuid;
 		
 		                getSummonerProfile(puuid, gameName, tagLine); // 소환사 정보
+		                getGameInfo(puuid, start);
 		            }
 		        });
+		      	/* //더보기 누르면 start +10 해주고 getMatchInfo 호출
+		        $(document).on("click", ".btn-more", function () {
+		            start += 10;
+		            console.log(start);
+		            searchMore(start, gameName, tagLine); // 값 전달
+		        }); */
 		    });
 	    });    
     </script>
@@ -81,7 +91,7 @@ request.setAttribute("pageType", "lol");
 	    function getSummonerProfile(puuid, gameName, tagLine) {
 	        $.ajax({
 	        	async : false,
-	            url: '<c:url value="/tft/getSummonerByPuuid"/>',
+	            url: '<c:url value="/lol/getSummonerByPuuid"/>',
 	            method: 'GET',
 	            data: { puuid: puuid },
 	            success: function (summonerProfile) {
@@ -102,6 +112,29 @@ request.setAttribute("pageType", "lol");
 	            }
 	        });
 	    }
+    </script>
+    
+    <script type="text/javascript">
+    	function getGameInfo(puuid, start) {
+    		$.ajax({
+		    	async : false,
+		        url: '<c:url value="/lol/recentLOLMatchIds"/>',
+		        method: 'GET',
+		        data: { puuid: puuid, start : start },
+		        success: function(matchIds) {
+		            if (matchIds.length > 0) {
+		                // 경기 정보를 순차적으로 가져오기
+		                console.log(matchIds);
+		                fetchMatchDetails(matchIds, 0, puuid);
+		            } else {
+		                $('#summonerMatchInfo').append('<p>최근 경기 데이터가 없습니다.</p>');
+		            }
+		        },
+		        error: function() {
+		            $('#summonerMatchInfo').append('<p style="color: red;">경기 ID를 가져오는 중 오류가 발생했습니다.</p>');
+		        }
+		    });
+		}
     </script>
 </body>
 </html>

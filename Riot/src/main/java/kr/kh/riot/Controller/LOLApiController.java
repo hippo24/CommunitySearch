@@ -40,8 +40,6 @@ public class LOLApiController {
     @GetMapping("/searchPUUID")
     @ResponseBody
     public Map<String, Object> searchSummoner(@RequestParam String gameName, @RequestParam String tagLine) {
-        System.out.println(gameName);
-        System.out.println(tagLine);
     	try {
             return lolApiService.getSummonerByRiotId(gameName, tagLine);
         } catch (Exception e) {
@@ -64,23 +62,30 @@ public class LOLApiController {
     public String listPost(@RequestParam String puuid, @RequestParam String summonerId, @RequestParam String gameName, 
     		@RequestParam String tagLine, Model model) {
 		try {
-			System.out.println(puuid);
-			System.out.println(summonerId);
-			System.out.println(gameName + '#' + tagLine);
-			model.addAttribute("gameName", gameName);
-			model.addAttribute("tagLine", tagLine);
+
 			// 서비스에서 소환사 정보 가져오기
 			Map<String, Object> summoner = lolApiService.getSummonerByPuuid(puuid);
-			model.addAttribute("summoner", summoner);
 			List<Map<String, Object>> leagueInfo = lolApiService.getLOLLeagueInfo(summonerId);
-			System.out.println(summoner);
-			System.out.println(leagueInfo);
+
 			// 가져온 데이터를 JSP에 보내기
+			model.addAttribute("gameName", gameName);
+			model.addAttribute("tagLine", tagLine);
+			model.addAttribute("summoner", summoner);
 			model.addAttribute("dto", leagueInfo.get(0)); // 첫 번째 데이터만 보낸다고 가정
 		} catch (Exception e) {	
 			e.printStackTrace();
 		}
-        return "tft/profile"; 
+        return "lol/profile"; 
+    }
+    
+    // PUUID로 LOL 경기 ID 가져오기
+    @GetMapping("/recentLOLMatchIds")
+    @ResponseBody
+    public List<String> getRecentLOLMatchIds(@RequestParam String puuid, @RequestParam int start) {
+        try {
+        	return lolApiService.getRecentLOLMatchIds(puuid, start);
+        } catch (Exception e) {
+            return List.of("소환사 정보를 가져오는 중 오류가 발생했습니다.");
+        }
     }
 }
-
