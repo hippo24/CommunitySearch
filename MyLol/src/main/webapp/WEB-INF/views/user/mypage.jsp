@@ -14,8 +14,8 @@
 </head>
 <body>
 
-	<form action="<c:url value="/mypage"/>" method="post">
-		<h1>회원가입</h1>
+	<form action="<c:url value="/user/mypage"/>" method="post">
+		<h1>회원 정보 변경</h1>
 
 		<div class="form-group mt-3">
 			<label for="pw" class="form-label">새 비밀번호</label> 
@@ -32,7 +32,7 @@
 			<input type="email" class="form-control" id="email" name="me_email" value = "${user.me_email }">
 		</div>
 		
-		<button type="submit" class="btn btn-outline-success col-12 mb-3">회원가입</button>
+		<button type="submit" class="btn btn-outline-success col-12 mb-3">회원 정보 변경</button>
 	</form>
 	
 	
@@ -56,7 +56,7 @@
 			messages : {
 				me_pw : {
 					//required : "필수 항목입니다.",
-					regex : "비번은 영문, 숫자, 특수문자(!@#$)만 가능하며, 8~15자입니다."
+					regex : "비번은 영문, 숫자, 특수문자(!@#$)만 가능하며, 8~20자입니다."
 				},
 				me_pw2 : {
 					equalTo : "비번과 비번확인이 일치하지 않습니다."
