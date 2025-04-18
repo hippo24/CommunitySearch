@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.myteam.lolsts.model.vo.EmailVO;
 import kr.myteam.lolsts.model.vo.UserVO;
 import kr.myteam.lolsts.service.UserService;
 
@@ -205,6 +206,28 @@ public class UserController {
 		
 		return "message";		//알림창 띄우기 위해 msg.jsp로
 	}
+	
+    @PostMapping("/email/send")
+    @ResponseBody
+    public String sendEmail(@RequestParam String email) {
+        EmailVO newEmail = new EmailVO();
+        newEmail.setEv_email(email);
+        System.out.println(email);
+        int evKey = userService.sendEmail(newEmail);
+        System.out.println(evKey);
+        if(evKey < 1) return null;
+        return Integer.toString(evKey);
+    }
+    
+    
+    @PostMapping("/email/check")
+    @ResponseBody
+    public boolean checkEmail(@RequestParam int ev_key, @RequestParam String code) {
+        EmailVO newEmail = new EmailVO();
+        newEmail.setEv_key(ev_key);
+        newEmail.setEv_authCode(code);
+        return userService.checkEmail(newEmail);
+    }
 	
 	
 }

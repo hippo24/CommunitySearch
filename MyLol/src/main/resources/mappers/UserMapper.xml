@@ -28,6 +28,15 @@
 		select us_id from user where us_email = #{us_email}
 	</select>
 	
+	<insert id="insertEV" useGeneratedKeys="true" keyProperty="email.ev_key">
+		insert into `email_verification` (ev_email, ev_authCode)
+		value (#{email.ev_email},#{email.ev_authCode})
+	</insert>
+	
+	<select id="selectEVCode" resultType="String">
+		select ev_authCode from email_verification where ev_key = #{ev_key}
+	</select>
+	
 	
 	
 </mapper>

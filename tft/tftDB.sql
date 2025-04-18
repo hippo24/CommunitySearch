@@ -108,16 +108,27 @@ CREATE TABLE `POSITION` (
 );
 
 
-# 첨부파일(차후 추가)
-
+# 첨부파일(추가)
 DROP TABLE IF EXISTS `FILE`;
 
 CREATE TABLE `FILE` (
-	`fi_key`	int  primary key auto_increment	NOT NULL,
+	`fi_key`	int  primary key auto_increment,
 	`fi_ori_name`	varchar(255) not	NULL,
 	`fi_name`	varchar(255) not	NULL,
 	`fi_po_key`	int	NOT NULL
 );
+
+# 이메일 인증(추가)
+DROP TABLE IF EXISTS `email_verification`;
+CREATE TABLE `email_verification` (
+    ev_key INT AUTO_INCREMENT PRIMARY KEY,
+    ev_email VARCHAR(255) NOT NULL,
+    ev_authCode VARCHAR(255) NOT NULL,
+    ev_created DATETIME DEFAULT CURRENT_TIMESTAMP,
+    ev_verified BOOLEAN DEFAULT FALSE,
+    ev_expired BOOLEAN DEFAULT FALSE
+);
+
 
 # 외래키 등록
 

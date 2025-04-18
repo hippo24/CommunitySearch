@@ -9,6 +9,15 @@
 	<style type="text/css">
 		.error, .red{color : red;} 
 		.green{color : green;}
+		.spinner-box {
+			display: none;
+			position: fixed;
+			top: 0; left: 0; right: 0; bottom: 0;
+			background: rgba(0, 0, 0, 0.3);
+			z-index: 1000;
+			justify-content: center;
+			align-items: center;
+		}
 	</style>	
 </head>
 <body>
@@ -51,6 +60,15 @@
 			<div class="form-group mt-3">
 				<label for="email" class="form-label">이메일</label> 
 				<input type="email" class="form-control" id="email" name="us_email">
+				<button type="button" class="btn btn-sm btn-outline-primary email-send-btn">인증번호 보내기</button>
+				
+				<div class="mt-2 email-check-form">
+				    <input type="text" class="form-control input-check-email" placeholder="인증번호 입력" />
+				    <button type="button" class="btn btn-sm btn-outline-success mt-1 email-check-btn">인증 확인</button>
+				    <div id="timer" class="text-muted small mt-1"></div>
+				    <div class="mt-1 email-result"></div>
+				</div>
+				
 			</div>
 			
 			<button type="submit" class="btn btn-outline-success col-12 mb-3">회원가입</button>
@@ -58,6 +76,143 @@
 		
 	</form>
 	
+	<div class="spinner-box">
+		<div class="d-flex justify-content-center align-items-center h-100">
+			<div class="spinner-border text-light" role="status">
+				<span class="sr-only">로딩중...</span>
+			</div>
+		</div>
+	</div>
+	
+	
+	<script type="text/javascript">
+		let ev_key = -1;
+	
+		let timer;
+		let timeNow = 180; // 3분
+		let emailCheck = false;
+		
+		
+		$(".email-check-form").hide();
+		
+		function startTimer() {
+		    clearInterval(timer);
+		    timeNow = 180;
+	
+		    timer = setInterval(() => {
+		        timeNow--;
+		        const minutes = Math.floor(timeNow / 60);
+		        const seconds = timeNow % 60;
+		        $("#timer").text(`남은 시간: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`);
+		        if (timeNow <= 0) {
+		            clearInterval(timer);
+		            $("#timer").text("인증 시간이 만료되었습니다.");
+		        }
+		    }, 1000);
+		}
+	
+		$(".email-send-btn").click(function () {
+		    const email = $("#email").val().trim();
+		    let res = false;
+		    if (!email) return alert("이메일을 입력하세요.");
+		    
+		    $(".spinner-box").show();
+			$(".email-send-btn").prop("disabled", true);
+		    
+		    $.ajax({
+		    	async: false,
+				url: "<c:url value='/user/find/id'/>",
+				method: "post",
+				data: { email: email },
+				success: function (data) {
+					if (data && data.length > 0) {
+						alert("해당 이메일 주소는 이미 사용중입니다.");
+						res = true;
+						return;
+					} else {
+						//res = true;
+					}
+				},
+				error: function () {
+					res = true;
+					alert("요청 중 오류가 발생했습니다.");
+				}
+			});
+		    if(res){
+		    	alert("이메일 발송 실패")
+		    	$(".spinner-box").hide();
+				$(".email-send-btn").prop("disabled", false);
+		    	return;
+		    }
+		   
+			
+		    $.ajax({
+		    	async: true,
+				url: "<c:url value='/user/email/send'/>",
+				method: "post",
+				data: { email: email },
+				success: function (data) {
+					if (data && data.length > 0) {
+						alert("인증 번호를 보냈습니다.");
+						ev_key = data;
+						return;
+					} else{
+						alert("인증 번호를 보내지 못했습니다.");
+					}
+				},
+				error: function () {
+					alert("요청 중 오류가 발생했습니다.");
+				},
+				complete: function(){
+					$("#email").prop("readonly", true);
+					$(".spinner-box").hide();
+					$(".email-check-form").show();
+				}
+			});
+		  
+		
+		});
+		
+	
+		$(".email-check-btn").click(function () {
+		    const email = $("#email").val().trim();
+		    const code = $(".input-check-email").val().trim();
+	
+		    if (!code) return alert("인증번호를 입력하세요.");
+	
+		    if (timeNow <= 0) {
+		    	clearInterval(timer);
+		    	$("#timer").text("인증 시간이 만료되었습니다.");
+		    	emailCheck = false;
+		    	return;
+		    }
+		    
+		    $.ajax({
+		        async: false,
+		        url: '<c:url value="/user/email/check"/>',
+		        type: 'post',
+		        data: { ev_key : ev_key , code : code },
+		        success: function(data) {
+		            if (data) {
+		            	clearInterval(timer);
+			            $(".email-result").text("이메일 인증되었습니다.").addClass("green").removeClass("red");
+			            emailCheck = true;
+			        } else {
+			            $(".email-result").text("인증 번호가 다릅니다.").addClass("red").removeClass("green");
+			        }
+		        },
+				error: function () {
+					alert("요청 중 오류가 발생했습니다.");
+				},
+				complete: function(){
+					
+				}
+		    });
+
+		    
+		});
+		
+	</script>
 	
 	<script type="text/javascript">
 	
@@ -178,6 +333,12 @@
 		        submitHandler: function() {
 		        	let idOk = checkId();
 		            let nameOk = checkName($("#name").val());
+		            
+		            if (!emailCheck) {
+		        		alert("이메일 인증을 완료해주세요.");
+		        		return false;
+		        	}
+		            
 		            return idOk && nameOk;
 		        }
 		    });

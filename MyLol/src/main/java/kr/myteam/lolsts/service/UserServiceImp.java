@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import kr.myteam.lolsts.dao.UserDao;
+import kr.myteam.lolsts.model.vo.EmailVO;
 import kr.myteam.lolsts.model.vo.UserVO;
 
 @Service
@@ -88,7 +89,7 @@ public class UserServiceImp implements UserService{
 		
 		try {
 			//새 비번을 생성
-			String newPw = createPw(16);
+			String newPw = createPw(16, true);
 			//System.out.println(newPw);
 			//새 비번을 이메일로 전송
 			boolean res = mailSend(user.getUs_email(), "새 비밀번호입니다." , "새 비밀번호는 <b>" + newPw + "</b> 입니다.");
@@ -106,8 +107,8 @@ public class UserServiceImp implements UserService{
 		}
 	}
 	
-	private String createPw(int size) {
-		if(size<8) return null;		//비번 정규표현식보다는 커야함
+	private String createPw(int size, boolean isPw) {
+		if(size<8 && isPw) return null;		//비번 정규표현식보다는 커야함
 		String pw = "";
 		while(pw.length() < size) {
 			//랜덤 정수 생성(0~61)
@@ -176,6 +177,43 @@ public class UserServiceImp implements UserService{
 		}
 		
 		return list;
+	}
+
+	@Override
+	public int sendEmail(EmailVO email) {
+		if(email == null || email.getEv_email().length() < 1) return 0;
+		
+		try {
+			//코드 생성
+			String code = createPw(6, false);
+			boolean res = mailSend(email.getEv_email(), "이메일 인증." , "인증 번호는 <b>" + code + "</b> 입니다. 유출되지 않도록 해 주세요.");
+			
+			if(!res) return 0; //이메일이 잘못됐거나 받는사람이 없는경우 실패
+			
+			code = passwordEncoder.encode(code);
+			email.setEv_authCode(code);
+
+			userDao.insertEV(email);
+			
+			//System.out.println(email);
+			
+			return email.getEv_key();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+
+	@Override
+	public boolean checkEmail(EmailVO email) {
+		
+		if(email==null)return false;
+		
+		String encCode = userDao.selectEVCode(email.getEv_key());
+		
+		return passwordEncoder.matches(email.getEv_authCode(),encCode);
 	}
 	
 

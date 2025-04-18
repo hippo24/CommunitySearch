@@ -2,6 +2,7 @@ package kr.myteam.lolsts.service;
 
 import java.util.List;
 
+import kr.myteam.lolsts.model.vo.EmailVO;
 import kr.myteam.lolsts.model.vo.UserVO;
 
 public interface UserService {
@@ -21,5 +22,9 @@ public interface UserService {
 	boolean updateUser(UserVO user, UserVO newUser);
 
 	List<String> findId(String email);
+
+	int sendEmail(EmailVO email);
+
+	boolean checkEmail(EmailVO email);
 
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import kr.myteam.lolsts.model.vo.EmailVO;
 import kr.myteam.lolsts.model.vo.UserVO;
 
 public interface UserDao {
@@ -19,5 +20,9 @@ public interface UserDao {
 	boolean updateUser(@Param("user")UserVO user);
 	
 	List<String> selectIdByEmail(@Param("us_email")String email);
+
+	boolean insertEV(@Param("email")EmailVO email);
+
+	String selectEVCode(@Param("ev_key")int ev_key);
 
 }
