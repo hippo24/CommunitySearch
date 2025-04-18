@@ -26,7 +26,7 @@ public class HomeController {
 	public String home(Locale locale, Model model) {
 		List<BoardVO> boardList = postService.getBoardList();
 		
-		model.addAttribute("boardList", boardList);
+		model.addAttribute("boardList", boardList);		
 
 		return "home";
 	}

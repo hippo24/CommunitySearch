@@ -27,7 +27,7 @@ buildSrc/build
 spring-test/test-output/
 
 # Maven artifacts
-/target/
+target/
 
 # Eclipse artifacts, including WTP generated manifests
 bin
@@ -56,5 +56,8 @@ node_modules
 /.kotlin/
 
 test/
+
+.metadata
+*.class
 
 config.properties
