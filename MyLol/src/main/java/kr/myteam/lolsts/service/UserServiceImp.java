@@ -154,14 +154,18 @@ public class UserServiceImp implements UserService{
 
 	@Override
 	public boolean updateUser(UserVO user, UserVO newUser) {
+		
 		if(user==null || newUser==null) return false;
 		user.setUs_email(newUser.getUs_email());
+		user.setUs_name(newUser.getUs_name());
+		
 		//비번이 있으면(비번이 제대로 입력됐으면) 비번을 암호화해서 회원정보에 저장
 		if(newUser.getUs_pw().length() != 0) {
 			String encPw = passwordEncoder.encode(newUser.getUs_pw());
 			user.setUs_pw(encPw);
 		}
 		return userDao.updateUser(user);
+		
 	}
 
 	@Override

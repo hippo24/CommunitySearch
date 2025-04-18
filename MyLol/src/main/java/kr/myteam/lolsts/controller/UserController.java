@@ -179,14 +179,14 @@ public class UserController {
 	@PostMapping("/find/pw")
 	public boolean findPwPost(@RequestParam String id, @RequestParam String email) {
 		//System.out.println(id);
-		return userService.findPw(id, email);
+		return userService.findPw(id.trim(), email.trim());
 	}
 	
 	@ResponseBody
 	@PostMapping("/find/id")
 	public List<String> findIdPost(@RequestParam String email) {
 		//System.out.println(email);
-		return userService.findId(email);
+		return userService.findId(email.trim());
 	}
 	
 	@GetMapping("/mypage")
@@ -211,7 +211,7 @@ public class UserController {
     @ResponseBody
     public String sendEmail(@RequestParam String email) {
         EmailVO newEmail = new EmailVO();
-        newEmail.setEv_email(email);
+        newEmail.setEv_email(email.trim());
         System.out.println(email);
         int evKey = userService.sendEmail(newEmail);
         System.out.println(evKey);
@@ -225,7 +225,7 @@ public class UserController {
     public boolean checkEmail(@RequestParam int ev_key, @RequestParam String code) {
         EmailVO newEmail = new EmailVO();
         newEmail.setEv_key(ev_key);
-        newEmail.setEv_authCode(code);
+        newEmail.setEv_authCode(code.trim());
         return userService.checkEmail(newEmail);
     }
 	

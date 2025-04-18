@@ -29,7 +29,7 @@
 		
 		<div class="form-group mt-3">
 		  <label for="id">아이디</label>
-		  <input type="text" class="form-control" id="id" name="us_id" value="${id}">	
+		  <input type="text" class="form-control" id="id" name="us_id" value="${id}" placeholder="아이디는 변경이 불가하니 신중히 입력해 주세요.">	
 		  <label id="checkId" class="red"></label>
 		  	
 		</div>
@@ -65,7 +65,7 @@
 				<div class="mt-2 email-check-form">
 				    <input type="text" class="form-control input-check-email" placeholder="인증번호 입력" />
 				    <button type="button" class="btn btn-sm btn-outline-success mt-1 email-check-btn">인증 확인</button>
-				    <div id="timer" class="text-muted small mt-1"></div>
+				    <div class="text-muted small mt-1 timer"> </div>
 				    <div class="mt-1 email-result"></div>
 				</div>
 				
@@ -85,6 +85,9 @@
 	</div>
 	
 	
+		
+	
+	<!-- 이메일 인증 -->
 	<script type="text/javascript">
 		let ev_key = -1;
 	
@@ -94,6 +97,7 @@
 		
 		
 		$(".email-check-form").hide();
+	
 		
 		function startTimer() {
 		    clearInterval(timer);
@@ -101,18 +105,29 @@
 	
 		    timer = setInterval(() => {
 		        timeNow--;
-		        const minutes = Math.floor(timeNow / 60);
-		        const seconds = timeNow % 60;
-		        $("#timer").text(`남은 시간: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`);
+		        const m = Math.floor(parseInt(timeNow) / 60);
+		        const s = parseInt(timeNow) % 60;
+		        
+		        //console.log("minutes:", minutes, "seconds:", seconds); 
+		        
+		        const time = ("남은 시간 : " + String(m).padStart(2,"0") + ":" + String(s).padStart(2,"0"));
+		        $(".timer").text(time);
+		        //console.log(m, s, time, timeNow);
+		        
+		        //$(".timer").text(`남은 시간: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`);
 		        if (timeNow <= 0) {
 		            clearInterval(timer);
-		            $("#timer").text("인증 시간이 만료되었습니다.");
+		            $(".timer").text("인증 시간이 만료되었습니다.");
 		        }
+		        
+		        //console.log(timeNow);
+		        
 		    }, 1000);
 		}
 	
 		$(".email-send-btn").click(function () {
 		    const email = $("#email").val().trim();
+		    $("#email").val(email);
 		    let res = false;
 		    if (!email) return alert("이메일을 입력하세요.");
 		    
@@ -155,6 +170,8 @@
 					if (data && data.length > 0) {
 						alert("인증 번호를 보냈습니다.");
 						ev_key = data;
+						$("#email").prop("readonly", true);
+						startTimer();
 						return;
 					} else{
 						alert("인증 번호를 보내지 못했습니다.");
@@ -164,7 +181,7 @@
 					alert("요청 중 오류가 발생했습니다.");
 				},
 				complete: function(){
-					$("#email").prop("readonly", true);
+					
 					$(".spinner-box").hide();
 					$(".email-check-form").show();
 				}
@@ -182,7 +199,7 @@
 	
 		    if (timeNow <= 0) {
 		    	clearInterval(timer);
-		    	$("#timer").text("인증 시간이 만료되었습니다.");
+		    	$(".timer").text("인증 시간이 만료되었습니다.");
 		    	emailCheck = false;
 		    	return;
 		    }
@@ -214,12 +231,13 @@
 		
 	</script>
 	
+	<!-- 표현식 검사 -->
 	<script type="text/javascript">
-	
 	
 		function checkId() {
 		    $("#checkId").text("");
-		    let id = $("#id").val();
+		    let id = $("#id").val().trim();
+		    $("#id").val(id);
 		    if (!/^[a-zA-Z0-9]{5,13}$/.test(id)) {
 		    	$("#checkId").hide();	
 		    	return false;
@@ -263,7 +281,7 @@
 				}, 
 				error : function(jqXHR, textStatus, errorThrown){
 				}
-		});
+			});
 			
 				
 
@@ -285,7 +303,9 @@
 
 		    // 유저명 중복 확인
 		    $("#name").on("blur", function() {
-		        checkName($("#name").val());
+		    	const name = $(this).val().trim();
+		        $(this).val(name); 
+		        checkName(name);
 		    });
 
 		    // Validate
@@ -331,14 +351,19 @@
 		            }
 		        },
 		        submitHandler: function() {
-		        	let idOk = checkId();
+		        	["#id", "#pw", "#pw2", "#name", "#email"].forEach(sel => {
+		                const el = $(sel);
+		                el.val(el.val().trim());
+		            });
+
+		            let idOk = checkId();
 		            let nameOk = checkName($("#name").val());
-		            
+
 		            if (!emailCheck) {
-		        		alert("이메일 인증을 완료해주세요.");
-		        		return false;
-		        	}
-		            
+		                alert("이메일 인증을 완료해주세요.");
+		                return false;
+		            }
+
 		            return idOk && nameOk;
 		        }
 		    });
