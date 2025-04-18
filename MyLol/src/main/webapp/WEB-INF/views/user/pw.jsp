@@ -17,12 +17,15 @@
 </head>
 <body>
 
-	<!-- 로그인.jsp 복붙해옴 -->
 	<div>	
 		<h1>비번찾기</h1>
 		<div class="form-group mt-3">
 			<label for="id" class="form-label">아이디</label> 
 			<input type="text" class="form-control" id="id">	<!-- 비동기 통신 할거기 때문에 name 필요없음 -->
+		</div>
+		<div class="form-group mt-3">
+			<label for="email" class="form-label">이메일주소</label> 
+			<input type="email" class="form-control" id="email" placeholder="가입시 입력한 이메일 주소를 입력해 주세요.">	
 		</div>
 		<button type = "button" class="btn-find-pw btn btn-outline-success mt-3 col-12">비번찾기</button>
 	</div>
@@ -40,12 +43,15 @@
 				async : true,
 				url : '<c:url value="/user/find/pw"/>',
 				method : "post",
-				data : { id : $("#id").val()},
+				data : { 
+						id : $("#id").val(),
+						email : $("#email").val()
+					},
 				success : function(data){
 					$(".fixed").hide();
 					//console.log(data);
 					if(data)alert("새 비번을 메일로 전송했습니다.");
-					else alert("일치하는 계정을 찾지 못했습니다.");
+					else alert("없는 계정이거나 이메일 주소가 일치하지 않습니다.");
 				}
 				
 			});

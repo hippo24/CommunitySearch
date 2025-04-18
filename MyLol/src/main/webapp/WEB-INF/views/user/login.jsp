@@ -29,7 +29,9 @@
 
 		<button type = "submit" class="btn btn-outline-success mt-3 col-12">로그인</button>
 	</form>
-	<a href="<c:url value="/user/find/pw"/>">비밀번호 찾기</a>
+	<a href="<c:url value="/user/find/id"/>" class="d-inline">아이디 찾기</a>
+	<div class="d-inline">/</div>
+	<a href="<c:url value="/user/find/howtofindpw"/>" class="d-inline">비밀번호 찾기</a>
 
 </body>
 </html>

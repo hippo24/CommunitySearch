@@ -1,5 +1,6 @@
 package kr.myteam.lolsts.service;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.mail.internet.MimeMessage;
@@ -81,9 +82,9 @@ public class UserServiceImp implements UserService{
 	}
 
 	@Override
-	public boolean findPw(String id) {
+	public boolean findPw(String id, String email) {
 		UserVO user = userDao.selectUserBy(id, "us_id");
-		if(user == null) return false;
+		if(user == null || !user.getUs_email().equals(email)) return false;
 		
 		try {
 			//새 비번을 생성
@@ -110,8 +111,8 @@ public class UserServiceImp implements UserService{
 		String pw = "";
 		while(pw.length() < size) {
 			//랜덤 정수 생성(0~61)
-			//int r = (int)(Math.random()*(61 - 0 + 1) + 0);
-			int r = (int)(Math.random()*(62));
+			
+			int r = (int)(Math.random()*(62)); //int r = (int)(Math.random()*(61 - 0 + 1) + 0);
 			
 			//0~9면 문자 0~9로 맵핑 후 이어붙임
 			if(r < 10) pw += r;
@@ -130,7 +131,7 @@ public class UserServiceImp implements UserService{
 
 	private boolean mailSend(String to, String title, String content) {
 
-		String setfrom = "jaewon8469@gmail.com";	//의미가 없지만 이걸 안쓰면 전송이 안됨
+		String setfrom = "jaewon8469@gmail.com";
 		try{
 	        MimeMessage message = mailSender.createMimeMessage();
 	        MimeMessageHelper messageHelper
@@ -151,15 +152,30 @@ public class UserServiceImp implements UserService{
 
 
 	@Override
-	public boolean updateUser(UserVO user, UserVO member) {
-		if(user==null || member==null) return false;
-		user.setUs_email(member.getUs_email());
+	public boolean updateUser(UserVO user, UserVO newUser) {
+		if(user==null || newUser==null) return false;
+		user.setUs_email(newUser.getUs_email());
 		//비번이 있으면(비번이 제대로 입력됐으면) 비번을 암호화해서 회원정보에 저장
-		if(member.getUs_pw().length() != 0) {
-			String encPw = passwordEncoder.encode(member.getUs_pw());
+		if(newUser.getUs_pw().length() != 0) {
+			String encPw = passwordEncoder.encode(newUser.getUs_pw());
 			user.setUs_pw(encPw);
 		}
 		return userDao.updateUser(user);
+	}
+
+	@Override
+	public List<String> findId(String email) {
+		// TODO Auto-generated method stub
+		List<String> list = userDao.selectIdByEmail(email);
+		
+		for(int i = 0; i < list.size(); i++) {
+			if(list.get(i).length()>4)
+			list.set(i, "***" + list.get(i).substring(3)); 
+			else 
+			list.set(i, "너무 짧은 이메일 주소입니다."); 
+		}
+		
+		return list;
 	}
 	
 

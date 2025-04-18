@@ -24,5 +24,10 @@
 		update user set US_PW = #{user.us_pw}, US_NAME = #{user.us_name}, US_EMAIL = #{user.us_email} where us_key = #{user.us_key}
 	</update>
 	
+	<select id="selectIdByEmail" resultType="String">
+		select us_id from user where us_email = #{us_email}
+	</select>
+	
+	
 	
 </mapper>

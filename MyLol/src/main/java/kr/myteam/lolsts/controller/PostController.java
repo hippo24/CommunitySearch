@@ -175,6 +175,7 @@ public class PostController {
 
 	@GetMapping("/duo")
 	public String duo(Model model, PostCriteria cri, Integer num) {
+		/*
 		cri.setPerPageNum(2);
 		List<PostVO> list = postService.getPostList(cri);
 		
@@ -191,7 +192,7 @@ public class PostController {
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("pm", pm);
 		model.addAttribute("boardNum", num);
-		
+		*/
 		
 		return "/post/duo";
 	}

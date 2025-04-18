@@ -1,5 +1,7 @@
 package kr.myteam.lolsts.service;
 
+import java.util.List;
+
 import kr.myteam.lolsts.model.vo.UserVO;
 
 public interface UserService {
@@ -14,8 +16,10 @@ public interface UserService {
 
 	UserVO getUserByCookie(String cookieId);
 
-	boolean findPw(String id);
+	boolean findPw(String id, String email);
 
-	boolean updateUser(UserVO user, UserVO member);
+	boolean updateUser(UserVO user, UserVO newUser);
+
+	List<String> findId(String email);
 
 }

@@ -1,6 +1,7 @@
 package kr.myteam.lolsts.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -162,12 +163,29 @@ public class UserController {
 	public String findPw() {
 		return "/user/pw";
 	}
+
+	@GetMapping("/find/id")
+	public String findId() {
+		return "/user/id";
+	}
+	
+	@GetMapping("/find/howtofindpw")
+	public String howToFindPw() {
+		return "/user/howtofindpw";
+	}
 	
 	@ResponseBody
 	@PostMapping("/find/pw")
-	public boolean findPwPost(@RequestParam String id) {
-		System.out.println(id);
-		return userService.findPw(id);
+	public boolean findPwPost(@RequestParam String id, @RequestParam String email) {
+		//System.out.println(id);
+		return userService.findPw(id, email);
+	}
+	
+	@ResponseBody
+	@PostMapping("/find/id")
+	public List<String> findIdPost(@RequestParam String email) {
+		//System.out.println(email);
+		return userService.findId(email);
 	}
 	
 	@GetMapping("/mypage")
@@ -176,16 +194,16 @@ public class UserController {
 	}
 	
 	@PostMapping("/mypage")
-	public String mypagePost(Model model, UserVO member, HttpSession session) {
+	public String mypagePost(Model model, UserVO newUser, HttpSession session) {
 		UserVO user = (UserVO)session.getAttribute("user");
-		if(userService.updateUser(user, member)) {
+		if(userService.updateUser(user, newUser)) {
 			model.addAttribute("msg","회원 정보 변경.");
 		}else {
 			model.addAttribute("msg","회원 정보 변경 실패.");
 		}
-		model.addAttribute("url","/mypage");
+		model.addAttribute("url","/user/mypage");
 		
-		return "/msg/msg";		//알림창 띄우기 위해 msg.jsp로
+		return "message";		//알림창 띄우기 위해 msg.jsp로
 	}
 	
 	
