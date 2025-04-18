@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%request.setAttribute("pageType", "tft");%>
 <!DOCTYPE html>
 <html lang="ko">
@@ -26,7 +27,11 @@
 			    <div>레벨: <strong>${summoner.summonerLevel}</strong></div>
 			    <div>티어: <strong>${dto.tier} ${dto.rank}</strong> (${dto.leaguePoints} LP)</div>
 			    <div>판수: <strong>${dto.wins + dto.losses}</strong></div>
-			    <div>순방: <strong>${dto.wins}</strong> / 패배: <strong>${dto.losses}</strong></div>
+			    <div>
+			    	순방: <strong>${dto.wins}</strong> / 
+			    	패배: <strong>${dto.losses}</strong> /
+			    	승률: <strong><fmt:formatNumber value="${(dto.wins / (dto.wins + dto.losses)) * 100}" type="number" maxFractionDigits="1" />%</strong>
+			    </div>
 			</div>
       </div>
     </div>

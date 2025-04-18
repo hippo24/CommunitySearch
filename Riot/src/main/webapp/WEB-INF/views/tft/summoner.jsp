@@ -190,92 +190,19 @@ request.setAttribute("pageType", "lol");
                         
 	                   	// 입력한 유저의 정보만 표시
 	                   	if (player.puuid === puuid) {
-	                        
-	                   		//시너지
-	                   		
-	                   		
 	              			//전설이 이미지 url
 					    	playerUrl ="https://ddragon.leagueoflegends.com/cdn/15.8.1/img/tft-tactician/" + tacticianData[player.companion.item_ID].image.full;
-					    	matchDetailHtml += '<h3>#' + player.placement + ' 경기 상세 정보</h3>'+' <h5>경기 ID: ' + matchId + '</h5>';
-						    matchDetailHtml += '<div class="legend ml-3 mt-3" style="display: flex; align-items: center; margin-bottom: 10px;">'+
+					    	matchDetailHtml += '<h3>#' + player.placement + ' 경기 상세 정보</h3>'+ 
+					    						/* '<h5>경기 ID: ' + matchId + '</h5>'+ */
+						    				'<div style="display: flex; align-items: center; flex-wrap: nowrap;">'
+					    	matchDetailHtml += '<div class="legend ml-3 mt-3" style="display: flex; align-items: center; margin-right: 20px;">'+
 													'<figure>'+
 														'<img src="' + playerUrl + '" alt="'+ tacticianData[player.companion.item_ID] +'" class="legend"/>'+
 														'<span class="level">' + player.level + '</span>'+
 													'</figure>'+
-													
 												'</div>';
-								
-                           	matchDetailHtml += '<div class="mt-6 mb-3 ml-2">';
-                           	
-                           	const championMetaMap = {}; //챔피언
-                           	const itemDataById = {};	//아이템
-                           	for (const key in championData) {
-                           	    const champ = championData[key];
-                           	    championMetaMap[champ.id] = champ;
-                           	}
-                           	for (const key in itemData) {
-                           	    const item = itemData[key];
-                           	    if (item.id) {
-                           	        itemDataById[item.id] = item;
-                           	    }
-                           	}
-                           	
-                           	matchDetailHtml += '<div class="unit-container">';
-                            if (player.units && player.units.length > 0) {
-                                player.units.forEach(function(unit) {
-	                            	// 소환수는 0 코스트 취급. 테두리는 1코스트처럼 두기.
-	                            	if (unit.character_id.startsWith("TFT14_Summon")){unit.rarity = 0;}
-
-								  	// championMetaMap에서 유닛 데이터 찾기
-								  	const champMeta = championMetaMap[unit.character_id];
-								  	if (!champMeta) {return;} // 매칭 안 되면 스킵
-								
-								  	const champName = champMeta.name;
-								  	
-								  	//const champTier = champMeta.tier;
-								  	const champImageUrl = "https://ddragon.leagueoflegends.com/cdn/15.7.1/img/tft-champion/" + champMeta.image.full;
-		                            	
-	                            	var borderColor; //이미지만 감싸는 div 태그에 스타일 넣기 위함
-	                            	switch (unit.rarity) {
-	                                    case 0: borderColor = 'gray'; break;
-	                                    case 1: borderColor = 'lightgreen'; break;
-	                                    case 2: borderColor = 'skyblue'; break;
-	                                    case 4: borderColor = 'purple'; break;
-	                                    case 6: borderColor = 'gold'; break;
-	                                    default: borderColor = 'transparent';
-	                            	}	
-		                            
-	                            	matchDetailHtml += '<div class="unit-box mt-3">'+
-							                            	//별
-							                                '<div class="unit-star">★'+ unit.tier+ '</div>'+
-							                                '<div class="unit-image unit" style="border-color: '+ borderColor + '">'+
-		                            							//챔피언
-		                            							'<img src="' + champImageUrl + '" class="champ-img " alt="' + champName + '" />'+
-		                            							
-                            								'</div>'+
-                                    						'<div class="unit-items item">';
-	                             	// 아이템 이미지들 출력
-	                                if (unit.itemNames && unit.itemNames.length > 0) {
-	                                    unit.itemNames.forEach(function(itemId) {
-	                                        const itemMeta = itemDataById[itemId];
-	                                        console.log();
-	                                        if (!itemMeta) return;
-	                                       	const itemImgUrl = "https://ddragon.leagueoflegends.com/cdn/15.8.1/img/tft-item/" + itemMeta.image.full;;
-	                                        //아이템
-	                                       	matchDetailHtml += '<div class="item-wrapper">' +
-						                                        '<img src="' + itemImgUrl + '" alt="' + itemMeta.name + '" />' +
-						                                        '<div class="tooltip">' + itemMeta.name + '</div>' +
-						                                    '</div>';
-	                                    });
-	                                }
-	                                matchDetailHtml += '</div></div>';
-                                });
-                            } else {
-                                matchDetailHtml += '<ol>유닛 정보가 없습니다.</ol>';
-                            }
-                            matchDetailHtml += '</div>'; 
-                            matchDetailHtml += '</div>';
-                            matchDetailHtml += '<div class="ml-3 mb-3" style="display: flex; flex-wrap: wrap;">';
+							//시너지
+	                   		matchDetailHtml += '<div class="synergy-container" style="display: flex; flex-wrap: wrap; gap: 8px;">';
 	
                             const styleBgMap = {
                                 1: "https://cdn.dak.gg/tft/images2/tft/traits/background/bronze.svg",
@@ -327,17 +254,92 @@ request.setAttribute("pageType", "lol");
 
                                 if (imageUrl) {
                                     matchDetailHtml += 
-                                    '<div style="display: inline-block; width: 32px; text-align: center;">' + 
+                                    '<div style="width: 32px; text-align: center;">' + 
                                         '<div style="position: relative; width: 32px; height: 32px;" class="synergy">' +
                                             '<img src="' + bgUrl + '" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">' +
                                             '<img src="' + imageUrl + '" alt="' + displayName + '" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 18px; height: 18px; filter: invert(1);" />' +
-                                        	'<div class="tooltip">'+displayName+'</div>'+
+                                        	'<div class="tooltip">'+displayName+'('+ trait.num_units +')</div>'+
                                         '</div>' +
                                         /* '<div style="font-size: 12px; margin-top: 2px;">' + trait.num_units + ' ' + displayName + '</div>' + */
                                     '</div>';
                                 }
                             });
+                            matchDetailHtml += '</div></div>';					
+							
+												
+                           	matchDetailHtml += '<div class="mt-6 mb-3 ml-2">';
+                           	
+                           	const championMetaMap = {}; //챔피언
+                           	const itemDataById = {};	//아이템
+                           	for (const key in championData) {
+                           	    const champ = championData[key];
+                           	    championMetaMap[champ.id] = champ;
+                           	}
+                           	for (const key in itemData) {
+                           	    const item = itemData[key];
+                           	    if (item.id) {
+                           	        itemDataById[item.id] = item;
+                           	    }
+                           	}
+                           	
+                           	matchDetailHtml += '<div class="unit-container">';
+                            if (player.units && player.units.length > 0) {
+                                player.units.forEach(function(unit) {
+	                            	// 소환수는 0 코스트 취급. 테두리는 1코스트처럼 두기.
+	                            	if (unit.character_id.startsWith("TFT14_Summon")){unit.rarity = 0;}
+
+								  	// championMetaMap에서 유닛 데이터 찾기
+								  	const champMeta = championMetaMap[unit.character_id];
+								  	if (!champMeta) {return;} // 매칭 안 되면 스킵
+								
+								  	const champName = champMeta.name;
+								  	
+								  	//const champTier = champMeta.tier;
+								  	const champImageUrl = "https://ddragon.leagueoflegends.com/cdn/15.7.1/img/tft-champion/" + champMeta.image.full;
+		                            	
+	                            	var borderColor; //이미지만 감싸는 div 태그에 스타일 넣기 위함
+	                            	switch (unit.rarity) {
+	                                    case 0: borderColor = 'gray'; break;
+	                                    case 1: borderColor = 'lightgreen'; break;
+	                                    case 2: borderColor = 'skyblue'; break;
+	                                    case 4: borderColor = 'purple'; break;
+	                                    case 6: borderColor = 'gold'; break;
+	                                    default: borderColor = 'transparent';
+	                            	}	
+		                            
+	                            	matchDetailHtml += '<div class="unit-box mt-3">'+
+							                            	//별
+							                                '<div class="unit-star">★'+ unit.tier+ '</div>'+
+							                                '<div class="unit">'+
+							                                	'<div class="unit-image" style="border-color: '+ borderColor + '">'+
+		                            							//챔피언
+		                            								'<img src="' + champImageUrl + '" class="champ-img " alt="' + champName + '" />'+
+                            									'</div>'+
+                            									'<div class="tooltip">' + champName + '</div>'+
+                            								'</div>'+
+                                    						'<div class="unit-items item">';
+	                             	// 아이템 이미지들 출력
+	                                if (unit.itemNames && unit.itemNames.length > 0) {
+	                                    unit.itemNames.forEach(function(itemId) {
+	                                        const itemMeta = itemDataById[itemId];
+	                                        console.log();
+	                                        if (!itemMeta) return;
+	                                       	const itemImgUrl = "https://ddragon.leagueoflegends.com/cdn/15.8.1/img/tft-item/" + itemMeta.image.full;;
+	                                        //아이템
+	                                       	matchDetailHtml += '<div class="item-wrapper">' +
+							                                        '<img src="' + itemImgUrl + '" alt="' + itemMeta.name + '" />' +
+							                                        '<div class="tooltip">' + itemMeta.name + '</div>' +
+						                                    	'</div>';
+	                                    });
+	                                }
+	                                matchDetailHtml += '</div></div>';
+                                });
+                            } else {
+                                matchDetailHtml += '<ol>유닛 정보가 없습니다.</ol>';
+                            }
+                            matchDetailHtml += '</div>'; 
                             matchDetailHtml += '</div></div>';
+                            
 		                    $('#gameInfo').append(matchDetailHtml);
                        	}
                    	})

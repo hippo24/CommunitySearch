@@ -41,7 +41,7 @@ figure {
 .unit-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 3px;
   margin-top: 10px;
 }
 
@@ -121,6 +121,7 @@ figure {
   flex-wrap: nowrap;
   gap: 6px;
 }
+
 
 /* 아이템, 유닛, 시너지 모두 position: relative */
 .item-wrapper,
