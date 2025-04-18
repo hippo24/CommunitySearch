@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>검색</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #121217;
+      font-family: "Segoe UI", sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      position: absolute;
+      top: 45%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .search-bar {
+      background-color: #2e2e38;
+      border-radius: 30px;
+      padding: 10px 15px;
+      display: flex;
+      align-items: center;
+      width: 300px;
+      max-width: 90%;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      justify-content: space-between;
+    }
+
+    .player-input {
+      background-color: transparent;
+      border: none;
+      outline: none;
+      font-size: 15px;
+      font-weight: 400;
+      flex: 1;
+      margin-right: 8px;
+      min-width: 0;
+      color: #ffffff;
+    }
+
+    .server-tag {
+      background-color: #282830;
+      color: #b2b8d4;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      margin-right: 8px;
+      white-space: nowrap;
+    }
+
+    .search-button {
+      background-color: #1e1e2f;
+      color: #c4c9f3;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .player-input::placeholder {
+      color: #b2b8d4;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="search-bar">
+      <input type="text" id="riotId" class="player-input" placeholder="&nbsp;플레이어 이름&nbsp; + &nbsp;" />
+      <div class="server-tag">#태그</div>
+      <button class="search-button">검색</button>
+    </div>
+  </div>
+</body>
+<script>
+  // Riot API 키
+  const API_KEY = "RGAPI-b1ba324e-eae0-495c-b637-c88670efd0a7";
+
+  // 클릭 이벤트 연결
+  document.querySelector(".search-button").addEventListener("click", async () => {
+    const playerNameInput = document.querySelector(".player-input");
+    const fullInputRaw = playerNameInput.value.trim();
+
+    if (!fullInputRaw) {
+      alert("플레이어 이름을 입력하세요.");
+      return;
+    }
+
+    // 태그 없는 경우 자동으로 #KR1 붙이기
+    const fullInput = fullInputRaw.includes("#") ? fullInputRaw : `${fullInputRaw}#KR1`;
+
+    const [gameName, tagLine] = fullInput.split("#");
+    if (!gameName || !tagLine) {
+      alert("올바른 Riot ID 형식이 아닙니다.");
+      return;
+    }
+
+    try {
+      // Riot ID → puuid 조회 (asia 서버)
+      const riotRes = await fetch(
+        `https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}?api_key=${API_KEY}`
+      );
+
+      if (!riotRes.ok) {
+        alert("존재하지 않는 Riot ID입니다.");
+        return;
+      }
+
+      const riotData = await riotRes.json();
+
+      // puuid → 소환사 정보 조회 (지역 서버: kr)
+      const region = "kr";
+      const summonerRes = await fetch(
+        `https://${region}.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${riotData.puuid}?api_key=${API_KEY}`
+      );
+
+      if (!summonerRes.ok) {
+        alert("소환사 정보를 가져올 수 없습니다.");
+        return;
+      }
+
+      const summonerData = await summonerRes.json();
+      localStorage.setItem("riotId", JSON.stringify({ gameName, tagLine }));
+      location.href = "result.html";
+    } catch (error) {
+      console.error("API 요청 실패:", error);
+    }
+  });
+
+
+  //엔터로 검색 가능
+  document.addEventListener("DOMContentLoaded", () => {
+    const input = document.getElementById("riotId");
+
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        document.querySelector(".search-button").click(); // 클릭 이벤트 강제 실행
+      }
+    });
+  });
+</script>
+
+</html>

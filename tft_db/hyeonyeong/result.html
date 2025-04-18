@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>소환사 정보</title>
+    <style>
+      body {
+        margin: 0;
+        background-color: #1c1c26;
+        font-family: "Segoe UI", sans-serif;
+        color: #ffffff;
+      }
+      /* 상단 레이아웃 컨테이너 */
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 40px;
+        margin: 40px auto;
+        width: 1200px; /* 고정 너비 */
+      }
+      /* 왼쪽 프로필 카드 */
+      .profile-card {
+        background-color: #2e2e38;
+        border-radius: 16px;
+        padding: 24px 32px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 360px;
+        text-align: center;
+      }
+      .profile-img {
+        width: 96px;
+        height: 96px;
+        border-radius: 50%;
+        margin-bottom: 16px;
+        border: 3px solid #4b4b5e;
+      }
+      .name-tag {
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+      .queue-type {
+        font-size: 14px;
+        color: #b2b8d4;
+        margin-bottom: 4px;
+      }
+      .tier {
+        font-size: 20px;
+        font-weight: 600;
+        margin-top: 4px;
+      }
+      .stats {
+        font-size: 14px;
+        color: #b2b8d4;
+        margin-top: 4px;
+      }
+      .lp {
+        font-size: 16px;
+        margin-top: 4px;
+      }
+      .tier-icon {
+        width: 100px;
+      }
+      /* 오른쪽 최근 전적 박스 */
+      .recent-matches {
+        background-color: #2e2e38;
+        border-radius: 16px;
+        padding: 24px 32px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+
+        width: 380px;
+        min-height: 380px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        /* text-align: center; */
+      }
+      .recent-matches .title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #fff;
+        margin-bottom: 10px;
+      }
+      .game-entry {
+        background-color: #3e3e4f;
+        padding: 10px;
+        width: 300px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        color: #fff;
+      }
+      .game-entry:last-child {
+        margin-bottom: 0;
+      }
+      .game-info {
+        font-size: 14px;
+        margin-bottom: 5px;
+      }
+      .separator {
+        border-top: 1px solid #4b4b5e;
+        margin-top: 10px;
+      }
+      /* 하단 테이블 컨테이너 */
+      .matches-table-container {
+        width: 1200px;
+        margin: 0 auto 40px auto; /* 가운데 정렬 + 아래 여백 */
+      }
+      .matches-table-container h2 {
+        margin-top: 0;
+        margin-bottom: 16px;
+        font-size: 22px;
+      }
+      .match-table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #2e2e38;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .match-table th,
+      .match-table td {
+        padding: 12px;
+        text-align: center;
+      }
+      .match-table th {
+        background-color: #3e3e4f;
+        font-weight: 600;
+      }
+      .match-table tr {
+        border-bottom: 1px solid #4b4b5e;
+      }
+      .match-table tr:last-child {
+        border-bottom: none;
+      }
+      .win-row {
+        background-color: rgba(0, 128, 255, 0.1); /* 승리 하이라이트 */
+      }
+      .lose-row {
+        background-color: rgba(255, 0, 0, 0.1); /* 패배 하이라이트 */
+      }
+      .item-icon,
+      .spell-icon {
+        width: 24px;
+        height: 24px;
+        margin-right: 4px;
+        vertical-align: middle;
+      }
+      .kda {
+        font-weight: bold;
+        color: #ffcc00;
+      }
+      .stats-cell {
+        color: #b2b8d4;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 상단 컨테이너 (왼쪽 프로필 카드 + 오른쪽 최근 전적) -->
+    <div class="container">
+      <!-- 왼쪽 프로필 카드 -->
+      <div class="profile-card">
+        <img class="profile-img" id="profileIcon" src="" alt="Profile Icon" />
+        <div class="level" id="summonerLevel">레벨</div>
+        <div class="name-tag" id="nameTag">소환사 이름</div>
+        <div class="queue-type">개인/2인 랭크 게임</div>
+        <img id="tierIcon" class="tier-icon" src="" alt="Tier Icon" />
+        <div class="tier" id="tierInfo">티어 정보</div>
+        <div class="lp" id="lpInfo">LP</div>
+        <div class="stats" id="winRate">승률</div>
+      </div>
+      <!-- 오른쪽 최근 전적 박스 -->
+      <div class="recent-matches">
+        <div class="title">최근 전적 통계 (x게임)</div>
+        <div class="game-entry">
+          <div class="game-info">캐릭 1:</div>
+          <div class="game-info">x승 0패 승률 x%</div>
+          <div class="game-info">평균 k/d/a kda:xx</div>
+        </div>
+        <div class="separator"></div>
+        <div class="game-entry">
+          <div class="game-info">캐릭 2:</div>
+          <div class="game-info">x승 0패 승률 x%</div>
+          <div class="game-info">평균 k/d/a kda:xx</div>
+        </div>
+        <div class="separator"></div>
+        <div class="game-entry">
+          <div class="game-info">캐릭 3:</div>
+          <div class="game-info">x승 0패 승률 x%</div>
+          <div class="game-info">평균 k/d/a kda:xx</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 하단 테이블 (최근 경기 상세) -->
+    <div class="matches-table-container">
+      <h2>최근 경기 정보</h2>
+      <table class="match-table">
+        <thead>
+          <tr>
+            <th>게임타입</th>
+            <th>챔피언</th>
+            <th>스펠</th>
+            <th>레벨</th>
+            <th>KDA</th>
+            <th>킬관여</th>
+            <th>아이템</th>
+            <th>CS</th>
+            <th>골드</th>
+            <th>시야</th>
+            <th>게임 시간</th>
+            <th>게임 종료</th>
+          </tr>
+        </thead>
+        <tbody id="matchDataBody">
+          <!-- 동적으로 경기 데이터 행들이 추가됩니다 -->
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+      const riotId = JSON.parse(localStorage.getItem("riotId"));
+      const API_KEY = "RGAPI-b1ba324e-eae0-495c-b637-c88670efd0a7";
+      if (!riotId) {
+        alert("플레이어 정보가 없습니다. 검색 페이지로 이동합니다.");
+        location.href = "index.html";
+      }
+      const { gameName, tagLine } = riotId;
+
+      // 기존 프로필, 랭크 정보 로드 함수
+      async function loadData() {
+        try {
+          // Riot ID → PUUID
+          const accountRes = await fetch(
+            `https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(
+              gameName
+            )}/${encodeURIComponent(tagLine)}?api_key=${API_KEY}`
+          );
+          const accountData = await accountRes.json();
+          const puuid = accountData.puuid;
+          const riotName = accountData.gameName; // 실제 Riot 계정명
+
+          // 프로필 카드 업데이트 (원래 코드 그대로)
+          document.getElementById(
+            "nameTag"
+          ).textContent = `${riotName}#${tagLine}`;
+          const summonerRes = await fetch(
+            `https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${puuid}?api_key=${API_KEY}`
+          );
+          const summonerData = await summonerRes.json();
+          const profileIconUrl = `https://ddragon.leagueoflegends.com/cdn/14.6.1/img/profileicon/${summonerData.profileIconId}.png`;
+          document.getElementById("profileIcon").src = profileIconUrl;
+          document.getElementById(
+            "summonerLevel"
+          ).textContent = `레벨 ${summonerData.summonerLevel}`;
+          const rankRes = await fetch(
+            `https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerData.id}?api_key=${API_KEY}`
+          );
+          const rankData = await rankRes.json();
+          const solo = rankData.find((e) => e.queueType === "RANKED_SOLO_5x5");
+          if (solo) {
+            const { tier, rank, leaguePoints, wins, losses } = solo;
+            const winRate = Math.round((wins / (wins + losses)) * 100);
+            document.getElementById("tierInfo").textContent = `${tier} ${rank}`;
+            document.getElementById(
+              "lpInfo"
+            ).textContent = `${leaguePoints} LP`;
+            document.getElementById(
+              "winRate"
+            ).textContent = `${wins}승 ${losses}패 · 승률 ${winRate}%`;
+            const iconMap = {
+              CHALLENGER: "challenger",
+              GRANDMASTER: "grandmaster",
+              MASTER: "master",
+              DIAMOND: "diamond",
+              PLATINUM: "platinum",
+              GOLD: "gold",
+              SILVER: "silver",
+              BRONZE: "bronze",
+              IRON: "iron",
+            };
+            const iconName = iconMap[tier.toUpperCase()];
+            if (iconName) {
+              const tierIconUrl = `https://opgg-static.akamaized.net/images/medals_new/${iconName}.png`;
+              document.getElementById("tierIcon").src = tierIconUrl;
+            }
+          } else {
+            document.getElementById("tierInfo").textContent = "Unranked";
+            document.getElementById("lpInfo").textContent = "-";
+            document.getElementById("winRate").textContent = "-";
+          }
+
+          // 최근 경기 데이터 로드 (별도 함수 호출)
+          await loadMatchData(puuid);
+        } catch (err) {
+          console.error("API 호출 중 오류 발생:", err);
+          alert("정보를 불러오지 못했습니다.");
+        }
+      }
+
+      // 1) 최근 N경기 match ID 불러오기
+      async function getRecentMatchIds(puuid, count = 20) {
+        const endpoint = `https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=${count}`;
+        const res = await fetch(endpoint, {
+          headers: { "X-Riot-Token": API_KEY },
+        });
+        if (!res.ok) {
+          throw new Error(
+            `매치 ID를 불러올 수 없습니다. 상태코드: ${res.status}`
+          );
+        }
+        return await res.json(); // match ID 배열
+      }
+
+      // 2) 개별 경기 상세 정보 불러오기
+      async function getMatchData(matchId) {
+        const endpoint = `https://asia.api.riotgames.com/lol/match/v5/matches/${matchId}`;
+        const res = await fetch(endpoint, {
+          headers: { "X-Riot-Token": API_KEY },
+        });
+        if (!res.ok) {
+          throw new Error(
+            `경기 상세를 불러올 수 없습니다. 상태코드: ${res.status}`
+          );
+        }
+        return await res.json(); // matchData
+      }
+
+      // queueId → 게임타입 변환 (예시)
+      function getGameType(queueId) {
+        const queueMap = {
+          420: "솔로랭크",
+          430: "일반 게임",
+          440: "자유랭크",
+          450: "칼바람",
+        };
+        return queueMap[queueId] || "기타";
+      }
+
+      // 3) 테이블 행 생성 함수 (매치 데이터, 내 puuid 기준)
+      function addMatchRow(matchData, myPuuid) {
+        const row = document.createElement("tr");
+        const info = matchData.info;
+        const participants = info.participants;
+        const me = participants.find((p) => p.puuid === myPuuid);
+
+        // 게임타입
+        const gameTypeCell = document.createElement("td");
+        gameTypeCell.textContent = getGameType(info.queueId);
+        row.appendChild(gameTypeCell);
+
+        // 챔피언 초상화 불러오기
+        const champCell = document.createElement("td");
+        const champImg = document.createElement("img");
+        champImg.src = `https://ddragon.leagueoflegends.com/cdn/15.6.1/img/champion/${me.championName}.png`;
+        champImg.alt = me.championName;
+        champImg.style.width = "48px"; // 크기 조정
+        champCell.appendChild(champImg);
+        row.appendChild(champCell);
+
+        // 소환사 스펠 ID와 이미지 이름을 매핑하는 객체
+        const summonerSpellMap = {
+          1: "SummonerBoost",
+          3: "SummonerExhaust",
+          4: "SummonerFlash",
+          6: "SummonerHaste", // Ghost → 실제 파일명: SummonerHaste.png
+          7: "SummonerHeal",
+          11: "SummonerSmite",
+          12: "SummonerTeleport",
+          14: "SummonerDot",
+          21: "SummonerBarrier",
+          32: "SummonerSnowball", // 눈덩이 스펠
+        };
+
+        // matchData에서 자신의 정보 가져오기
+        const spellId1 = me.summoner1Id;
+        const spellId2 = me.summoner2Id;
+
+        // 스펠 아이콘을 넣을 테이블 셀 생성
+        const spellCell = document.createElement("td");
+
+        // 첫 번째 스펠 아이콘 불러오기
+        const spellImg1 = document.createElement("img");
+        spellImg1.src = `https://ddragon.leagueoflegends.com/cdn/15.6.1/img/spell/${summonerSpellMap[spellId1]}.png`;
+        spellImg1.alt = summonerSpellMap[spellId1];
+        spellImg1.style.width = "30px";
+
+        // 두 번째 스펠 아이콘 불러오기
+        const spellImg2 = document.createElement("img");
+        spellImg2.src = `https://ddragon.leagueoflegends.com/cdn/15.6.1/img/spell/${summonerSpellMap[spellId2]}.png`;
+        spellImg2.alt = summonerSpellMap[spellId2];
+        spellImg2.style.width = "30px";
+
+        // 생성된 아이콘을 스펠 셀에 추가
+        spellCell.appendChild(spellImg1);
+        spellCell.appendChild(spellImg2);
+
+        // 완성된 스펠 셀을 행에 추가
+        row.appendChild(spellCell);
+
+        // 레벨
+        const levelCell = document.createElement("td");
+        levelCell.textContent = me.champLevel;
+        row.appendChild(levelCell);
+
+        // KDA
+        const kdaCell = document.createElement("td");
+        kdaCell.innerHTML = `<span class="kda">${me.kills} / ${me.deaths} / ${me.assists}</span>`;
+        row.appendChild(kdaCell);
+
+        // 킬 관여율 계산
+        const totalTeamKills = participants
+          .filter((p) => p.teamId === me.teamId)
+          .reduce((sum, p) => sum + p.kills, 0);
+        const kp = ((me.kills + me.assists) / totalTeamKills) * 100 || 0;
+        const kpCell = document.createElement("td");
+        kpCell.textContent = `${kp.toFixed(0)}%`;
+        row.appendChild(kpCell);
+
+        // 아이템 (item0 ~ item6)
+        // 아이템 아이콘을 넣을 셀 생성
+        const itemCell = document.createElement("td");
+        let itemHtml = "";
+
+        // 아이템 0부터 6까지 순회
+        for (let i = 0; i <= 6; i++) {
+          const itemId = me[`item${i}`];
+          // itemId가 0이 아니면 실제 아이템이 존재하는 것으로 간주
+          if (itemId && itemId !== 0) {
+            itemHtml += `<img class="item-icon" src="https://ddragon.leagueoflegends.com/cdn/15.6.1/img/item/${itemId}.png" alt="아이템 ${itemId}" />`;
+          }
+        }
+        itemCell.innerHTML = itemHtml;
+        row.appendChild(itemCell);
+
+        // CS (totalMinionsKilled + neutralMinionsKilled)
+        const cs = me.totalMinionsKilled + me.neutralMinionsKilled;
+        const csCell = document.createElement("td");
+        csCell.textContent = cs;
+        row.appendChild(csCell);
+
+        // 골드
+        const goldCell = document.createElement("td");
+        goldCell.textContent = me.goldEarned;
+        row.appendChild(goldCell);
+
+        // 시야 점수
+        const visionCell = document.createElement("td");
+        visionCell.textContent = me.visionScore;
+        row.appendChild(visionCell);
+
+        // [추가] 게임 시간 (분, 초)
+        const gameDuration = info.gameDuration; // 초 단위
+        const minutes = Math.floor(gameDuration / 60);
+        const seconds = gameDuration % 60;
+        const gameTimeCell = document.createElement("td");
+        gameTimeCell.textContent = `${minutes}분 ${seconds}초`;
+        row.appendChild(gameTimeCell);
+
+        // [추가] 게임 종료 시각 계산: gameCreation + (gameDuration * 1000)
+        const gameCreation = info.gameCreation; // 밀리초 단위
+        const gameEndTimestamp = gameCreation + gameDuration * 1000;
+        const gameEndDate = new Date(gameEndTimestamp);
+
+        // 2자리 형식으로 날짜와 시간을 포맷
+        const year = gameEndDate.getFullYear().toString().slice(-2);
+        const month = ("0" + (gameEndDate.getMonth() + 1)).slice(-2);
+        const day = ("0" + gameEndDate.getDate()).slice(-2);
+        const hours = ("0" + gameEndDate.getHours()).slice(-2);
+        const minutesStr = ("0" + gameEndDate.getMinutes()).slice(-2);
+
+        const gameEndCell = document.createElement("td");
+        gameEndCell.textContent = `${year}-${month}-${day} ${hours}:${minutesStr}`;
+        row.appendChild(gameEndCell);
+
+        // 승패 색상 적용
+        if (me.win) {
+          row.classList.add("win-row");
+        } else {
+          row.classList.add("lose-row");
+        }
+        document.getElementById("matchDataBody").appendChild(row);
+      }
+
+      // 4) 메인 로직: matchIds를 이용해 테이블 행 추가 (필터 적용)
+      async function loadMatchData(myPuuid) {
+        try {
+          const allowedQueues = [420, 430, 440, 450]; // 솔로랭크, 일반 게임, 자유랭크, 칼바람만 허용
+          const matchIds = await getRecentMatchIds(myPuuid, 10);
+          const tableBody = document.getElementById("matchDataBody");
+          tableBody.innerHTML = ""; // 초기화
+
+          for (const matchId of matchIds) {
+            const matchData = await getMatchData(matchId);
+            // queueId가 허용된 값인지 확인
+            if (!allowedQueues.includes(matchData.info.queueId)) {
+              continue; // 허용되지 않는 경기라면 건너뜁니다.
+            }
+            addMatchRow(matchData, myPuuid);
+          }
+        } catch (e) {
+          console.error("경기 데이터 로드 오류:", e);
+        }
+      }
+
+      async function loadData() {
+        try {
+          // 1) Riot ID → PUUID
+          const accountRes = await fetch(
+            `https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(
+              gameName
+            )}/${encodeURIComponent(tagLine)}?api_key=${API_KEY}`
+          );
+          const accountData = await accountRes.json();
+          const puuid = accountData.puuid;
+          const riotName = accountData.gameName;
+          document.getElementById(
+            "nameTag"
+          ).textContent = `${riotName}#${tagLine}`;
+
+          // 2) 프로필 카드 업데이트 (이전 코드 그대로)
+          const summonerRes = await fetch(
+            `https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${puuid}?api_key=${API_KEY}`
+          );
+          const summonerData = await summonerRes.json();
+          const profileIconUrl = `https://ddragon.leagueoflegends.com/cdn/14.6.1/img/profileicon/${summonerData.profileIconId}.png`;
+          document.getElementById("profileIcon").src = profileIconUrl;
+          document.getElementById(
+            "summonerLevel"
+          ).textContent = `레벨 ${summonerData.summonerLevel}`;
+
+          // 3) 랭크 정보 업데이트
+          const rankRes = await fetch(
+            `https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerData.id}?api_key=${API_KEY}`
+          );
+          const rankData = await rankRes.json();
+          const solo = rankData.find((e) => e.queueType === "RANKED_SOLO_5x5");
+          if (solo) {
+            const { tier, rank, leaguePoints, wins, losses } = solo;
+            const winRate = Math.round((wins / (wins + losses)) * 100);
+            document.getElementById("tierInfo").textContent = `${tier} ${rank}`;
+            document.getElementById(
+              "lpInfo"
+            ).textContent = `${leaguePoints} LP`;
+            document.getElementById(
+              "winRate"
+            ).textContent = `${wins}승 ${losses}패 · 승률 ${winRate}%`;
+            const iconMap = {
+              CHALLENGER: "challenger",
+              GRANDMASTER: "grandmaster",
+              MASTER: "master",
+              DIAMOND: "diamond",
+              PLATINUM: "platinum",
+              GOLD: "gold",
+              SILVER: "silver",
+              BRONZE: "bronze",
+              IRON: "iron",
+            };
+            const iconName = iconMap[tier.toUpperCase()];
+            if (iconName) {
+              const tierIconUrl = `https://opgg-static.akamaized.net/images/medals_new/${iconName}.png`;
+              document.getElementById("tierIcon").src = tierIconUrl;
+            }
+          } else {
+            document.getElementById("tierInfo").textContent = "Unranked";
+            document.getElementById("lpInfo").textContent = "-";
+            document.getElementById("winRate").textContent = "-";
+          }
+
+          // 4) 최근 경기 데이터 로드 및 테이블 업데이트
+          await loadMatchData(puuid);
+        } catch (err) {
+          console.error("API 호출 중 오류:", err);
+          alert("정보를 불러오지 못했습니다.");
+        }
+      }
+
+      loadData();
+    </script>
+  </body>
+</html>
