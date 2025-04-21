@@ -29,7 +29,7 @@
 		<property name="configLocation"  value="/WEB-INF/spring/mybatis-config.xml"/>
 	</bean>
 	
-	<mybatis-spring:scan base-package="kr.myteam.lolsts.dao"/>
+	<mybatis-spring:scan base-package="kr.kh.riot.dao"/>
 
 		
 	<!-- 메일 정보 -->

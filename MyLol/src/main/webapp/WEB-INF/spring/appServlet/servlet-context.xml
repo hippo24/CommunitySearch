@@ -22,7 +22,7 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="kr.myteam.lolsts.*" />
+	<context:component-scan base-package="kr.kh.riot.*" />
 	
 	
 	<beans:bean id="tilesViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
