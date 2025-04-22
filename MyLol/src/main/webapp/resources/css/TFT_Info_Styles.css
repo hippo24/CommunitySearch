@@ -1,0 +1,162 @@
+/* 기본 폰트 설정 */
+body {
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* figure: 레벨 텍스트 오버랩용 */
+figure {
+  position: relative;
+  display: inline-block;
+  bottom: -8px;
+}
+
+/* 전설 이미지 스타일 */
+.legend {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+/* 레벨 숫자 스타일 */
+.level {
+  position: absolute;
+  bottom: 0px;
+  right: 2px;
+  background-color: black;
+  color: #8B5A3A;
+  border: 1px solid #8B5A3A;
+  border-radius: 50%;
+  width: 27px;
+  height: 27px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+/* 유닛 컨테이너: flex로 여러줄 가능 */
+.unit-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin-top: 10px;
+}
+
+/* 유닛 박스 */
+.unit-box {
+  width: 70px;
+  text-align: center;
+  position: relative;
+}
+
+/* 별 등급 */
+.unit-star {
+  position: absolute;
+  top: -20px;
+  left: 0;
+  right: 0;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* 유닛 이미지 */
+.unit-image {
+  position: relative; /* 툴팁 위치 기준 */
+  border: 3px solid;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto;
+}
+
+/* 유닛 이미지 내부 img */
+.unit-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 유닛 아이템 목록 */
+.unit-items {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin-top: 4px;
+}
+
+/* 아이템 이미지 */
+.unit-items img {
+  width: 17px;
+  height: 17px;
+  border-radius: 4px;
+}
+
+/* 챔피언 이미지 */
+.champ-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  object-position: 75% top;
+  border-radius: 5px;
+}
+
+/* 정보 박스 */
+.infoBox {
+  min-height: auto;
+  height: auto;
+  background-color: #f8f9fa;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
+
+/* 아이템 컨테이너: 한 줄에 배치, 간격 */
+.item-container {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 6px;
+}
+
+
+/* 아이템, 유닛, 시너지 모두 position: relative */
+.item-wrapper,
+.unit,
+.synergy {
+  position: relative;
+  display: inline-block;
+  /* margin-right: 6px; 필요하면 추가 */
+}
+
+/* 툴팁 기본 스타일 */
+.tooltip {
+  position: absolute;
+  bottom: 110%; /* 이미지 위로 툴팁을 띄우기 */
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  border-radius: 4px;
+  white-space: nowrap;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+  z-index: 10; /* 툴팁을 유닛 이미지 위에 표시하기 위해 설정 */
+}
+
+/* 호버 시 툴팁 보이기 */
+.item-wrapper:hover .tooltip,
+.unit:hover .tooltip,
+.unit-image:hover .tooltip,  /* 이미지에 마우스 올려도 툴팁 보임 */
+.synergy:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(-5px);
+}

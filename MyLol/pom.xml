@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>kr.myteam</groupId>
-	<artifactId>lolsts</artifactId>
-	<name>MyLol</name>
+	<groupId>kr.kh</groupId>
+	<artifactId>riot</artifactId>
+	<name>Riot</name>
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 	<properties>
@@ -257,10 +257,9 @@
 		    <artifactId>mail</artifactId>
 		    <version>1.4.3</version>
 		</dependency>
-	
 		
-		
-<!--                                                                 -->		      
+
+    
 	</dependencies>
     <build>
         <plugins>
@@ -283,8 +282,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.5.1</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>11</source>
+                    <target>11</target>
                     <compilerArgument>-Xlint:all</compilerArgument>
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>

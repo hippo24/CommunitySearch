@@ -28,9 +28,30 @@
 	    </button>
 	    <div class="collapse navbar-collapse" id="collapsibleNavbar">
 	      <ul class="navbar-nav">
-	        <li class="nav-item">
+	        <%-- <li class="nav-item">
 	          <a class="nav-link" href="<c:url value="/"/>">전적검색 돌아가기</a>
-	        </li>
+	        </li> --%>
+	        <!-- 좌측 로고 및 페이지 전환 -->
+			<div class="d-flex align-items-center">
+				<c:choose>
+					<c:when test="${pageType != 'tft'}">
+						<a class="navbar-brand" href="<c:url value='/lol/home'/>">
+							<img src="https://cdn.dak.gg/lol/images/header/ico-lol.svg" alt="LOL 홈" style="height: 30px;">
+						</a>
+						<a class="btn btn-sm ms-2" href="<c:url value='/tft/home'/>">
+							<img src="https://cdn.dak.gg/tft/images2/gnb/family/ico-tft.svg" alt="TFT 홈" style="height: 30px;">
+						</a>
+					</c:when>
+					<c:when test="${pageType == 'tft'}">
+						<a class="navbar-brand" href="<c:url value='/tft/home'/>">
+							<img src="https://cdn.dak.gg/tft/images2/gnb/family/ico-tft.svg" alt="TFT 홈" style="height: 30px;">
+						</a>
+						<a class="btn btn-sm ms-2" href="<c:url value='/lol/home'/>">
+							<img src="https://cdn.dak.gg/lol/images/header/ico-lol.svg" alt="LOL 홈" style="height: 30px;">
+						</a>
+					</c:when>
+				</c:choose>
+			</div>
 	        <c:if test="${user == null}">
 		        <li class="nav-item">
 		          <a class="nav-link" href="<c:url value="/user/signup"/>">회원가입</a>
