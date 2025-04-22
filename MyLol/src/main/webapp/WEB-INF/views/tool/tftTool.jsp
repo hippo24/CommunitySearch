@@ -275,7 +275,7 @@
 
 
     // json으로부터 챔피언 데이터 가져오기
-    fetch("/lolsts/resources/14unit_data.json")
+    fetch("/riot/resources/14unit_data.json")
       .then(response => response.json())
       .then(data => {
         data.forEach((champ, index) => {

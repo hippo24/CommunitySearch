@@ -39,11 +39,11 @@
 	</beans:bean>
 		
 	<!-- 인터셉터 등록 -->
-	<beans:bean id="loginInterceptor" class="kr.myteam.lolsts.interceptor.LoginInterceptor"/>	
-	<beans:bean id="autoLoginInterceptor" class="kr.myteam.lolsts.interceptor.AutoLoginInterceptor"/>	
-	<beans:bean id="prevUrlInterceptor" class="kr.myteam.lolsts.interceptor.PrevUrlInterceptor"/>	
-	<beans:bean id="adminInterceptor" class="kr.myteam.lolsts.interceptor.AdminInterceptor"/>	
-	<beans:bean id="guestInterceptor" class="kr.myteam.lolsts.interceptor.GuestInterceptor"/>	
+	<beans:bean id="loginInterceptor" class="kr.kh.riot.interceptor.LoginInterceptor"/>	
+	<beans:bean id="autoLoginInterceptor" class="kr.kh.riot.interceptor.AutoLoginInterceptor"/>	
+	<beans:bean id="prevUrlInterceptor" class="kr.kh.riot.interceptor.PrevUrlInterceptor"/>	
+	<beans:bean id="adminInterceptor" class="kr.kh.riot.interceptor.AdminInterceptor"/>	
+	<beans:bean id="guestInterceptor" class="kr.kh.riot.interceptor.GuestInterceptor"/>	
 	
 	<!-- 인터셉터 맵핑 -->
 	<interceptors>

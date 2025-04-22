@@ -5,14 +5,14 @@
   <!-- typealias 등록 -->
 <configuration>
 	<typeAliases>
-		<typeAlias type="kr.myteam.lolsts.model.vo.UserVO" alias="UserVO"/>	
-		<typeAlias type="kr.myteam.lolsts.model.vo.BoardVO" alias="BoardVO"/>	
-		<typeAlias type="kr.myteam.lolsts.model.vo.TFTVO" alias="TFTVO"/>	
-		<typeAlias type="kr.myteam.lolsts.model.vo.PostVO" alias="PostVO"/>	
-		<typeAlias type="kr.myteam.lolsts.model.vo.RecommendedVO" alias="RecommendedVO"/>	
-		<typeAlias type="kr.myteam.lolsts.model.vo.FileVO" alias="FileVO"/>	
-		<typeAlias type="kr.myteam.lolsts.model.vo.CommentVO" alias="CommentVO"/>	
-		<typeAlias type="kr.myteam.lolsts.model.vo.EmailVO" alias="EmailVO"/>	
+		<typeAlias type="kr.kh.riot.model.vo.UserVO" alias="UserVO"/>	
+		<typeAlias type="kr.kh.riot.model.vo.BoardVO" alias="BoardVO"/>	
+		<typeAlias type="kr.kh.riot.model.vo.TFTVO" alias="TFTVO"/>	
+		<typeAlias type="kr.kh.riot.model.vo.PostVO" alias="PostVO"/>	
+		<typeAlias type="kr.kh.riot.model.vo.RecommendedVO" alias="RecommendedVO"/>	
+		<typeAlias type="kr.kh.riot.model.vo.FileVO" alias="FileVO"/>	
+		<typeAlias type="kr.kh.riot.model.vo.CommentVO" alias="CommentVO"/>	
+		<typeAlias type="kr.kh.riot.model.vo.EmailVO" alias="EmailVO"/>	
 
 
 	</typeAliases>
