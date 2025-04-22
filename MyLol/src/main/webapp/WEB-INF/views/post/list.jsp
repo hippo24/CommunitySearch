@@ -4,27 +4,23 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-
-	
 </head>
 <body>
 
-	<h1 class="mt-3">게시글 목록</h1>
-	
+	<h1 class="mt-3">🔍 게시글 목록</h1>
+	<!-- 카테고리 버튼 -->
 	<button class="btn btn-outline-success btn-board" data-num="0">전체</button>
-	
 	<c:choose>
 		<c:when test="${not empty boardList}">
-			<div class="board-container form-control">
 				<c:forEach items="${boardList}" var="board">	
 					<button class="btn btn-outline-success btn-board" data-num="${board.bo_key}">${board.bo_name}</button>	
 				</c:forEach>
-			</div>
 		</c:when>
 		<c:otherwise>
 			<h3>등록된 게시판이 없습니다.</h3>
 		</c:otherwise>
 	</c:choose>
+	
 	
 	<div class="d-flex justify-content-between mt-3"><!-- 양쪽에 나눠서 배치 -->
 
@@ -36,8 +32,10 @@
 	
 	</div>
 	
-
-	<div class="pl-container mt-3 mb-3"></div>
+	<!-- 게시글 목록을 보여주는 컨테이너 -->
+	<div class="pl-container mt-3 mb-3">
+	
+	</div>
 	    
 
 
@@ -82,12 +80,7 @@
 			$(".pl-container").html(data);
 			
 		})
-	
-		
-		
-		
-		
-		
+
 		function checkBoardBtn(num){		//일부러 밖에 넣는 이유는 색상같은거 바꾸고 싶을때 여기서 한번에 바꾸면 되게
 
 			//초기 설정

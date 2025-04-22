@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/TFT_Info_Styles.css">
 </head>
 <body>
+	<h3>연습용jsp 화면</h3>
     <div class="infoBox form-control mt-3 mb-3">
     	<h3>#1 경기 상세 정보</h3>
     	<!-- 전설이&레벨 및 시너지 -->

@@ -7,25 +7,26 @@
 	
 </head>
 <body>
-	<h1>관리자-게시판 관리</h1>
+	<h3 class="mt-3 mb-3">‍💼 관리자 메뉴</h3>
+	<h5>게시판 관리</h5>
 
 	<div class="board-list">
 		<c:forEach items="${boardList}" var="board">
 			<form class="input-group mb-3 update" action="<c:url value="/admin/board/update"/>" method="post">
 				<input type="hidden" name="bo_key" value="${board.bo_key}">
-				<input type="text" class="form-control" placeholder="${board.bo_name}" name="bo_name" value="${board.bo_name}">
-				<button type="submit" class="form-control btn btn-outline-warning">수정</button>
-				<a href="<c:url value="/admin/board/delete?num=${board.bo_key}"/>" class="form-control btn btn-outline-danger del">삭제</a>
+				<input type="text" class="form-control col-8" placeholder="${board.bo_name}" name="bo_name" value="${board.bo_name}">
+				<button type="submit" class="form-control btn btn-warning col-2">수정</button>
+				<a href="<c:url value="/admin/board/delete?num=${board.bo_key}"/>" class="form-control btn btn-danger del col-2">삭제</a>
 			</form>
 		</c:forEach>
 	
 	</div>
-	
+	<h5 class="mt-3 mb-3">게시판 추가</h5>
 	<div class="board-insert">
 		<form action="<c:url value="/admin/board/insert"/>" method="post" id="insert">
 			<div class="input-group mb-3">
-				<input type="text" class="form-control" placeholder="게시판을 입력하세요." name="name">
-				<button class="form-control btn btn-outline-success">등록</button>
+				<input type="text" class="form-control col-8" placeholder="게시판을 입력하세요." name="name">
+				<button class="form-control btn btn-success col-4">등록</button>
 			</div>
 		</form>
 	</div>
