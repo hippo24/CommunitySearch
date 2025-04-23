@@ -67,12 +67,12 @@ public class PostController {
 	*/
 	@PostMapping("/list")
 	public Object PostList(Model model, @RequestBody PostCriteria cri) {			
-		cri.setPerPageNum(2);
+		//cri.setPerPageNum(2);
 		List<PostVO> postList = postService.getPostList(cri);
-		PageMaker pm = postService.getPageMaker(cri);
+		//PageMaker pm = postService.getPageMaker(cri);
 		
 		model.addAttribute("postList", postList);
-		model.addAttribute("pm",pm);
+		//model.addAttribute("pm",pm);
 		
 		
 		return"post/sub";					
@@ -105,8 +105,7 @@ public class PostController {
 	
 	@GetMapping("/detail/{po_key}")
 	public String detail(Model model,@PathVariable("po_key") int po_key) {
-		//조회수 증가
-		//postService.updateView(po_key);
+
 		//게시글을 가져와서 화면에 전달
 		PostVO post = postService.getPost(po_key);
 		

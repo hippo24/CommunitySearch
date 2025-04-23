@@ -23,13 +23,10 @@
 	
 	
 	<div class="d-flex justify-content-between mt-3"><!-- 양쪽에 나눠서 배치 -->
-
-		
 		<!-- 게시글 등록 버튼 -->
 		<c:if test="${user ne null}">
 			<a href="<c:url value="/post/insert"/>" class= "btn btn-outline-success ">게시글 등록</a>
 		</c:if>
-	
 	</div>
 	
 	<!-- 게시글 목록을 보여주는 컨테이너 -->

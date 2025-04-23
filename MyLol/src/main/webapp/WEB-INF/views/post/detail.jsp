@@ -16,57 +16,61 @@
 		<c:when test="${post ne null}">
 		<h1>게시글 상세</h1>
 			<div>
-			
 				<div class="form-group mt-3">
 					<label class="form-label">게시판</label> 
-					<input type="text" class="form-control" value="${post.po_bo_name}" readonly>	<!-- 보낼거 아니기때문에 name 불필요 -->
+					<div class="form-control" value="${post.po_bo_name}" >${post.po_bo_name}</div>	<!-- 보낼거 아니기때문에 name 불필요 -->
 				</div>
-		
 				<div class="form-group mt-3">
 					<label class="form-label">제목</label> 
-					<input type="text" class="form-control" value="${post.po_title}" readonly>	
+					<div class="form-control" value="${post.po_title}">${post.po_title}</div>
 				</div>
-		
 				<div class="form-group mt-3">
 					<label class="form-label">작성자</label> 
-					<input type="text" class="form-control" value="${post.po_us_key}" readonly>	
-				</div>
-		
-				<div class="form-group mt-3">
-					<label class="form-label">작성일</label> 
-					<input type="text" class="form-control" value="<fmt:formatDate value="${post.po_date}" pattern="yyyy-MM-dd HH:mm:ss" />" readonly>	
+					<div class="form-control" value="${post.po_us_key}">${post.po_us_key}</div>	
 				</div>
 				
-		
+				
+				<!-- post.po_date -> post.po_time  -->
 				<div class="form-group mt-3">
+					<label class="form-label">작성일</label> 
+					<div type="text" class="form-control"><fmt:formatDate value="${post.po_time}" pattern="yyyy-MM-dd HH:mm" /></div>	
+				</div>
+				
+				<!-- post.po_view,  post.po_up, post.po_down 없음-->
+				<%-- <div class="form-group mt-3">
 					<label class="form-label">조회수</label> 
 					<input type="text" class="form-control" value="${post.po_view}" readonly>	
 				</div>
 				<div class="form-group mt-3 d-flex justify-content-center" id="btns">
 					<button class="btn btn<c:if test="${like.li_state ne 1}">-outline</c:if>-success btn-up" data-state="1">추천(<span>${post.po_up}</span>)</button>
 					<button class="btn btn<c:if test="${like.li_state ne -1}">-outline</c:if>-danger ml-3 btn-down" data-state="-1">비추천(<span>${post.po_down}</span>)</button>	<!-- 추천 비추천 한번에 처리하려고!! -->
+				</div> --%>
+				
+				<div class="form-group mt-3">
+				    <label class="form-label">내용</label>
+				    <div class="form-control" id="content" style="min-height: 400px;">
+				        ${post.po_content}
+				        
+				        <c:if test="${fileList.size() != 0 }">
+				        	<hr>
+				            <div class="mb-3">
+				                <!-- Swiper -->
+				                <div class="swiper mySwiper">
+				                    <div class="swiper-wrapper">
+				                        <c:forEach items="${fileList}" var="file">
+				                            <div class="swiper-slide" style="background: #fff; text-align: center;">
+				                                <img alt="첨부파일" width="auto" height="200px" src="<c:url value='/download${file.fi_name}'/>">
+				                            </div>
+				                        </c:forEach>
+				                    </div>
+				                    <div class="swiper-button-next"></div>
+				                    <div class="swiper-button-prev"></div>
+				                    <div class="swiper-pagination"></div>
+				                </div>
+				            </div>
+				        </c:if>
+				    </div>
 				</div>
-		
-
-
-				<!-- ${fileList}  -->
-				<c:if test="${fileList.size() != 0 }">
-					<div class="mb-3">
-						<!-- Swiper -->
-						<div class="swiper mySwiper">
-						  <div class="swiper-wrapper">
-						  	<c:forEach items="${fileList}" var="file">
-							    <div class="swiper-slide" style="background: #fff; text-align: center;">
-									<img alt="첨부파일" width="auto" height="300" src="<c:url value="/download${file.fi_name }"/>">
-							    </div>
-							</c:forEach>
-						  </div>
-						  <div class="swiper-button-next"></div>
-						  <div class="swiper-button-prev"></div>
-						  <div class="swiper-pagination"></div>
-						</div>
-					</div>
-				</c:if>
 				
 				</div>
 
@@ -87,12 +91,10 @@
 	</div>
 	<hr>
 	<h3>댓글</h3>
-	<div class="comment-container"></div>
-	
-	
-	
-	
-	
+	<div class="comment-container">
+		<!-- 여기에 댓글들 불러오게 함 -->
+	</div>
+
 	<script>
 		var swiper = new Swiper(".mySwiper", {
 		  spaceBetween: 30,
@@ -107,9 +109,5 @@
 		  },
 		});
 	</script>
-	
-
-	
-	
 </body>
 </html>

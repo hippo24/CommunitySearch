@@ -32,11 +32,12 @@
 	
 	<select id="selectPost" resultType="PostVO">
 		select 
-			post.*, bo_name as po_bo_name, us_name as po_us_name from post
+			post.*, bo_name as po_bo_name, us_name as po_us_name
 		from post
 		join board on po_bo_key = bo_key 
 		join user on us_key = po_us_key
-		where po_key = #{po_key} and PO_UPD &lt; now()
+		where po_key = #{po_key} 
+		<!-- and PO_UPD &lt; now() -->
 	</select>
 	
 	<update id="deletePost">

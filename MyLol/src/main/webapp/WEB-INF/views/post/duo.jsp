@@ -7,9 +7,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-
 	<h1 class="mt-3">듀오 모집 게시판</h1>
-
+	
 
 
 </body>
