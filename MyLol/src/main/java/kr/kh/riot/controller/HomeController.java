@@ -28,7 +28,7 @@ public class HomeController {
 		
 		model.addAttribute("boardList", boardList);		
 
-		return "home";
+		return "/tft/profile2";
 	}
 	
 	@GetMapping("/exampleTFT")
