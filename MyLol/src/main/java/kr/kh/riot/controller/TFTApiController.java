@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.kh.riot.model.vo.BoardVO;
+import kr.kh.riot.service.PostService;
 import kr.kh.riot.service.TFTApiService;
 
 @Controller
@@ -22,6 +24,9 @@ public class TFTApiController {
 
     @Autowired
     TFTApiService tftApiService;
+    
+    @Autowired
+    PostService postService;
     
     @GetMapping("/home")
     public String home(Model model) {

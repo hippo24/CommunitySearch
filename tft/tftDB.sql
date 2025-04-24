@@ -1,5 +1,8 @@
 # https://www.erdcloud.com/d/7sC2zZvewC6wtY9kb
-
+# GROUP BY 할때 사용하지 않은 속성 조회하는 경우 에러 해결하는 쿼리(실행하고 인스턴스 나갔다 들어와야 적용됨)
+SET GLOBAL sql_mode = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION';	
+# 원상 복구하는 쿼리
+# SET GLOBAL sql_mode = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION,ONLY_FULL_GROUP_BY';	
 
 DROP DATABASE IF EXISTS RIOT;
 

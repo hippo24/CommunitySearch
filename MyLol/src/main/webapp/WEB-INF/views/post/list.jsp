@@ -12,17 +12,25 @@
 	<button class="btn btn-outline-success btn-board" data-num="0">전체</button>
 	<c:choose>
 		<c:when test="${not empty boardList}">
-				<c:forEach items="${boardList}" var="board">	
-					<button class="btn btn-outline-success btn-board" data-num="${board.bo_key}">${board.bo_name}</button>	
-				</c:forEach>
+			<c:forEach items="${boardList}" var="board">	
+				<button class="btn btn-outline-success btn-board" data-num="${board.bo_key}">${board.bo_name}</button>	
+			</c:forEach>
 		</c:when>
 		<c:otherwise>
 			<h3>등록된 게시판이 없습니다.</h3>
 		</c:otherwise>
 	</c:choose>
-	
-	
 	<div class="d-flex justify-content-between mt-3"><!-- 양쪽에 나눠서 배치 -->
+	
+		<!-- 검색 화면 추가(검색창, 검색타입, 버튼) -->
+		
+		<!-- 정렬방식 선택 -->
+		<select class="form-control col-3 sel-type">
+			<option value="ALL">ALL</option>
+			<option value="LOL">LOL</option>
+			<option value="TFT">TFT</option>
+		</select>	
+	
 		<!-- 게시글 등록 버튼 -->
 		<c:if test="${user ne null}">
 			<a href="<c:url value="/post/insert"/>" class= "btn btn-outline-success ">게시글 등록</a>
@@ -41,7 +49,7 @@
 		let cri = {					// cri를 전역변수로 설정
 				po_bo_key : 0,
 				page : 1,
-				orderBy : "po_key desc"
+				po_type : "ALL"
 		}
 	
 	
@@ -71,7 +79,7 @@
 	
 	//정렬방식 change 이벤트
 		$(".sel-type").change(function(e){
-			cri.orderBy = $(this).val();
+			cri.po_type = $(this).val();
 			cri.page = 1;
 			let data = getPostList(cri);
 			$(".pl-container").html(data);

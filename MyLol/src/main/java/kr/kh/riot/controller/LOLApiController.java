@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.kh.riot.model.dto.SummonerDTO;
+import kr.kh.riot.model.vo.BoardVO;
 import kr.kh.riot.service.LOLApiService;
+import kr.kh.riot.service.PostService;
 
 @Controller
 @RequestMapping("/lol")
@@ -24,6 +26,9 @@ public class LOLApiController {
     @Autowired
     LOLApiService lolApiService;
 
+    @Autowired
+    PostService postService;
+    
     @GetMapping("/home")
     public String getSummoner(Model model) {
     	 model.addAttribute("pageType", "lol");

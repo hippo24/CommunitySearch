@@ -24,11 +24,7 @@ public class AdminController {
 	
 	@GetMapping("/board")	// admin을 제외한 뒷부분 써주기
 	public String board(Model model) { //화면에 전달하려면 model객체 필요
-		//게시판 목록을 가져옴
-		List<BoardVO> boardList = postService.getBoardList();
-		//화면에 전달
-		model.addAttribute("boardList", boardList);
-		
+
 		return "/admin/board";
 	}
 	

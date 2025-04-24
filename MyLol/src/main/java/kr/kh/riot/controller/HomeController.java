@@ -24,9 +24,6 @@ public class HomeController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
-		List<BoardVO> boardList = postService.getBoardList();
-		
-		model.addAttribute("boardList", boardList);		
 
 		return "/tft/profile2";
 	}

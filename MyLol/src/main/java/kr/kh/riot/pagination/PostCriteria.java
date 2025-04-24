@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 public class PostCriteria extends Criteria {
 
 	private int po_bo_key;
-	String orderBy;
+	String po_type;
 
 	public PostCriteria(int page, int perPageNum) {
 		super(page, perPageNum);

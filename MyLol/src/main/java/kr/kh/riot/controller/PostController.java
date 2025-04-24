@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,47 +33,26 @@ public class PostController {
 	private PostService postService;
 	
 	@GetMapping("/list")
-	public String list(Model model) {
+	public String list(@RequestParam(value = "num", defaultValue = "0") int num, Model model) {
 		
-		//게시판 목록을 서비스에게 요청하여 가져온 후 화면에 전송
+		
 		List<BoardVO> boardList = postService.getBoardList();
 		model.addAttribute("boardList", boardList);
+		model.addAttribute("num", num);
 		
-		return "/post/list";		//"post/list" 처럼 슬래시 빼먹을 경우 타일즈 적용 안됨...
+		
+		return "/post/list";		
 	}
 	
-	/*
-	@PostMapping("/list")
-	public String list(Model model, PostCriteria cri, Integer num) {
-		//cri.setPerPageNum(2);
-		List<PostVO> list = postService.getPostList(cri);
-		
-		List<BoardVO> boardList = postService.getBoardList();
-		
-		PageMaker pm = postService.getPageMaker(cri);
-		
-		int lastBoardNum = boardList.get(boardList.size()-1).getBo_key();
-				
-		num = num == null ? 0 : num;
-		if(num<0 || lastBoardNum < num) num = 0;
-		
-		model.addAttribute("postList", list);
-		model.addAttribute("boardList", boardList);
-		model.addAttribute("pm", pm);
-		model.addAttribute("boardNum", num);
-		
-		
-		return "/post/list";
-	}
-	*/
+
 	@PostMapping("/list")
 	public Object PostList(Model model, @RequestBody PostCriteria cri) {			
 		//cri.setPerPageNum(2);
 		List<PostVO> postList = postService.getPostList(cri);
-		//PageMaker pm = postService.getPageMaker(cri);
+		PageMaker pm = postService.getPageMaker(cri);
 		
 		model.addAttribute("postList", postList);
-		//model.addAttribute("pm",pm);
+		model.addAttribute("pm",pm);
 		
 		
 		return"post/sub";					

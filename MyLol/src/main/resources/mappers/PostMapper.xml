@@ -63,8 +63,10 @@
 		<if test="criteria.po_bo_key != 0">
 			and po_bo_key = #{criteria.po_bo_key}
 		</if>
+		<if test="criteria.po_type != null and criteria.po_type != 'ALL'">
+		  and po_type = #{criteria.po_type}
+		</if>
 		group by po_key
-		order by ${criteria.orderBy}
 		limit #{criteria.pageStart}, #{criteria.perPageNum}
 		
 
