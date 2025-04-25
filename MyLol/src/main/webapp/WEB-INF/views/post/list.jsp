@@ -66,7 +66,7 @@
 	</div>
 	<!-- 사이드바 -->
 	<div class="sidebar-l d-none d-xl-block" id="sidebar-l">
-		<h5 class="mt-2 mb-2">📂 게시판</h5>
+		<h5 class="mt-2 mb-2">-게시판-</h5>
 		<a href="#" class="board-link" data-num="0">전체</a>
 		<c:choose>
 			<c:when test="${not empty boardList}">
