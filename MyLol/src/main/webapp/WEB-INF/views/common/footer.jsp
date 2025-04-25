@@ -42,6 +42,23 @@
   .footer-section ul li a:hover {
     text-decoration: underline;
   }
+  
+  .footer div:last-child:hover {
+	  filter: brightness(1.2);
+	  cursor: pointer;
+   	  position: absolute;
+	  bottom: 0;
+	  right: 0;
+	  width: 300px; /*  */
+	  height: 200px; /*  */
+	  background-image: url('이미지_경로.jpg');
+	  background-size: cover;
+	  background-repeat: no-repeat;
+	  background-position: center;
+	  opacity: 0.8; /*  */
+	  pointer-events: none; /*  */
+	  z-index: -1; /*  */
+	}
 </style>
 </head>
 <body>
@@ -99,6 +116,7 @@
 
 <footer class="text-center">
   ⓒ 2025 KH TaskGroup1. All rights reserved.
+  
 </footer>
 
 
