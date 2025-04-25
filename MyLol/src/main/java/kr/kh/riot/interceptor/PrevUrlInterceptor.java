@@ -10,7 +10,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import kr.kh.riot.model.vo.UserVO;
 import lombok.extern.log4j.Log4j;
 
-@Log4j
+
 public class PrevUrlInterceptor extends HandlerInterceptorAdapter{
 
 	@Override
@@ -22,15 +22,13 @@ public class PrevUrlInterceptor extends HandlerInterceptorAdapter{
 	    throws Exception {
 		 //구현   
 
-
 		HttpSession session = request.getSession();
-		UserVO newUser = (UserVO)modelAndView.getModel().get("user");				
-
+		UserVO newUser = (UserVO)session.getAttribute("user");				
 		if(newUser == null) return;		
 
 		//이전 url
 		String prevUrl = (String)session.getAttribute("prevUrl");
-		log.info(prevUrl);
+		System.out.println(prevUrl);
 		if(prevUrl == null) return;		
 
 		response.sendRedirect(prevUrl);			

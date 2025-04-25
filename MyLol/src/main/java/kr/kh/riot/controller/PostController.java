@@ -2,6 +2,7 @@ package kr.kh.riot.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import kr.kh.riot.model.vo.BoardVO;
 import kr.kh.riot.model.vo.FileVO;
+import kr.kh.riot.model.vo.PositionVO;
 import kr.kh.riot.model.vo.PostVO;
 import kr.kh.riot.model.vo.UserVO;
+import kr.kh.riot.pagination.DuoCriteria;
 import kr.kh.riot.pagination.PageMaker;
 import kr.kh.riot.pagination.PostCriteria;
 import kr.kh.riot.service.PostService;
-import lombok.extern.log4j.Log4j;
 
 @Controller
 @RequestMapping("/post")
@@ -84,13 +86,19 @@ public class PostController {
 	}
 	
 	@GetMapping("/detail/{po_key}")
-	public String detail(Model model,@PathVariable("po_key") int po_key) {
+	public String detail(Model model,@PathVariable("po_key") int po_key, HttpServletRequest request) {
 
 		//게시글을 가져와서 화면에 전달
 		PostVO post = postService.getPost(po_key);
 		
 		//첨부파일을 가져옴
-		List<FileVO> list = postService.getFileList(po_key);
+		List<FileVO> list = postService.getFileList(po_key);	
+		String contextPath = request.getContextPath();
+		for (int i = 0; i < list.size(); i++) {
+		    String tag = "{이미지:" + (i + 1) + "}";
+		    String imgTag = "<img src='" + contextPath + "/download" + list.get(i).getFi_name() + "' style='max-width:100%; height:auto;' />";
+	        post.setPo_content(post.getPo_content().replace(tag, imgTag));		    post.setPo_content(post.getPo_content().replace(tag, imgTag));
+		}
 		
 		model.addAttribute("post", post);
 		model.addAttribute("fileList", list);
@@ -125,7 +133,7 @@ public class PostController {
 		List<FileVO> list = postService.getFileList(po_key);
 		
 		model.addAttribute("post", post);
-		model.addAttribute("fileist", list);
+		model.addAttribute("fileList", list);
 		return "/post/update";
 	}
 	
@@ -143,6 +151,9 @@ public class PostController {
 		model.addAttribute("url", "/post/detail/" + post.getPo_key());
 		return "message";
 	}
+	
+	
+	
 	/*
 	@ResponseBody
 	@PostMapping("/like")
@@ -175,6 +186,34 @@ public class PostController {
 		
 		return "/post/duo";
 	}
+
+    @GetMapping("/duo/list")
+    public String duoList(Model model, DuoCriteria cri, Integer num) {
+        List<PositionVO> duoList = postService.getDuoList();
+        int total = duoList.size();
+        
+        PageMaker pm = postService.getPageMaker(cri);
+
+        //List<DuoBoardDTO> boardList = postService.getDuoList(pageDTO.getStartRow(), perPage);
+        
+        num = num == null ? 0 : num;
+		if(num<0 || total < num) num = 0;
+        
+        model.addAttribute("list", duoList);
+        model.addAttribute("page", pm);
+        model.addAttribute("boardNum", num);
+        
+        return "/post/duoList";
+    }
+	
+	
+	
+	@GetMapping("/duo/lines")
+	@ResponseBody
+	public List<PositionVO> getLines(@RequestParam("pbKey") int pbKey) {
+	    return postService.getPositions(pbKey);
+	}
+
 	
 
 }

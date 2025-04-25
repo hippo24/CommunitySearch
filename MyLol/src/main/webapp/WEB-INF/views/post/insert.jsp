@@ -36,13 +36,14 @@
 		
 				<div class="form-group">
 				  <label for="content">내용:</label>
-				  <textarea class="form-control" id="content" name="po_content"></textarea>
+				  <textarea class="form-control" id="content" name="po_content" placeholder="{이미지:1}과 같은 식으로 첨부파일을 본문에 직접 등록 가능"></textarea>
 				</div>
 		
 				<div class="form-group">
-					<input type="file" name="fileList" class="form-control">
-					<input type="file" name="fileList" class="form-control">
-					<input type="file" name="fileList" class="form-control">
+					<div class="form-label">첨부파일(최대 10mb)</div> 
+					<input type="file" name="fileList" class="form-control" accept="image/*">
+					<input type="file" name="fileList" class="form-control" accept="image/*">
+					<input type="file" name="fileList" class="form-control" accept="image/*">
 				</div>	
 		
 		
@@ -76,7 +77,7 @@
 	
 	<script>
       $('[name=po_content]').summernote({
-        placeholder: '내용을 입력하세요.',
+        placeholder: '{이미지:1}과 같은 식으로 첨부파일을 본문에 직접 등록 가능',
         tabsize: 2,
         height: 400
       });

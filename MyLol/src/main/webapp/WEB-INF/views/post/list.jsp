@@ -46,8 +46,9 @@
 
 
 	<script type="text/javascript">
+		let ini_bo_key = ${num}; // controller에서 넘긴 board 번호
 		let cri = {					// cri를 전역변수로 설정
-				po_bo_key : 0,
+				po_bo_key : ini_bo_key,
 				page : 1,
 				po_type : "ALL"
 		}

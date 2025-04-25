@@ -11,8 +11,10 @@ import org.springframework.web.multipart.MultipartFile;
 import kr.kh.riot.dao.PostDao;
 import kr.kh.riot.model.vo.BoardVO;
 import kr.kh.riot.model.vo.FileVO;
+import kr.kh.riot.model.vo.PositionVO;
 import kr.kh.riot.model.vo.PostVO;
 import kr.kh.riot.model.vo.UserVO;
+import kr.kh.riot.pagination.Criteria;
 import kr.kh.riot.pagination.PageMaker;
 import kr.kh.riot.pagination.PostCriteria;
 import kr.kh.riot.utils.UploadFileUtils;
@@ -64,12 +66,12 @@ public class PostServiceImp implements PostService{
 	}
 
 	@Override
-	public List<PostVO> getPostList(PostCriteria cri) {
+	public List<PostVO> getPostList(Criteria cri) {
 		return postDao.selectPostList(cri);
 	}
 
 	@Override
-	public PageMaker getPageMaker(PostCriteria cri) {
+	public PageMaker getPageMaker(Criteria cri) {
 		int totalCount = postDao.selectCountPostList(cri);
 		return new PageMaker(10, cri, totalCount);
 	}
@@ -210,5 +212,16 @@ public class PostServiceImp implements PostService{
 		
 		//db에서 해당 첨부파일을 삭제
 		postDao.deleteFile(fileVo.getFi_key());
+	}
+	
+	@Override
+	public List<PositionVO> getPositions(int key) {
+	    return postDao.selectPositions(key);
+	}
+
+	@Override
+	public List<PositionVO> getDuoList() {
+		
+		return postDao.selectDuoList();
 	}
 }

@@ -59,7 +59,7 @@
 		left join file on po_key = fi_po_key
 		join user on po_us_key = us_key
 		
-		where po_upd &lt; now()
+		<!-- where po_upd &lt; now()  -->
 		<if test="criteria.po_bo_key != 0">
 			and po_bo_key = #{criteria.po_bo_key}
 		</if>
@@ -67,6 +67,7 @@
 		  and po_type = #{criteria.po_type}
 		</if>
 		group by po_key
+		order by po_upd desc
 		limit #{criteria.pageStart}, #{criteria.perPageNum}
 		
 
@@ -93,6 +94,19 @@
 		<if test="criteria.po_bo_key != 0">
 			and po_bo_key = #{criteria.po_bo_key}
 		</if>
+	</select>
+	
+	
+	
+	<select id="selectPositions" resultType="PositionVO">
+		select * from position
+		join position_board on pb_key = ps_pb_key
+		where pb_key = #{pb_key}
+	</select>
+	
+	
+	<select id="selectDuoList" resultType="PositionVO">
+		select * from position_board
 	</select>
 	
 </mapper>

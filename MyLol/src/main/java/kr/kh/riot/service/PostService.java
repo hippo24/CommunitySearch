@@ -6,10 +6,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import kr.kh.riot.model.vo.BoardVO;
 import kr.kh.riot.model.vo.FileVO;
+import kr.kh.riot.model.vo.PositionVO;
 import kr.kh.riot.model.vo.PostVO;
 import kr.kh.riot.model.vo.UserVO;
+import kr.kh.riot.pagination.Criteria;
 import kr.kh.riot.pagination.PageMaker;
-import kr.kh.riot.pagination.PostCriteria;
 
 public interface PostService {
 
@@ -21,9 +22,9 @@ public interface PostService {
 
 	boolean deleteBoard(int num);
 
-	List<PostVO> getPostList(PostCriteria cri);
+	List<PostVO> getPostList(Criteria cri);
 
-	PageMaker getPageMaker(PostCriteria cri);
+	PageMaker getPageMaker(Criteria cri);
 
 	boolean insertPost(PostVO post, UserVO user, MultipartFile[] fileList);
 
@@ -34,6 +35,10 @@ public interface PostService {
 	List<FileVO> getFileList(int po_key);
 
 	boolean updatePost(PostVO post, UserVO user, MultipartFile[] fileList, int[] delNums);
+
+	List<PositionVO> getPositions(int pbKey);
+
+	List<PositionVO> getDuoList();
 
 
 

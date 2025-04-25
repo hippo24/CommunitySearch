@@ -10,8 +10,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </head>
 
-<body id="body"><!-- 기존거 가져와서 html만 남김 -->
-<!-- 썸머노트 대신 스위퍼로 -->
+<body id="body">
 	<c:choose>
 		<c:when test="${post ne null}">
 		<h1>게시글 상세</h1>
@@ -26,7 +25,7 @@
 				</div>
 				<div class="form-group mt-3">
 					<label class="form-label">작성자</label> 
-					<div class="form-control" value="${post.po_us_key}">${post.po_us_key}</div>	
+					<div class="form-control" value="${post.po_us_name}">${post.po_us_name}</div>	
 				</div>
 				
 				
@@ -36,43 +35,57 @@
 					<div type="text" class="form-control"><fmt:formatDate value="${post.po_time}" pattern="yyyy-MM-dd HH:mm" /></div>	
 				</div>
 				
-				<!-- post.po_view,  post.po_up, post.po_down 없음-->
-				<%-- <div class="form-group mt-3">
-					<label class="form-label">조회수</label> 
-					<input type="text" class="form-control" value="${post.po_view}" readonly>	
-				</div>
-				<div class="form-group mt-3 d-flex justify-content-center" id="btns">
-					<button class="btn btn<c:if test="${like.li_state ne 1}">-outline</c:if>-success btn-up" data-state="1">추천(<span>${post.po_up}</span>)</button>
-					<button class="btn btn<c:if test="${like.li_state ne -1}">-outline</c:if>-danger ml-3 btn-down" data-state="-1">비추천(<span>${post.po_down}</span>)</button>	<!-- 추천 비추천 한번에 처리하려고!! -->
-				</div> --%>
-				
 				<div class="form-group mt-3">
 				    <label class="form-label">내용</label>
 				    <div class="form-control" id="content" style="min-height: 400px;">
-				        ${post.po_content}
-				        
-				        <c:if test="${fileList.size() != 0 }">
-				        	<hr>
-				            <div class="mb-3">
-				                <!-- Swiper -->
-				                <div class="swiper mySwiper">
-				                    <div class="swiper-wrapper">
-				                        <c:forEach items="${fileList}" var="file">
-				                            <div class="swiper-slide" style="background: #fff; text-align: center;">
-				                                <img alt="첨부파일" width="auto" height="200px" src="<c:url value='/download${file.fi_name}'/>">
-				                            </div>
-				                        </c:forEach>
-				                    </div>
-				                    <div class="swiper-button-next"></div>
-				                    <div class="swiper-button-prev"></div>
-				                    <div class="swiper-pagination"></div>
-				                </div>
-				            </div>
-				        </c:if>
+				        <c:out value="${post.po_content}" escapeXml="false"/>
 				    </div>
 				</div>
+		        
+				<c:if test="${fileList.size() != 0 }">
+				    <!-- 탭 버튼 -->
+					<ul class="nav nav-tabs mb-2" id="fileTab" role="tablist">
+					  <li class="nav-item">
+					    <a class="nav-link active" id="list-tab" data-toggle="tab" href="#list" role="tab" aria-controls="list" aria-selected="true">파일 목록</a>
+					  </li>
+					  <li class="nav-item">
+					    <a class="nav-link" id="preview-tab" data-toggle="tab" href="#preview" role="tab" aria-controls="preview" aria-selected="false">이미지 미리보기</a>
+					  </li>
+					</ul>
+					
+					<!-- 탭 콘텐츠 -->
+					<div class="tab-content" id="fileTabContent">
+					  <!-- 파일 목록 -->
+					  <div class="tab-pane fade show active" id="list" role="tabpanel" aria-labelledby="list-tab">
+					    <c:forEach items="${fileList}" var="file">
+					      <a class="form-control mb-1" href="<c:url value='/download${file.fi_name}'/>" download="${file.fi_ori_name}">
+					        ${file.fi_ori_name}
+					      </a>
+					    </c:forEach>
+					  </div>
+					
+					  <!-- 이미지 미리보기 -->
+					  <div class="tab-pane fade" id="preview" role="tabpanel" aria-labelledby="preview-tab">
+					    <div class="swiper mySwiper mt-2">
+					      <div class="swiper-wrapper">
+					        <c:forEach items="${fileList}" var="file">
+					          <c:if test="${file.fi_ori_name.endsWith('.jpg') or file.fi_ori_name.endsWith('.png') or file.fi_ori_name.endsWith('.jpeg') or file.fi_ori_name.endsWith('.gif')}">
+					            <div class="swiper-slide text-center" style="background: #fff;">
+					              <img alt="첨부파일" width="auto" height="200px" src="<c:url value='/download${file.fi_name}'/>">
+					            </div>
+					          </c:if>
+					        </c:forEach>
+					      </div>
+					      <div class="swiper-button-next"></div>
+					      <div class="swiper-button-prev"></div>
+					      <div class="swiper-pagination"></div>
+					    </div>
+					  </div>
+					</div>
+
+				</c:if>
 				
-				</div>
+			</div>
 
 		</c:when>
 		<c:otherwise>
@@ -95,19 +108,38 @@
 		<!-- 여기에 댓글들 불러오게 함 -->
 	</div>
 
+
 	<script>
-		var swiper = new Swiper(".mySwiper", {
-		  spaceBetween: 30,
-		  effect: "fade",
-		  navigation: {
-		    nextEl: ".swiper-button-next",
-		    prevEl: ".swiper-button-prev",
-		  },
-		  pagination: {
-		    el: ".swiper-pagination",
-		    clickable: true,
-		  },
-		});
+	  let swiper; 
+	
+	  $(document).ready(function () {
+	   
+	    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+	      if ($(e.target).attr('href') === '#preview') {
+	        if (!swiper) {
+	          swiper = new Swiper(".mySwiper", {
+	            spaceBetween: 30,
+	            effect: "fade",
+	            navigation: {
+	              nextEl: ".swiper-button-next",
+	              prevEl: ".swiper-button-prev",
+	            },
+	            pagination: {
+	              el: ".swiper-pagination",
+	              clickable: true,
+	            },
+	          });
+	        } else {
+	          swiper.update(); 
+	        }
+	      }
+	    });
+	
+	    // 기본적으로 Swiper가 보이게 하고 싶다면 아래 코드 활성화
+	    // $('#preview-tab').tab('show');
+	  });
 	</script>
+	
+
 </body>
 </html>

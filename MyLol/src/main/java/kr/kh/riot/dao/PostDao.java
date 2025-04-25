@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import kr.kh.riot.model.vo.BoardVO;
 import kr.kh.riot.model.vo.FileVO;
+import kr.kh.riot.model.vo.PositionVO;
 import kr.kh.riot.model.vo.PostVO;
 import kr.kh.riot.pagination.Criteria;
 
@@ -38,5 +39,9 @@ public interface PostDao {
 	int selectCountPostList(@Param("criteria")Criteria cri);
 
 	List<PostVO> selectPostList(@Param("criteria")Criteria cri);
+
+	List<PositionVO> selectPositions(@Param("pb_key")int pb_key);
+
+	List<PositionVO> selectDuoList();
 
 }

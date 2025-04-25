@@ -40,18 +40,15 @@
 		
 	<!-- 인터셉터 등록 -->
 	<beans:bean id="loginInterceptor" class="kr.kh.riot.interceptor.LoginInterceptor"/>	
-	<beans:bean id="autoLoginInterceptor" class="kr.kh.riot.interceptor.AutoLoginInterceptor"/>	
-	<beans:bean id="prevUrlInterceptor" class="kr.kh.riot.interceptor.PrevUrlInterceptor"/>	
 	<beans:bean id="adminInterceptor" class="kr.kh.riot.interceptor.AdminInterceptor"/>	
 	<beans:bean id="guestInterceptor" class="kr.kh.riot.interceptor.GuestInterceptor"/>	
+	<beans:bean id="autoLoginInterceptor" class="kr.kh.riot.interceptor.AutoLoginInterceptor"/>	
+	<beans:bean id="prevUrlInterceptor" class="kr.kh.riot.interceptor.PrevUrlInterceptor"/>	
 	
 	<!-- 인터셉터 맵핑 -->
 	<interceptors>
 		
-		<interceptor>
-			<mapping path="/user/login"/>
-			<beans:ref bean="prevUrlInterceptor"/>
-		</interceptor>
+		
 		
 		<interceptor>
 			<mapping path="/**"/>	
@@ -73,7 +70,10 @@
 			<mapping path="/user/signup"/>
 			<beans:ref bean="guestInterceptor"/>
 		</interceptor>
-		
+		<interceptor>
+			<mapping path="/user/login"/>
+			<beans:ref bean="prevUrlInterceptor"/>
+		</interceptor>
 	</interceptors>
 
 	<!-- 업로드 파일 용량 설정-->

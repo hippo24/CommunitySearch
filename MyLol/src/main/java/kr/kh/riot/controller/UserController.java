@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import kr.kh.riot.model.vo.EmailVO;
 import kr.kh.riot.model.vo.UserVO;
 import kr.kh.riot.service.UserService;
+import lombok.extern.log4j.Log4j;
+
 
 @Controller
 @RequestMapping("/user")
@@ -49,8 +51,10 @@ public class UserController {
 	@GetMapping("/login")
 	public String login(Model model, String id, HttpServletRequest request) {
 		String prevUrl = request.getHeader("Referer");
+		System.out.println(prevUrl);
 		if(prevUrl != null && !prevUrl.contains("/user/login")) {		
 			request.getSession().setAttribute("prevUrl", prevUrl);	
+			
 		}
 		model.addAttribute("id", id);
 		System.out.println(id);
