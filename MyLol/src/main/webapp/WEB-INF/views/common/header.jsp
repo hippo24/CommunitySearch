@@ -87,6 +87,10 @@
 	</nav>
 	<!-- 오른쪽 사이드바 -->
 	<div id="sidebar" class="sidebar">
+ 	  <div class="text-right p-2">
+	    <button class="btn btn-sm text-white" id="sidebarClose">×</button>
+	  </div>
+	
 	  <h5 class="text-white mt-4 ml-3">메뉴</h5>
 	  <ul class="navbar-nav pl-3">
 	    <c:if test="${user == null}">
@@ -157,8 +161,11 @@
 	<script>
 	  $(function(){
 	      $(document).on("click", "#sidebarToggle", function() {
-	      $("#sidebar").toggleClass("show");
-	    });
+		      $("#sidebar").toggleClass("show");
+	      });
+	      $(document).on('click', '#sidebarClose', function () {
+	          $('#sidebar').removeClass('show');
+	      });
 	  });
 
 	</script>
