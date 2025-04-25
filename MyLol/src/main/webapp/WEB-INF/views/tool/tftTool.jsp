@@ -48,11 +48,6 @@
 	<div id="champ-tooltip"></div>
 
 	<script>
-    // JavaScript 코드: 기존 HTML과 동일하게 유지
-    // 단, fetch("14unit_data.json") → context path 주의 필요
-    // 예: fetch("${pageContext.request.contextPath}/static/14unit_data.json")
-    
-    
     const board = document.getElementById("board");
     const champPool = document.getElementById("champion-pool");
     const toggleBtn = document.getElementById("toggle-theme");
@@ -139,10 +134,15 @@
     	}
 
     // json으로부터 챔피언 데이터 가져오기
-    fetch("/riot/resources/14unit_data.json")
-      .then(response => response.json())
-      .then(data => {
-        data.forEach((champ, index) => {
+    Promise.all([
+	  fetch("/riot/resources/14unit_data.json").then(res => res.json()),
+	  fetch("/riot/resources/14trait_data.json").then(res => res.json())
+	])
+    .then(([unitData, traitData]) => {
+    	console.log(unitData);
+    	console.log(traitData);
+    	
+    	unitData.forEach((champ, index) => {
           championData[champ.id] = champ;
 		  
           //유닛 이미지 설정
@@ -154,7 +154,7 @@
           champImg.draggable = true;
           champImg.dataset.champid = champ.id;
           champImg.classList.add("champion");
-
+		
           champPool.addEventListener("dragstart", e => {
 	       	if (e.target && e.target.classList.contains("champion")) {
 	       	  const champId = e.target.dataset.champid;
@@ -203,9 +203,27 @@
       });
       synergy();
     }
-
+    
+	//시너지 활성 등급 계산 함수
+    function getActiveStyle(traitData, unitCount) {
+  	  if (!traitData || !traitData.tiers) return 0;
+  	  const activeTier = traitData.tiers
+  	    .filter(tier => unitCount >= tier.minUnits)
+  	    .sort((a, b) => b.tier - a.tier)[0];
+  	  return activeTier ? activeTier.style : 0;
+  	}
+	// 시너지 아이콘과 등급(스타일)별 배경 이미지 매핑 준비
+   	const styleBgMap = {
+	  1: "https://cdn.dak.gg/tft/images2/tft/traits/background/bronze.svg",
+	  2: "https://cdn.dak.gg/tft/images2/tft/traits/background/silver.svg",
+	  3: "https://cdn.dak.gg/tft/images2/tft/traits/background/unique.svg",
+	  4: "https://cdn.dak.gg/tft/images2/tft/traits/background/gold.svg",
+	  5: "https://cdn.dak.gg/tft/images2/tft/traits/background/chromatic.svg"
+	};
+    
     //시너지 계산
     function synergy() {
+    	
       const synergyList = document.getElementById("synergy-list");
       synergyList.innerHTML = "";
 
