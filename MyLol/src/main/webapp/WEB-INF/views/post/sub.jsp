@@ -103,10 +103,35 @@
 	</c:if>
 	
 	
-	<!-- 더보기 버튼을 추가 -->
-	<c:if test="${pm.next}">
-		<button class="btn btn-danger btn-more col-12">더보기</button>
-	</c:if>	
+	<!-- 페이지네이션 -->
+	<!-- 페이지네이션 -->
+	<ul class="pagination justify-content-center">
+	    <li class="page-item ${!pm.prev ? 'disabled' : ''}">
+	        <a class="page-link btn-page" href="#" data-page="${pm.startPage - 1}">이전</a>
+	    </li>
+	
+	    <c:forEach begin="${pm.startPage}" end="${pm.endPage}" var="i">
+	        <li class="page-item ${pm.cri.page == i ? 'active' : ''}">
+	            <a class="page-link btn-page" href="#" data-page="${i}">${i}</a>
+	        </li>
+	    </c:forEach>
+	
+	    <li class="page-item ${!pm.next ? 'disabled' : ''}">
+	        <a class="page-link btn-page" href="#" data-page="${pm.endPage + 1}">다음</a>
+	    </li>
+	</ul>
+
+	<script type="text/javascript">
+		$(document).off("click", ".btn-page");
+		$(document).on("click", ".btn-page", function(e){
+		    e.preventDefault();
+		    let page = $(this).data("page");
+		    cri.page = page;
+		    let data = getPostList(cri); // 이건 네가 이미 구현한 Ajax 함수
+		    $(".pl-container").html(data);
+		});
+	</script>
+
 		
 	
 
