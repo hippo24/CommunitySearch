@@ -4,23 +4,87 @@
 <html>
 <head>
 	<meta charset="UTF-8">
+	<style>
+	
+
+		/* 사이드바 */
+		.sidebar-l {
+  		  position: fixed;
+		  top: 7rem;
+		  left: 0;
+		  width: 12.5rem;
+		  height: auto;
+		  padding: 1rem;
+		  border: 1px solid gray;
+		  background: #f9f9f9;
+		}
+		
+		/* 게시판 링크 */
+		.board-link, .board-link2 {
+		  font-size:1rem;
+		  display: block;
+		  padding: 8px 10px;
+		  margin-bottom: 5px;
+		  color: #333;
+		  border-radius: 4px;
+		  text-decoration: none;
+		  transition: all 0.2s;
+		}
+		
+		.board-link:hover, .board-link2:hover, .board-link.active, .board-link.active {
+		  background-color: #28a745;
+		  color: white;
+		}
+		@media (min-width: 1200px) {
+			.pl-container, .btn-container{
+			  margin-left: 7.5rem; 
+			  padding: 1rem;
+			}
+			.pl-container{
+			  min-height: 1000px;
+			}
+		}
+
+	</style>
 </head>
 <body>
 
-	<h1 class="mt-3">🔍 게시글 목록</h1>
+	
 	<!-- 카테고리 버튼 -->
-	<button class="btn btn-outline-success btn-board" data-num="0">전체</button>
-	<c:choose>
-		<c:when test="${not empty boardList}">
-			<c:forEach items="${boardList}" var="board">	
-				<button class="btn btn-outline-success btn-board" data-num="${board.bo_key}">${board.bo_name}</button>	
-			</c:forEach>
-		</c:when>
-		<c:otherwise>
-			<h3>등록된 게시판이 없습니다.</h3>
-		</c:otherwise>
-	</c:choose>
-	<div class="d-flex justify-content-between mt-3"><!-- 양쪽에 나눠서 배치 -->
+	<div class="btn-container">
+		<button class="btn btn-outline-success btn-board" data-num="0">전체</button>
+		<c:choose>
+			<c:when test="${not empty boardList}">
+				<c:forEach items="${boardList}" var="board">	
+					<button class="btn btn-outline-success btn-board" data-num="${board.bo_key}">${board.bo_name}</button>	
+				</c:forEach>
+			</c:when>
+			<c:otherwise>
+				<h3>등록된 게시판이 없습니다.</h3>
+			</c:otherwise>
+		</c:choose>
+	</div>
+	<!-- 사이드바 -->
+	<div class="sidebar-l d-none d-xl-block" id="sidebar-l">
+		<h5 class="mt-2 mb-2">📂 게시판</h5>
+		<a href="#" class="board-link" data-num="0">전체</a>
+		<c:choose>
+			<c:when test="${not empty boardList}">
+				<c:forEach items="${boardList}" var="board">
+					<a href="#" class="board-link btn-board" data-num="${board.bo_key}">${board.bo_name}</a>
+				</c:forEach>
+			    <a class="board-link2" href="<c:url value='/post/duo' />">듀오모집게시판1</a>
+			    <a class="board-link2" href="<c:url value='/exampleTFT' />">TFT 배치 툴</a>
+			</c:when>
+			<c:otherwise>
+				<h5>등록된 게시판이 없습니다.</h3>
+			</c:otherwise>
+		</c:choose>
+	</div>
+	
+	
+	
+	<div class="d-flex justify-content-between mt-3 btn-container"><!-- 양쪽에 나눠서 배치 -->
 	
 		<!-- 검색 화면 추가(검색창, 검색타입, 버튼) -->
 		
@@ -59,7 +123,8 @@
 	
 	
 	//게시판 클릭 이벤트
-		$(".btn-board").click(function(e){
+		$(document).on("click", ".btn-board, .board-link", function (e) {	
+			e.preventDefault();
 			
 			cri.po_bo_key = $(this).data("num");
 			cri.page = 1; 			//게시판 바뀌면 1페이지로 초기화

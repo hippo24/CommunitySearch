@@ -1,5 +1,7 @@
 package kr.kh.riot.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,14 +53,23 @@ public class PostController {
 	public Object PostList(Model model, @RequestBody PostCriteria cri) {			
 		//cri.setPerPageNum(2);
 		List<PostVO> postList = postService.getPostList(cri);
+		System.out.println(postList);
 		PageMaker pm = postService.getPageMaker(cri);
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		String today = sdf.format(new Date());
+		
+		for(PostVO post : postList) {
+			post.setSummary(htmlToText(post.getPo_content(), 20));			//요약
+		}
 		
 		model.addAttribute("postList", postList);
 		model.addAttribute("pm",pm);
-		
+		model.addAttribute("today", today);
 		
 		return"post/sub";					
 	}
+	
 	
 	@GetMapping("/insert")
 	public String insert(Model model, Integer bo_key) {
@@ -132,6 +143,9 @@ public class PostController {
 		}
 		List<FileVO> list = postService.getFileList(po_key);
 		
+		List<BoardVO> boardList = postService.getBoardList();
+		
+		model.addAttribute("boardList", boardList);
 		model.addAttribute("post", post);
 		model.addAttribute("fileList", list);
 		return "/post/update";
@@ -214,6 +228,17 @@ public class PostController {
 	    return postService.getPositions(pbKey);
 	}
 
+	
+	public static String htmlToText(String html, int maxLength) {
+	    // HTML 태그 제거
+	    String plainText = html.replaceAll("<[^>]*>", "").replace("&nbsp;", " ").trim();
+
+	    // 길이 제한
+	    if (plainText.length() > maxLength) {
+	        return plainText.substring(0, maxLength) + "...";
+	    }
+	    return plainText;
+	}
 	
 
 }

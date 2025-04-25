@@ -97,12 +97,12 @@
 			count += this.files.length;
 		})
 		//console.log(count);
-		
+		/*
 		if(count == 0) {
 			alert("이미지는 1개 이상 선택하세요.")
 			return false;
 		}
-    	  
+    	*/  
       })
 		
 		

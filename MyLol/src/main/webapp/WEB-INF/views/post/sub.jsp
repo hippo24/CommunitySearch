@@ -10,6 +10,10 @@
 <body>
 
 	<c:forEach items="${postList}" var="post">
+		<fmt:formatDate var="postTimeDate" pattern="yyyyMMdd" value="${post.po_time}" />
+		<fmt:formatDate var="updTimeDate" pattern="yyyyMMdd" value="${post.po_upd}" />
+		
+	
 		<c:choose>
 			<c:when test="${post.po_upd.time gt now.time}">
 				<c:choose>
@@ -21,8 +25,17 @@
 									<div>🛠️ [관리자용] 삭제된 글</div>
 									<div>작성자 : ${post.po_us_name}</div>
 									<div>
-										작성일 : <fmt:formatDate pattern="yy.MM.dd" value="${post.po_upd}"/>
+										작성일 : 
+										<c:choose>
+											<c:when test="${postTimeDate eq today}">
+												작성시각 : <fmt:formatDate pattern="HH:mm" value="${post.po_time}" />
+											</c:when>
+											<c:otherwise>
+												작성일 : <fmt:formatDate pattern="yy.MM.dd" value="${post.po_time}" />
+											</c:otherwise>
+										</c:choose>
 									</div>
+									<div>내용 : ${post.summary }</div>
 								</div>
 							</div>
 						</a>
@@ -54,11 +67,30 @@
 							<div>${post.po_title}</div>
 							<div>작성자 : ${post.po_us_name}</div>
 							<div>
-								작성일 : <fmt:formatDate pattern="yy.MM.dd" value="${post.po_upd}"/>
+								 
+								<c:choose>
+									<c:when test="${postTimeDate eq today}">
+										작성시각 : <fmt:formatDate pattern="HH:mm" value="${post.po_time}" />
+									</c:when>
+									<c:otherwise>
+										작성일 : <fmt:formatDate pattern="yy.MM.dd" value="${post.po_time}" />
+									</c:otherwise>
+								</c:choose>
+								<!-- 수정됨 -->
 								<c:if test="${post.po_time ne post.po_upd}">
-									<span class="text-muted">(수정됨)</span>
+									(
+									<c:choose>
+										<c:when test="${updTimeDate eq today}">
+											<fmt:formatDate pattern="HH:mm" value="${post.po_upd}" />
+										</c:when>
+										<c:otherwise>
+											<fmt:formatDate pattern="yy.MM.dd" value="${post.po_upd}" />
+										</c:otherwise>
+									</c:choose>
+									수정됨)
 								</c:if>
 							</div>
+							<div>내용 : ${post.summary }</div>
 						</div>
 					</div>
 				</a>

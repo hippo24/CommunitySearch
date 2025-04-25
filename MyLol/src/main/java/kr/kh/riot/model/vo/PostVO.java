@@ -21,4 +21,6 @@ public class PostVO {
 	
 	String po_us_name;
 	
+	String summary;
+	
 }

@@ -12,10 +12,14 @@
 	<form action="<c:url value="/post/update"/>" method="post"  enctype="multipart/form-data">
 		<h1>게시글 수정</h1>
 		<input type="hidden" name="po_key" value="${post.po_key}">
-		<div class="form-group">
-		  <label for="board">게시판:</label>
-		  	<!-- 게시판 변경 안하게 간단한 버젼으로 -->
-		  <div class="form-control">"${post.po_bo_name}"</div>
+		<div class="form-group mt-3">
+			<label for="title" class="form-label">게시판</label> 
+			<select class="form-control" id="board" name="po_bo_key">
+				<c:forEach items="${boardList}" var="board">
+					<!-- bonum과 pobonum이 같으면 옵션태그에 selected추가(옵션에 selected 들어가면 해당 옵션값이 선택됨. -->
+					<option value="${board.bo_key}" <c:if test="${board.bo_key == post.po_bo_key}">selected</c:if> >${board.bo_name}</option>
+				</c:forEach>
+			</select>	
 		</div>
 		<div class="form-group">
 		  <label for="title">제목:</label>
@@ -34,7 +38,7 @@
 				</div>
 			</c:forEach>	
 	    	<c:forEach begin="1" end="${3 - fileList.size()}">
-	    		<input type="file" class="form-control" name="fileList"/>
+	    		<input type="file" class="form-control" name="fileList"  accept="image/*"/>
 	    	</c:forEach>
 
 	    

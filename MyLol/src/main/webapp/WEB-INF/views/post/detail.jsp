@@ -37,7 +37,7 @@
 				
 				<div class="form-group mt-3">
 				    <label class="form-label">내용</label>
-				    <div class="form-control" id="content" style="min-height: 400px;">
+				    <div class="form-control" id="content" style="min-height: 400px; height: auto; ">
 				        <c:out value="${post.po_content}" escapeXml="false"/>
 				    </div>
 				</div>

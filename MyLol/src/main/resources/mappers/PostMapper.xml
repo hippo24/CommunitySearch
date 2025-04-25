@@ -37,7 +37,7 @@
 		join board on po_bo_key = bo_key 
 		join user on us_key = po_us_key
 		where po_key = #{po_key} 
-		<!-- and PO_UPD &lt; now() -->
+		and PO_UPD &lt; now()
 	</select>
 	
 	<update id="deletePost">
@@ -47,9 +47,10 @@
 	<update id="updatePost">
 		update post 
 		set
-			po_title = #{post.po_title},
-			po_content = #{post.po_content}
-			po_bo_key = #{post.po_bo_key}
+	        <if test="post.po_title != null">po_title = #{post.po_title},</if>
+	        <if test="post.po_content != null">po_content = #{post.po_content},</if>
+	        <if test="post.po_bo_key > 0">po_bo_key = #{post.po_bo_key}</if>
+	    
 		where
 			po_key = #{post.po_key}
 	</update>
@@ -58,14 +59,14 @@
 		select post.*, fi_name as po_fi_name, us_name as po_us_name from post
 		left join file on po_key = fi_po_key
 		join user on po_us_key = us_key
-		
-		<!-- where po_upd &lt; now()  -->
+		where 0 &lt; po_key
 		<if test="criteria.po_bo_key != 0">
 			and po_bo_key = #{criteria.po_bo_key}
 		</if>
 		<if test="criteria.po_type != null and criteria.po_type != 'ALL'">
 		  and po_type = #{criteria.po_type}
 		</if>
+		and po_upd &lt; now()
 		group by po_key
 		order by po_upd desc
 		limit #{criteria.pageStart}, #{criteria.perPageNum}
@@ -90,10 +91,12 @@
 
 
 	<select id="selectCountPostList" resultType="int">
-		select count(*) from post where po_upd &lt; now() 
+		select count(*) from post  
+		where 0 &lt; po_key
 		<if test="criteria.po_bo_key != 0">
 			and po_bo_key = #{criteria.po_bo_key}
 		</if>
+		and po_upd &lt; now() 
 	</select>
 	
 	
