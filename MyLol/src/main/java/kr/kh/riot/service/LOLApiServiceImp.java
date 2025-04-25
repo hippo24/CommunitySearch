@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.LinkedHashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -199,9 +200,20 @@ public class LOLApiServiceImp implements LOLApiService {
                     match.setWin((Boolean) playerData.get("win"));
                     
                     // 아이템 정보 설정
-                    List<String> firstRow = new ArrayList<>();
-                    List<String> secondRow = new ArrayList<>();
+                    Map<Integer, String> firstRowWithPositions = new LinkedHashMap<>();
+                    Map<Integer, String> secondRowWithPositions = new LinkedHashMap<>();
 
+                    // 모든 슬롯 위치 초기화 (빈 슬롯도 포함)
+                    for(int i = 0; i <= 2; i++) {
+                        firstRowWithPositions.put(i, null);
+                    }
+                    firstRowWithPositions.put(6, null);  // 첫 줄의 마지막 슬롯
+
+                    for(int i = 3; i <= 5; i++) {
+                        secondRowWithPositions.put(i, null);
+                    }
+
+                    // 실제 아이템 정보 채우기
                     for(int i = 0; i < 7; i++) {
                         String itemKey = "item" + i;
                         if(playerData.containsKey(itemKey)) {
@@ -211,19 +223,18 @@ public class LOLApiServiceImp implements LOLApiService {
                                 if(itemId > 0) {
                                     String itemIconUrl = String.format("https://ddragon.leagueoflegends.com/cdn/15.8.1/img/item/%d.png", itemId);
                                     
-                                    if(i <= 2) {
-                                        firstRow.add(itemIconUrl);
-                                    } else if(i == 6) {
-                                        firstRow.add(itemIconUrl);
+                                    if(i <= 2 || i == 6) {
+                                        firstRowWithPositions.put(i, itemIconUrl);
                                     } else {
-                                        secondRow.add(itemIconUrl);
+                                        secondRowWithPositions.put(i, itemIconUrl);
                                     }
                                 }
                             }
                         }
                     }
-                    match.setFirstRowItems(firstRow);
-                    match.setSecondRowItems(secondRow);
+
+                    match.setFirstRowItems(new ArrayList<>(firstRowWithPositions.values()));
+                    match.setSecondRowItems(new ArrayList<>(secondRowWithPositions.values()));
                     
                     matchList.add(match);
                 }

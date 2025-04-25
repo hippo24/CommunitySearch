@@ -21,19 +21,23 @@
 		}
 
 		.champion-icon {
-			width: 48px;
-			height: 48px;
+			width: 60px;
+			height: 60px;
+			border-radius: 8px;
+			overflow: hidden;			
 		}
 
 		.spell-icons {
 			display: flex;
 			flex-direction: column;
-			gap: 2px;
+			border-radius: 4px;
+			overflow: hidden;
+			gap: 4px;
 		}
 
 		.spell-icon {
-			width: 24px;
-			height: 24px;
+			width: 28px;
+			height: 28px;
 		}
 
 		.spell-rune-container {
@@ -53,13 +57,13 @@
 		}
 
 		.primary-rune-icon {
-			width: 26px;
-			height: 26px;
+			width: 30px;
+			height: 30px;
 		}
 
 		.secondary-rune-icon {
-			width: 19px;
-			height: 19px;
+			width: 24px;
+			height: 24px;
 			margin-left: 3px;
 		}
 
@@ -67,6 +71,26 @@
 			display: flex;
 			flex-direction: column;  /* 세로 정렬 */
 			gap: 2px;
+		}
+
+		.item-slot {
+			width: 28px;
+			height: 28px;
+			border-radius: 4px;
+			overflow: hidden;
+		}
+
+		.item-icon {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+
+		.empty-item-slot {
+			width: 100%;
+			height: 100%;
+			background-color: #4a4a4a;
+			border-radius: 4px;
 		}
 	</style>
 </head>
@@ -128,13 +152,31 @@
 						<td>
 							<div class="items">
 								<div class="first-row">
-									<c:forEach items="${match.firstRowItems}" var="item">
-										<img src="${item}" alt="item" width="30" height="30">
+									<c:forEach items="${match.firstRowItems}" var="item" varStatus="status">
+										<div class="item-slot" data-position="${status.index <= 2 ? status.index : 6}">
+											<c:choose>
+												<c:when test="${not empty item}">
+													<img src="${item}" alt="item" class="item-icon">
+												</c:when>
+												<c:otherwise>
+													<div class="empty-item-slot"></div>
+												</c:otherwise>
+											</c:choose>
+										</div>
 									</c:forEach>
 								</div>
 								<div class="second-row">
-									<c:forEach items="${match.secondRowItems}" var="item">
-										<img src="${item}" alt="item" width="30" height="30">
+									<c:forEach items="${match.secondRowItems}" var="item" varStatus="status">
+										<div class="item-slot" data-position="${status.index + 3}">
+											<c:choose>
+												<c:when test="${not empty item}">
+													<img src="${item}" alt="item" class="item-icon">
+												</c:when>
+												<c:otherwise>
+													<div class="empty-item-slot"></div>
+												</c:otherwise>
+											</c:choose>
+										</div>
 									</c:forEach>
 								</div>
 							</div>
