@@ -11,24 +11,29 @@ request.setAttribute("pageType", "lol");
     <title>소환사 정보</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/TFT_Info_Styles.css">
-
+    <style>
+	    .form-group label {
+	    margin-right: 10px; /* 라벨과 인풋 사이의 간격 조정 */
+	    width: 75px; /* 라벨의 고정 너비 설정 */
+	}
+	</style>
 </head>
 
 <body>
-	<h3>🔍 TFT 전적 상세 조회</h3>
+	<h3 class="mt-3 mb-3">🔍 TFT 전적 상세 조회</h3>
 	<p>
 		소환사 이름을 <strong>게임이름#태그라인</strong> 형식으로 입력하세요 (예 : 바다새#KR1)
 	</p>
 	<form id="summonerForm">
-		<div>
-			<label for="gameName">게임 이름:</label> <input type="text" id="gameName"
-				name="gameName" required>
-		</div>
-		<div>
-			<label for="tagLine">태그라인:</label> <input type="text" id="tagLine"
-				name="tagLine" required>
-		</div>
-		<button class="btn-search" type="submit">조회</button>
+	    <div class="form-group">
+	        <label for="gameName">게임 이름 : </label>
+	        <input type="text" id="gameName" name="gameName" required>
+	    </div>
+	    <div class="form-group">
+	        <label for="tagLine">태그라인 : </label>
+	        <input type="text" id="tagLine" name="tagLine" required>
+	    </div>
+	    <button class="btn-search" type="submit">조회</button>
 	</form>
 	<div id="summonerProfile" style="margin-top: 20px;">
 		<!-- 소환사 정보가 여기에 표시됩니다. -->

@@ -12,6 +12,12 @@
 	</definition>
 	 -->
 
+    <definition name="/post/*" template="/WEB-INF/views/layout/baseLayout.jsp">
+    	<put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />      
+      	<put-attribute name="body" value="/WEB-INF/views/post/{1}.jsp" />
+        <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
+      	<put-attribute name="sidebar" value="/WEB-INF/views/common/sidebar.jsp" />
+    </definition>
     <definition name="/*/*" template="/WEB-INF/views/layout/baseLayout.jsp">
         <put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />      
         <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
@@ -24,14 +30,8 @@
       	<put-attribute name="body" value="/WEB-INF/views/{1}.jsp" />	<!-- 확장으로 추가된 속성으로는 body가 있다 -->
 	</definition>
 
-	<definition name="exampleTFT" template="/WEB-INF/views/tool/tftTool.jsp">
+	<!-- <definition name="exampleTFT" template="/WEB-INF/views/tool/tftTool.jsp"></definition> -->
 	
-	</definition>
-	
-    <definition name="/post/*" template="/WEB-INF/views/layout/baseLayout.jsp">
-      	<put-attribute name="body" value="/WEB-INF/views/{1}/{2}.jsp" />
-      	<put-attribute name="sidebar" value="/WEB-INF/views/common/sidebar.jsp" />
-    </definition>
 
 
 </tiles-definitions>
