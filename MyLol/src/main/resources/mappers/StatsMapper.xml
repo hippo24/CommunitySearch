@@ -30,7 +30,7 @@
 	    FROM tft_rank r
 	    LEFT JOIN tft_players p ON r.puuid = p.puuid
 	</select>
-	<!-- 아이템 -->
+	<!-- 매치 데이터 -->
 	<select id="selectTftMatches" resultType="kr.kh.riot.model.vo.TftMatches">
 	    SELECT 
 	        match_id AS matchId,
@@ -46,5 +46,19 @@
 	        traits,
 	        units
 	    FROM tft_matches
-</select>
+	</select>
+	<!-- 아이템 -->
+	<select id="selectTftItems" resultType="kr.kh.riot.model.vo.TftItems">
+	    SELECT 
+	        i.id,
+	        i.match_id AS matchId,
+	        i.puuid,
+	        p.riot_id_name AS riotIdName,
+	        p.riot_id_tagline AS riotIdTagline,
+	        i.unit_index AS unitIndex,
+	        i.unit_name AS unitName,
+	        i.item_name AS itemName
+	    FROM tft_items i
+	    LEFT JOIN tft_players p ON i.puuid = p.puuid
+	</select>
 </mapper>

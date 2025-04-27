@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import kr.kh.riot.model.vo.TftItems;
 import kr.kh.riot.model.vo.TftMatches;
 import kr.kh.riot.model.vo.TftPlayers;
 import kr.kh.riot.model.vo.TftRank;
@@ -36,5 +37,11 @@ public class StatsController {
         List<TftMatches> matchList = statsService.getTftMatches();
         model.addAttribute("matchList", matchList);
         return "matches";
+    }
+    @GetMapping("/items")
+    public String showItems(Model model) {
+        List<TftItems> itemList = statsService.getTftItems();
+        model.addAttribute("itemList", itemList);
+        return "items";
     }
 }
