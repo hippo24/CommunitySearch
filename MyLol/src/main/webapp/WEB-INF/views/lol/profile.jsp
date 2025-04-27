@@ -92,6 +92,14 @@
 			background-color: #4a4a4a;
 			border-radius: 4px;
 		}
+		.win-text {
+	        color: #1abc1a; /* 초록색 */
+	        font-weight: bold;
+	    }
+	    .lose-text {
+	        color: #e74c3c; /* 빨간색 */
+	        font-weight: bold;
+	    }
 	</style>
 </head>
 <body>
@@ -107,6 +115,7 @@
 	    <div>승리: <strong>${dto.wins}</strong> / 패배: <strong>${dto.losses}</strong></div>
 	</div>
     </div>
+    <br>
     <!-- 하단 테이블 (최근 경기 상세) -->
     <div class="matches-table-container">
         <h2>최근 경기 정보</h2>
@@ -116,6 +125,7 @@
                 <tr>
                     <th>게임타입</th>
                     <th>챔피언</th>
+                    <th>결과</th>
                     <th>레벨</th>
                     <th>KDA</th>
                     <th>킬관여</th>
@@ -145,6 +155,16 @@
 									</div>
 								</div>
 							</div>
+						</td>
+						<td>
+						    <c:choose>
+						        <c:when test="${match.win}">
+						            <span class="win-text">승리</span>
+						        </c:when>
+						        <c:otherwise>
+						            <span class="lose-text">패배</span>
+						        </c:otherwise>
+						    </c:choose>
 						</td>
 						<td>${match.champLevel}</td>
 						<td>${match.kills}/${match.deaths}/${match.assists}</td>
