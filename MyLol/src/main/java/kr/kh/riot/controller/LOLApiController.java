@@ -81,7 +81,7 @@ public class LOLApiController {
 
             // 새로 추가된 코드 (초록색으로 표시)
             // 매치 데이터 가져오기
-			List<MatchDTO> matchList = lolApiService.getRecentMatches(puuid, 10); // 최근 10게임
+			List<MatchDTO> matchList = lolApiService.getRecentMatches(puuid, 20); // 최근 x게임
 			model.addAttribute("matchList", matchList);
         
 		} catch (Exception e) {	
