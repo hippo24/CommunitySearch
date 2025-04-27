@@ -100,19 +100,5 @@ public class TFTApiController {
         return "tft/profile"; 
     }
     
-    //통계 사이트
-    @GetMapping("/summonerstats")
-    public String getSummonerStats(Model model, String gameName, String tagLine, String puuid) {
-        model.addAttribute("pageType", "tft");
-        System.out.println(puuid);
-//        List<TFTMatcheVO> list = tftApiService.getMatches(puuid);
-//        if(list == null) {
-//        	System.out.println("dkdh");
-//        	return "/tft/summonerstats";
-//        }
-//        System.out.println(list);
-        return "/tft/summonerstats";
-    }
-    
 }
 
