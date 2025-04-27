@@ -12,12 +12,7 @@
 	</definition>
 	 -->
 
-    <definition name="/post/*" template="/WEB-INF/views/layout/baseLayout.jsp">
-    	<put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />      
-      	<put-attribute name="body" value="/WEB-INF/views/post/{1}.jsp" />
-        <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
-      	<put-attribute name="sidebar" value="/WEB-INF/views/common/sidebar.jsp" />
-    </definition>
+
     <definition name="/*/*" template="/WEB-INF/views/layout/baseLayout.jsp">
         <put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />      
         <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
