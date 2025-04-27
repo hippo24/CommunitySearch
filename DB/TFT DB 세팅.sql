@@ -91,7 +91,7 @@ ORDER BY use_count DESC
 LIMIT 10;
 
 -- 티어 등록된 유저 확인
-SELECT r.id, p.riot_id_name, p.riot_id_tagline, r.tier, r.rank_division, r.league_points, r.wins, r.losses, r.created_at, r.updated_at 
+SELECT r.id, p.name, p.tagline, r.tier, r.rank_division, r.league_points, r.wins, r.losses, r.created_at, r.updated_at 
 FROM tft_rank r 
 LEFT JOIN tft_players p ON r.puuid = p.puuid 
 ORDER BY r.id LIMIT 100;
@@ -184,15 +184,15 @@ WHERE puuid LIKE 'BOT%'
 GROUP BY last_round
 ORDER BY last_round ASC;
 
--- BOT들의 riot_id 정보 확인
-SELECT DISTINCT puuid, riot_id_name, riot_id_tagline 
+-- BOT들의 정보 확인
+SELECT DISTINCT puuid, name, tagline 
 FROM tft_players 
 WHERE puuid LIKE 'BOT%';
 
 -- BOT 플레이어 목록과 각각의 통계
 SELECT 
     p.puuid,
-    p.riot_id_name,
+    p.name,
     COUNT(*) as games_played,
     ROUND(AVG(m.placement), 2) as avg_placement,
     MIN(m.placement) as best_placement,
@@ -200,7 +200,7 @@ SELECT
 FROM tft_players p
 JOIN tft_matches m ON p.puuid = m.puuid
 WHERE p.puuid LIKE 'BOT%'
-GROUP BY p.puuid, p.riot_id_name
+GROUP BY p.puuid, p.name
 ORDER BY avg_placement ASC;
 
 -- BOT들의 전체 평균 등수
@@ -276,7 +276,7 @@ SELECT
     m.placement,
     m.units as raw_units,
     JSON_LENGTH(m.units) as unit_count,
-    p.riot_id_name
+    p.name
 FROM tft_matches m
 JOIN tft_players p ON m.puuid = p.puuid
 WHERE p.is_bot = true
