@@ -15,7 +15,7 @@
 
 	<div class="container mt-5">
 		<h1 class="text-center mb-4">TFT 챔피언 배치</h1>
-
+	
 		<div class="text-center mb-3">
 			<button id="toggle-theme" class="btn btn-info">라이트 테마</button>
 		</div>
