@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.kh.riot.dao.StatsMapper">
+    <select id="selectTftPlayers" resultType="kr.kh.riot.model.vo.TftPlayer">
+        SELECT 
+            id, 
+            puuid, 
+            riot_id_name AS riotIdName, 
+            riot_id_tagline AS riotIdTagline, 
+            game_date AS gameDate, 
+            created_at AS createdAt, 
+            bot
+        FROM tft_players
+    </select>
+</mapper>
