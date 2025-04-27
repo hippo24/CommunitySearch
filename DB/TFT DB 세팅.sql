@@ -4,7 +4,7 @@ node "C:\Users\loden\Desktop\DevHub\CommunitySearch\DB\tft-server/server.js"
 */
 
 -- DROP DATABASE IF EXISTS riot;
-CREATE DATABASE riot;
+-- CREATE DATABASE riot;
 USE riot;
 
 CREATE TABLE tft_players (
@@ -192,7 +192,7 @@ WHERE puuid LIKE 'BOT%';
 -- BOT 플레이어 목록과 각각의 통계
 SELECT 
     p.puuid,
-    p.name,
+    p.riot_id_name,
     COUNT(*) as games_played,
     ROUND(AVG(m.placement), 2) as avg_placement,
     MIN(m.placement) as best_placement,
@@ -200,7 +200,7 @@ SELECT
 FROM tft_players p
 JOIN tft_matches m ON p.puuid = m.puuid
 WHERE p.puuid LIKE 'BOT%'
-GROUP BY p.puuid, p.name
+GROUP BY p.puuid, p.riot_id_name
 ORDER BY avg_placement ASC;
 
 -- BOT들의 전체 평균 등수
@@ -276,7 +276,7 @@ SELECT
     m.placement,
     m.units as raw_units,
     JSON_LENGTH(m.units) as unit_count,
-    p.name
+    p.riot_id_name
 FROM tft_matches m
 JOIN tft_players p ON m.puuid = p.puuid
 WHERE p.is_bot = true
