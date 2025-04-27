@@ -1,5 +1,7 @@
 package kr.kh.riot.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,9 +9,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import kr.kh.riot.model.vo.BoardVO;
+import kr.kh.riot.model.vo.PostVO;
+import kr.kh.riot.pagination.PageMaker;
+import kr.kh.riot.pagination.PostCriteria;
 import kr.kh.riot.service.PostService;
 
 @Controller
@@ -22,10 +28,16 @@ public class AdminController {
 	
 	
 	
-	@GetMapping("/board")	// admin을 제외한 뒷부분 써주기
-	public String board(Model model) { //화면에 전달하려면 model객체 필요
+	@GetMapping("/board")	
+	public String board(Model model) { 
 
 		return "/admin/board";
+	}
+	
+	@GetMapping("/post")	
+	public String post(Model model) { 
+
+		return "/admin/list";
 	}
 	
 	@PostMapping("/board/insert")	
@@ -72,6 +84,27 @@ public class AdminController {
 		return "message";
 	}
 
+	@PostMapping("/post")
+	public Object PostList(Model model, @RequestBody PostCriteria cri) {			
+		//cri.setPerPageNum(2);
+		List<PostVO> postList = postService.getPostList(cri);
+		//System.out.println(postList);
+		PageMaker pm = postService.getPageMaker(cri);
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		String today = sdf.format(new Date());
+		
+		for(PostVO post : postList) {
+			post.setSummary(PostController.htmlToText(post.getPo_content(), 20));			//요약
+		}
+		
+		model.addAttribute("postList", postList);
+		model.addAttribute("pm",pm);
+		model.addAttribute("today", today);
+		
+		
+		return"admin/sub";					
+	}
 	
 
 	
