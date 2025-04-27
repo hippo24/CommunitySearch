@@ -92,6 +92,7 @@
 			    <a class="dropdown-item" href="<c:url value='/exampleTFT' />">TFT 배치 툴</a>
 			    <a class="dropdown-item" href="<c:url value='/players' />">플레이어</a>
 			    <a class="dropdown-item" href="<c:url value='/rank' />">등록된 유저</a>
+			    <a class="dropdown-item" href="<c:url value='/matches' />">매치 데이터</a>
 			  </div>
 			</li>
 				    

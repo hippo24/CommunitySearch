@@ -30,4 +30,21 @@
 	    FROM tft_rank r
 	    LEFT JOIN tft_players p ON r.puuid = p.puuid
 	</select>
+	<!-- 아이템 -->
+	<select id="selectTftMatches" resultType="kr.kh.riot.model.vo.TftMatches">
+	    SELECT 
+	        match_id AS matchId,
+	        placement,
+	        level,
+	        gold_left AS goldLeft,
+	        last_round AS lastRound,
+	        players_eliminated AS playersEliminated,
+	        time_eliminated AS timeEliminated,
+	        total_damage_to_players AS totalDamageToPlayers,
+	        game_length AS gameLength,
+	        companion,
+	        traits,
+	        units
+	    FROM tft_matches
+</select>
 </mapper>
