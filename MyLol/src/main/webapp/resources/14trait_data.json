@@ -1,0 +1,247 @@
+[
+  {
+    "id": "TFT14_StreetDemon",
+    "name": "거리의 악마",
+    "tiers": [
+      { "tier": 1, "minUnits": 3, "style": 1 },
+      { "tier": 2, "minUnits": 5, "style": 2 },
+      { "tier": 3, "minUnits": 7, "style": 4 },
+      { "tier": 4, "minUnits": 10, "style": 5 }
+    ],
+    "image": { "full": "Trait_Icon_14_StreetDemon.TFT_Set14.png" }
+  },
+  {
+    "id": "TFT14_Overlord",
+    "name" : "군주",
+    "tiers" : [
+      	{"tier":1 , "minUnits": 1, "style": 3 }
+    ],
+    "image": { "full": "Trait_Icon_14_Overlord.TFT_Set14.png" }
+  },
+  {
+    "id": "TFT14_Netgod",
+    "name" : "네트워크의 신",
+    "tiers" : [
+      	{"tier":1 , "minUnits": 1, "style": 3 }
+    ],
+    "image": { "full": "Trait_Icon_14_GodoftheNet.TFT_Set14.png" }
+  },
+  {
+    "id": "TFT14_HotRod",
+    "name" : "니트로",
+    "tiers" : [
+      	{"tier":1 , "minUnits": 3, "style": 1 },
+      	{"tier":2 , "minUnits": 4, "style": 4 }
+    ],
+    "image": { "full": "Trait_Icon_14_NitroForge.TFT_Set14.png" }
+  },
+  {
+    "id": "TFT14_AnimaSquad",
+    "name" : "동물특공대",
+    "tiers" : [
+      	{ "tier": 1, "minUnits": 3, "style": 1 },
+      	{ "tier": 2, "minUnits": 5, "style": 2 },
+      	{ "tier": 3, "minUnits": 7, "style": 4 },
+      	{ "tier": 4, "minUnits": 10, "style": 5 }
+    ],
+    "image": { "full": "Trait_Icon_14_AnimaSquad.TFT_Set14.png" }
+  },
+  {
+    "id": "TFT14_Virus",
+    "name" : "바이러스",
+    "tiers" : [
+      	{"tier":1 , "minUnits": 1, "style": 3 }
+    ],
+    "image": { "full": "Trait_Icon_14_Virus.TFT_Set14.png" }
+  },
+  {
+    "id": "TFT14_Mob",
+    "name" : "범죄 조직",
+    "tiers" : [
+      	{"tier":1 , "minUnits": 3, "style": 1 },
+      	{"tier":2 , "minUnits": 5, "style": 2 },
+      	{"tier":3 , "minUnits": 7, "style": 4 }
+    ],
+    "image": { "full": "Trait_Icon_14_Mob.TFT_Set14.png" }
+  },
+  {
+    "id": "TFT14_Cyberboss",
+    "name": "사이버보스",
+    "tiers": [
+    	{ "tier": 1, "minUnits": 2, "style": 1 },
+      	{ "tier": 2, "minUnits": 3, "style": 2 },
+      	{ "tier": 3, "minUnits": 4, "style": 4 }
+    ],
+    "image": { "full": "Trait_Icon_14_Cyberbosses.TFT_Set14.png" }
+  },
+  {
+    "id": "TFT14_Suits",
+    "name" : "사이퍼",
+    "tiers" : [
+      	{"tier":1 , "minUnits": 3, "style": 1 },
+      	{"tier":2 , "minUnits": 4, "style": 2 },
+      	{"tier":3 , "minUnits": 5, "style": 4 }
+    ],
+    "image": { "full": "Trait_Icon_14_Cypher.TFT_Set14.png" }
+  },
+  {
+    "id": "TFT14_Divinicorp",
+    "name" : "신성기업",
+    "tiers" : [
+      	{"tier":1 , "minUnits": 1, "style": 1 },
+      	{"tier":2 , "minUnits": 2, "style": 2 },
+      	{"tier":3 , "minUnits": 5, "style": 4 }
+    ],
+    "image": { "full": "Trait_Icon_14_Divinicorp.TFT_Set14.png" }
+  },
+  {
+    "id": "TFT14_EdgeRunner",
+    "name" : "엑소테크",
+    "tiers" : [
+      	{"tier":1 , "minUnits": 3, "style": 1 },
+      	{"tier":2 , "minUnits": 5, "style": 2 },
+      	{"tier":3 , "minUnits": 7, "style": 4 },
+      	{"tier":4 , "minUnits": 10, "style": 5 }
+    ],
+    "image": { "full": "Trait_Icon_14_Exotech.TFT_Set14.png" }
+  },
+  {
+    "id": "TFT14_ViegoUniqueTrait",
+    "name" : "영혼 살해자",
+    "tiers" : [
+      	{"tier":1 , "minUnits": 1, "style": 3 }
+    ],
+    "image": { "full": "Trait_Icon_14_SoulKiller.TFT_Set14.png" }
+  },
+  {
+    "id": "TFT14_BallisTek",
+    "name" : "폭발 봇",
+    "tiers" : [
+      	{"tier":1 , "minUnits": 2, "style": 1 },
+      	{"tier":2 , "minUnits": 4, "style": 2 },
+      	{"tier":3 , "minUnits": 6, "style": 4 }
+    ],
+    "image": { "full": "Trait_Icon_14_BoomBots.TFT_Set14.png" }
+  },
+  {
+    "id": "TFT14_Immortal",
+    "name" : "황금 황소",
+    "tiers" : [
+      	{"tier":1 , "minUnits": 2, "style": 1 },
+      	{"tier":2 , "minUnits": 4, "style": 2 },
+      	{"tier":3 , "minUnits": 6, "style": 4 }
+    ],
+    "image": { "full": "Trait_Icon_14_GoldenOx.TFT_Set14.png" }
+  },
+  {
+    "id": "TFT14_Techie",
+    "name" : "기술광",
+    "tiers" : [
+      	{"tier":1 , "minUnits": 2, "style": 1 },
+      	{"tier":2 , "minUnits": 4, "style": 2 },
+      	{"tier":3 , "minUnits": 6, "style": 4 }
+    ],
+    "image": { "full": "Trait_Icon_14_Techie.TFT_Set14.png" }
+  },
+  {
+    "id": "TFT14_Bruiser",
+    "name" : "난동꾼",
+    "tiers" : [
+      	{"tier":1 , "minUnits": 2, "style": 1 },
+      	{"tier":2 , "minUnits": 4, "style": 2 },
+      	{"tier":3 , "minUnits": 6, "style": 4 }
+    ],
+    "image": { "full": "Trait_Icon_14_Bruiser.TFT_Set14.png" }
+  },
+  {
+    "id": "TFT14_Thirsty",
+    "name" : "다이나모",
+    "tiers" : [
+		{"tier":1 , "minUnits": 2, "style": 1 },
+      	{"tier":2 , "minUnits": 3, "style": 2 },
+      	{"tier":3 , "minUnits": 4, "style": 4 }
+    ],
+    "image": { "full": "Trait_Icon_14_Dynamo.TFT_Set14.png"}
+  },
+  {
+    "id": "TFT14_Marksman",
+    "name" : "사격수",
+    "tiers" : [
+		{"tier":1 , "minUnits": 2, "style": 1 },
+      	{"tier":2 , "minUnits": 4, "style": 2 },
+      	{"tier":3 , "minUnits": 6, "style": 4 }
+    ],
+    "image": { "full": "Trait_Icon_14_Marksman.TFT_Set14.png" }
+  },
+  {
+    "id": "TFT14_Vanguard",
+    "name" : "선봉대",
+    "tiers" : [
+		{"tier":1 , "minUnits": 2, "style": 1 },
+      	{"tier":2 , "minUnits": 4, "style": 2 },
+      	{"tier":3 , "minUnits": 6, "style": 4 }
+    ],
+    "image": { "full": "Trait_Icon_12_Vanguard.TFT_Set12.png" }
+  },
+  {
+    "id": "TFT14_Swift",
+    "name" : "속사포",
+    "tiers" : [
+		{"tier":1 , "minUnits": 2, "style": 1 },
+      	{"tier":2 , "minUnits": 4, "style": 2 },
+      	{"tier":3 , "minUnits": 6, "style": 4 }
+    ],
+    "image": { "full": "Trait_Icon_10_Rapidfire.png" }
+  },
+  {
+    "id": "TFT14_Armorclad",
+    "name" : "요새",
+    "tiers" : [
+		{"tier":1 , "minUnits": 2, "style": 1 },
+      	{"tier":2 , "minUnits": 4, "style": 2 },
+      	{"tier":3 , "minUnits": 6, "style": 4 }
+    ],
+    "image": { "full": "Trait_Icon_9_Bastion.png" }
+  },
+  {
+    "id": "TFT14_Supercharge",
+    "name" : "증.폭.",
+    "tiers" : [
+		{"tier":1 , "minUnits": 2, "style": 1 },
+      	{"tier":2 , "minUnits": 3, "style": 2 },
+      	{"tier":3 , "minUnits": 5, "style": 4 }
+    ],
+    "image": { "full": "Trait_Icon_14_Amp.TFT_Set14.png" }
+  },
+  {
+    "id": "TFT14_Controller",
+    "name" : "책략가",
+    "tiers" : [
+		{"tier":1 , "minUnits": 2, "style": 1 },
+      	{"tier":2 , "minUnits": 3, "style": 2 },
+      	{"tier":3 , "minUnits": 5, "style": 4 }
+    ],
+    "image": { "full": "Trait_Icon_9_Strategist.png" }
+  },
+  {
+    "id": "TFT14_Cutter",
+    "name" : "처형자",
+    "tiers" : [
+		{"tier":1 , "minUnits": 2, "style": 1 },
+      	{"tier":2 , "minUnits": 3, "style": 2 },
+      	{"tier":3 , "minUnits": 5, "style": 4 }
+    ],
+    "image": { "full": "Trait_Icon_4_Executioner.png" }
+  },
+  {
+    "id": "TFT14_Strong",
+    "name" : "학살자",
+    "tiers" : [
+		{"tier":1 , "minUnits": 2, "style": 1 },
+      	{"tier":2 , "minUnits": 4, "style": 2 },
+      	{"tier":3 , "minUnits": 6, "style": 4 }
+    ],
+    "image": { "full": "Trait_Icon_4_Slayer.png" }
+  }
+]
+ 

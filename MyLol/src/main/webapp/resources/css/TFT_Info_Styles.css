@@ -2,7 +2,10 @@
 body {
   font-family: "Segoe UI", sans-serif;
 }
-
+.form-group label {
+    margin-right: 10px; /* 라벨과 인풋 사이의 간격 조정 */
+    width: 80px; /* 라벨의 고정 너비 설정 */
+}
 /* figure: 레벨 텍스트 오버랩용 */
 figure {
   position: relative;
