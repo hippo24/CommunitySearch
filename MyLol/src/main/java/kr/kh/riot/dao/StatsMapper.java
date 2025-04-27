@@ -2,8 +2,8 @@ package kr.kh.riot.dao;
 
 import java.util.List;
 
-import kr.kh.riot.model.vo.TftPlayer;
+import kr.kh.riot.model.vo.TftPlayers;
 
 public interface StatsMapper {
-    List<TftPlayer> selectTftPlayers();
+    List<TftPlayers> selectTftPlayers();
 }

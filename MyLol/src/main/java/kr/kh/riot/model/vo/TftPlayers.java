@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 import lombok.Data;
 
 @Data
-public class TftPlayer {
+public class TftPlayers {
     private int id;
     private String puuid;
     private String riotIdName;
