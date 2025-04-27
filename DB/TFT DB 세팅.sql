@@ -3,9 +3,9 @@ node "D:\git\CommunitySearch\bin\hyeonyeong\tft-server\server.js"
 node "C:\Users\loden\Desktop\DevHub\CommunitySearch\DB\tft-server/server.js"
 */
 
--- DROP DATABASE IF EXISTS tft;
-CREATE DATABASE tft;
-USE tft;
+-- DROP DATABASE IF EXISTS riot;
+CREATE DATABASE riot;
+USE riot;
 
 CREATE TABLE tft_players (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -72,7 +72,7 @@ CREATE TABLE tft_items (
 );
 
 -- 매치 조회
-USE tft;
+USE riot;
 SELECT * FROM tft_players ORDER BY created_at DESC LIMIT 1000;
 SELECT * FROM tft_matches ORDER BY created_at DESC LIMIT 1000;
 SELECT * FROM tft_items ORDER BY id DESC LIMIT 500;
