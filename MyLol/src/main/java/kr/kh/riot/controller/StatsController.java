@@ -77,6 +77,12 @@ public class StatsController {
         }
         model.addAttribute("tierCount", tierCount);
         
+        List<Map<String, Object>> top3Levels = null;
+        if (gameName != null && tagLine != null && !gameName.isEmpty() && !tagLine.isEmpty()) {
+            top3Levels = statsService.getTop3LevelsByRiotId(gameName, tagLine);
+        }
+        model.addAttribute("top3Levels", top3Levels);
+        
         return "records";
     }
 }

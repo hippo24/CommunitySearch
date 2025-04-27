@@ -71,6 +71,7 @@
                                         <c:when test="${tier.tier == 1}">⭐</c:when>
                                         <c:when test="${tier.tier == 2}">⭐⭐</c:when>
                                         <c:when test="${tier.tier == 3}">⭐⭐⭐</c:when>
+                                        <c:when test="${tier.tier == 4}">⭐⭐⭐⭐</c:when>
                                         <c:otherwise>${tier.tier}성</c:otherwise>
                                     </c:choose>
                                 </td>
@@ -80,6 +81,7 @@
                     </table>
                 </div>
             </div>
+            <br>
             <br>
             <!-- 시너지/아이템 TOP3 가로 배치 -->
             <div style="display: flex; gap: 40px; align-items: flex-start;">
@@ -122,6 +124,27 @@
                     </table>
                 </div>
             </div>
+            <br>
+            <br>
+            <h3>가장 많이 달성한 레벨 TOP 3</h3>
+			<table border="2">
+		    <tr>
+		        <th>순위</th>
+		        <th>레벨</th>
+		        <th>달성 횟수</th>
+		        <th>평균 등수</th>
+		    </tr>
+		    <c:forEach var="level" items="${top3Levels}" varStatus="status">
+		        <tr>
+		            <td>${status.index + 1}</td>
+		            <td>${level.level}레벨</td>
+		            <td>${level.cnt}번</td>
+		            <td>
+		                <fmt:formatNumber value="${level.avgPlacement}" maxFractionDigits="2"/>등
+		            </td>
+		        </tr>
+		    </c:forEach>
+		</table>
         </c:when>
         <c:otherwise>
             <div>검색 후 결과가 표시됩니다.</div>

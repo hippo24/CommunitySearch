@@ -147,4 +147,18 @@
 		GROUP BY t.tier
 		ORDER BY t.tier
 	</select>
+	<!-- 평균 레벨 3 -->
+	<select id="selectTop3LevelsByRiotId" resultType="map">
+	    SELECT
+	      level,
+	      COUNT(*) AS cnt,
+	      AVG(placement) AS avgPlacement
+	    FROM tft_matches m
+	    LEFT JOIN tft_players p ON m.puuid = p.puuid
+	    WHERE p.riot_id_name = #{riotIdName}
+	      AND p.riot_id_tagline = #{riotIdTagline}
+	    GROUP BY level
+	    ORDER BY cnt DESC, level DESC
+	    LIMIT 3
+	</select>
 </mapper>
