@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 
 // Riot API 설정
-const API_KEY = "RGAPI-9aca6db9-aedb-4031-8e7c-bda740caf1c4";
+const API_KEY = "RGAPI-9b484120-f042-423e-b0b5-0e3a256de28a";
 const RIOT_API = {
   ASIA: "https://asia.api.riotgames.com",
   KOREA: "https://kr.api.riotgames.com"
@@ -29,7 +29,7 @@ const dbConfig = {
   host: "localhost",
   user: "root",
   password: "root",
-  database: "tft",
+  database: "riot",
 };
 
 let db;
