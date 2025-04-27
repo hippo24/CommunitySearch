@@ -1,6 +1,7 @@
 package kr.kh.riot.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,5 +32,33 @@ public class StatsServiceImp implements StatsService {
     @Override
     public List<TftItems> getTftItems() {
         return statsMapper.selectTftItems();
+    }
+    
+    @Override
+    public List<TftPlayers> getTftPlayersByRiotId(String riotIdName, String riotIdTagline) {
+        return statsMapper.selectTftPlayersByRiotId(riotIdName, riotIdTagline);
+    }
+
+    @Override
+    public List<TftRank> getTftRankByRiotId(String riotIdName, String riotIdTagline) {
+        return statsMapper.selectTftRankByRiotId(riotIdName, riotIdTagline);
+    }
+
+    @Override
+    public List<TftMatches> getTftMatchesByRiotId(String riotIdName, String riotIdTagline) {
+        return statsMapper.selectTftMatchesByRiotId(riotIdName, riotIdTagline);
+    }
+
+    @Override
+    public List<TftItems> getTftItemsByRiotId(String riotIdName, String riotIdTagline) {
+        return statsMapper.selectTftItemsByRiotId(riotIdName, riotIdTagline);
+    }
+    @Override
+    public List<Map<String, Object>> getTop3UnitsByRiotId(String riotIdName, String riotIdTagline) {
+        return statsMapper.selectTop3UnitsByRiotId(riotIdName, riotIdTagline);
+    }
+    @Override
+    public List<Map<String, Object>> getTop3TraitsByRiotId(String riotIdName, String riotIdTagline) {
+        return statsMapper.selectTop3TraitsByRiotId(riotIdName, riotIdTagline);
     }
 }

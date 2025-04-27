@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.kh.riot.dao.StatsMapper">
-	<!-- 플레이어 -->
+	<!-- DB 플레이어 -->
     <select id="selectTftPlayers" resultType="kr.kh.riot.model.vo.TftPlayers">
         SELECT 
             id, 
@@ -15,7 +15,7 @@
             bot
         FROM tft_players
     </select>
-    <!-- 랭크 -->
+    <!-- DB 랭크 -->
     <select id="selectTftRank" resultType="kr.kh.riot.model.vo.TftRank">
 	    SELECT 
 	        r.id, 
@@ -30,7 +30,7 @@
 	    FROM tft_rank r
 	    LEFT JOIN tft_players p ON r.puuid = p.puuid
 	</select>
-	<!-- 매치 데이터 -->
+	<!-- DB 매치 데이터 -->
 	<select id="selectTftMatches" resultType="kr.kh.riot.model.vo.TftMatches">
 	    SELECT 
 	        match_id AS matchId,
@@ -47,7 +47,7 @@
 	        units
 	    FROM tft_matches
 	</select>
-	<!-- 아이템 -->
+	<!-- DB 아이템 -->
 	<select id="selectTftItems" resultType="kr.kh.riot.model.vo.TftItems">
 	    SELECT 
 	        i.id,
@@ -60,5 +60,44 @@
 	        i.item_name AS itemName
 	    FROM tft_items i
 	    LEFT JOIN tft_players p ON i.puuid = p.puuid
+	</select>
+	<!-- 검색한 유저의 매치 수 -->
+	<select id="selectTftMatchesByRiotId" resultType="kr.kh.riot.model.vo.TftMatches">
+	    SELECT m.*
+	    FROM tft_matches m
+	    LEFT JOIN tft_players p ON m.puuid = p.puuid
+	    WHERE p.riot_id_name = #{riotIdName}
+	      AND p.riot_id_tagline = #{riotIdTagline}
+	</select>
+	<!-- 검색한 유저의 유닛 3 -->
+	<select id="selectTop3UnitsByRiotId" resultType="map">
+	    SELECT i.unit_name AS unitName, COUNT(DISTINCT i.match_id) AS cnt
+		FROM tft_items i
+		LEFT JOIN tft_players p ON i.puuid = p.puuid
+		WHERE p.riot_id_name = #{riotIdName}
+		  AND p.riot_id_tagline = #{riotIdTagline}
+		GROUP BY i.unit_name
+		ORDER BY cnt DESC
+		LIMIT 3
+	</select>
+	<!-- 검색한 유저의 시너지 3 -->
+	<select id="selectTop3TraitsByRiotId" resultType="map">
+	    SELECT traitName, COUNT(*) AS cnt
+	    FROM (
+	      SELECT
+	        JSON_UNQUOTE(JSON_EXTRACT(m.traits, CONCAT('$[', n.n, '].name'))) AS traitName
+	      FROM tft_matches m
+	      LEFT JOIN tft_players p ON m.puuid = p.puuid
+	      JOIN (
+	        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4
+	        UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
+	      ) n
+	      WHERE p.riot_id_name = #{riotIdName}
+	        AND p.riot_id_tagline = #{riotIdTagline}
+	        AND JSON_EXTRACT(m.traits, CONCAT('$[', n.n, '].name')) IS NOT NULL
+	    ) t
+	    GROUP BY traitName
+	    ORDER BY cnt DESC
+	    LIMIT 3
 	</select>
 </mapper>

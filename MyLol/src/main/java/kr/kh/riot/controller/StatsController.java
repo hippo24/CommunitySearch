@@ -1,11 +1,13 @@
 package kr.kh.riot.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.kh.riot.model.vo.TftItems;
 import kr.kh.riot.model.vo.TftMatches;
@@ -25,7 +27,6 @@ public class StatsController {
         model.addAttribute("playerList", playerList);
         return "players";
     }
-    
     @GetMapping("/rank")
     public String showRank(Model model) {
         List<TftRank> rankList = statsService.getTftRank();
@@ -43,5 +44,27 @@ public class StatsController {
         List<TftItems> itemList = statsService.getTftItems();
         model.addAttribute("itemList", itemList);
         return "items";
+    }
+    @GetMapping("/records")
+    public String showRecords(
+        @RequestParam(value="gameName", required=false) String gameName,
+        @RequestParam(value="tagLine", required=false) String tagLine,
+        Model model) {
+
+        List<Map<String, Object>> top3Units = null;
+        if (gameName != null && tagLine != null && !gameName.isEmpty() && !tagLine.isEmpty()) {
+            // 검색한 유저의 유닛 TOP 3만 조회
+            top3Units = statsService.getTop3UnitsByRiotId(gameName, tagLine);
+            model.addAttribute("gameName", gameName);
+            model.addAttribute("tagLine", tagLine);
+        }
+        model.addAttribute("top3Units", top3Units);
+        
+        List<Map<String, Object>> top3Traits = null;
+        if (gameName != null && tagLine != null && !gameName.isEmpty() && !tagLine.isEmpty()) {
+            top3Traits = statsService.getTop3TraitsByRiotId(gameName, tagLine);
+        }
+        model.addAttribute("top3Traits", top3Traits);
+        return "records";
     }
 }

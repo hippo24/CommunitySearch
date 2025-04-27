@@ -15,6 +15,7 @@ request.setAttribute("pageType", "lol");
 </head>
 
 <body>
+	<br>
 	<h3>🔍 LOL 전적 상세 조회</h3>
 	<p>
 		소환사 이름을 <strong>게임이름#태그라인</strong> 형식으로 입력하세요 (예 : Hide on bush#KR1)
