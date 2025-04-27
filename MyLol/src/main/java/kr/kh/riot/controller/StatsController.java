@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import kr.kh.riot.model.vo.TftPlayers;
+import kr.kh.riot.model.vo.TftRank;
 import kr.kh.riot.service.StatsService;
 
 @Controller
@@ -17,9 +18,16 @@ public class StatsController {
     private StatsService statsService;
 
     @GetMapping("/players")
-    public String showStats(Model model) {
+    public String showPlayer(Model model) {
         List<TftPlayers> playerList = statsService.getTftPlayers();
         model.addAttribute("playerList", playerList);
         return "players";
+    }
+    
+    @GetMapping("/rank")
+    public String showRank(Model model) {
+        List<TftRank> rankList = statsService.getTftRank();
+        model.addAttribute("rankList", rankList);
+        return "rank";
     }
 }

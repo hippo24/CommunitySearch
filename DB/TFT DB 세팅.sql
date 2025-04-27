@@ -271,7 +271,7 @@ LIMIT 10;
 
 -- BOT 매치들의 실제 데이터 확인
 SELECT 
-    m.match_id,
+    m.match_id,	
     m.puuid,
     m.placement,
     m.units as raw_units,
