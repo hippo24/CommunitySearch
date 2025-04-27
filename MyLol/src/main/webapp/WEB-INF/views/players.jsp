@@ -5,9 +5,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <title>통계</title>
-<head>
-    <title>통계</title>
+    <title>플레이어</title>
     <style>
     	table th {
             text-align: center;
@@ -18,14 +16,15 @@
     </style>
 </head>
 <body>
-    <h2>유저 통계</h2>
+	<br>
+    <h2>플레이어</h2>
     <table border="2">
     <colgroup>
         <col style="width:50px">
 	    <col style="width:500px">
 	    <col style="width:120px">
 	    <col style="width:60px">
-	    <col style="width:150px">
+	    <col style="width:110px">
 	    <col style="width:200px">
 	    <col style="width:100px">
     </colgroup>
@@ -50,7 +49,7 @@
             <td>${player.createdAt}</td>
             <td>
                 <c:choose>
-                    <c:when test="${player.bot}">BOT</c:when>
+                    <c:when test="${player.bot}">봇</c:when>
                     <c:otherwise>유저</c:otherwise>
                 </c:choose>
             </td>
