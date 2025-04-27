@@ -25,4 +25,5 @@ public interface StatsMapper {
     List<Map<String, Object>> selectTop3UnitsByRiotId(@Param("riotIdName") String riotIdName, @Param("riotIdTagline") String riotIdTagline);
     List<Map<String, Object>> selectTop3TraitsByRiotId(@Param("riotIdName") String riotIdName, @Param("riotIdTagline") String riotIdTagline);
     List<Map<String, Object>> selectTop3ItemsByRiotId(@Param("riotIdName") String riotIdName, @Param("riotIdTagline") String riotIdTagline);
+    List<Map<String, Object>> selectTierCountByRiotId(@Param("riotIdName") String riotIdName, @Param("riotIdTagline") String riotIdTagline);
 }

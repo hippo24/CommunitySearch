@@ -22,4 +22,5 @@ public interface StatsService {
 	List<Map<String, Object>> getTop3UnitsByRiotId(String riotIdName, String riotIdTagline);
 	List<Map<String, Object>> getTop3TraitsByRiotId(String riotIdName, String riotIdTagline);
 	List<Map<String, Object>> getTop3ItemsByRiotId(String riotIdName, String riotIdTagline);
+	List<Map<String, Object>> getTierCountByRiotId(String riotIdName, String riotIdTagline);
 }

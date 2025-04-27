@@ -65,4 +65,8 @@ public class StatsServiceImp implements StatsService {
     public List<Map<String, Object>> getTop3ItemsByRiotId(String riotIdName, String riotIdTagline) {
         return statsMapper.selectTop3ItemsByRiotId(riotIdName, riotIdTagline);
     }
+    @Override
+    public List<Map<String, Object>> getTierCountByRiotId(String riotIdName, String riotIdTagline) {
+        return statsMapper.selectTierCountByRiotId(riotIdName, riotIdTagline);
+    }
 }

@@ -71,40 +71,51 @@
 	</select>
 	<!-- 검색한 유저의 유닛 3 -->
 	<select id="selectTop3UnitsByRiotId" resultType="map">
-	    SELECT i.unit_name AS unitName, COUNT(DISTINCT i.match_id) AS cnt
-		FROM tft_items i
-		LEFT JOIN tft_players p ON i.puuid = p.puuid
-		WHERE p.riot_id_name = #{riotIdName}
-		  AND p.riot_id_tagline = #{riotIdTagline}
-		GROUP BY i.unit_name
-		ORDER BY cnt DESC
-		LIMIT 3
-	</select>
-	<!-- 검색한 유저의 시너지 3 -->
-	<select id="selectTop3TraitsByRiotId" resultType="map">
-	    SELECT traitName, COUNT(*) AS cnt
-	    FROM (
-	      SELECT
-	        JSON_UNQUOTE(JSON_EXTRACT(m.traits, CONCAT('$[', n.n, '].name'))) AS traitName
-	      FROM tft_matches m
-	      LEFT JOIN tft_players p ON m.puuid = p.puuid
-	      JOIN (
-	        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4
-	        UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-	      ) n
-	      WHERE p.riot_id_name = #{riotIdName}
-	        AND p.riot_id_tagline = #{riotIdTagline}
-	        AND JSON_EXTRACT(m.traits, CONCAT('$[', n.n, '].name')) IS NOT NULL
-	    ) t
-	    GROUP BY traitName
+	    SELECT 
+	        i.unit_name AS unitName, 
+	        COUNT(*) AS cnt,
+	        AVG(m.placement) AS avgPlacement
+	    FROM tft_items i
+	    LEFT JOIN tft_players p ON i.puuid = p.puuid
+	    LEFT JOIN tft_matches m ON i.match_id = m.match_id AND i.puuid = m.puuid
+	    WHERE p.riot_id_name = #{riotIdName}
+	      AND p.riot_id_tagline = #{riotIdTagline}
+	      AND i.unit_name IS NOT NULL
+	      AND i.unit_name != ''
+	    GROUP BY i.unit_name
 	    ORDER BY cnt DESC
 	    LIMIT 3
 	</select>
+	<!-- 검색한 유저의 시너지 3 -->
+	<select id="selectTop3TraitsByRiotId" resultType="map">
+	    SELECT traitName, COUNT(*) AS cnt, AVG(placement) AS avgPlacement
+		FROM (
+		  SELECT
+		    JSON_UNQUOTE(JSON_EXTRACT(m.traits, CONCAT('$[', n.n, '].name'))) AS traitName,
+		    m.placement
+		  FROM tft_matches m
+		  LEFT JOIN tft_players p ON m.puuid = p.puuid
+		  JOIN (
+		    SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4
+		    UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
+		  ) n
+		  WHERE p.riot_id_name = #{riotIdName}
+		    AND p.riot_id_tagline = #{riotIdTagline}
+		    AND JSON_EXTRACT(m.traits, CONCAT('$[', n.n, '].name')) IS NOT NULL
+		) t
+		GROUP BY traitName
+		ORDER BY cnt DESC
+		LIMIT 3
+	</select>
 	<!-- 검색한 유저의 아이템 3 -->
 	<select id="selectTop3ItemsByRiotId" resultType="map">
-	    SELECT i.item_name AS itemName, COUNT(*) AS cnt
+	    SELECT 
+	        i.item_name AS itemName, 
+	        COUNT(*) AS cnt,
+	        AVG(m.placement) AS avgPlacement
 	    FROM tft_items i
 	    LEFT JOIN tft_players p ON i.puuid = p.puuid
+	    LEFT JOIN tft_matches m ON i.match_id = m.match_id AND i.puuid = m.puuid
 	    WHERE p.riot_id_name = #{riotIdName}
 	      AND p.riot_id_tagline = #{riotIdTagline}
 	      AND i.item_name IS NOT NULL
@@ -112,5 +123,28 @@
 	    GROUP BY i.item_name
 	    ORDER BY cnt DESC
 	    LIMIT 3
+	</select>
+	<!-- 검색한 유저의 별 갯수 -->
+	<select id="selectTierCountByRiotId" resultType="map">
+	    SELECT
+		  t.tier,
+		  COUNT(*) AS cnt
+		FROM (
+		  SELECT
+		    jt.tier
+		  FROM tft_matches m
+		  LEFT JOIN tft_players p ON m.puuid = p.puuid
+		  JOIN JSON_TABLE(
+		    m.units,
+		    '$[*]' COLUMNS (
+		      tier INT PATH '$.tier'
+		    )
+		  ) jt
+		  WHERE p.riot_id_name = #{riotIdName}
+		    AND p.riot_id_tagline = #{riotIdTagline}
+		  -- 필요시 AND jt.tier IN (1,2,3)
+		) t
+		GROUP BY t.tier
+		ORDER BY t.tier
 	</select>
 </mapper>
