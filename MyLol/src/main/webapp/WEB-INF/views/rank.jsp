@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <title>랭크</title>
+    <title>등록된 유저</title>
     <style>
     	table th {
             text-align: center;
@@ -17,7 +17,7 @@
 </head>
 <body>
 	<br>
-    <h2>랭크</h2>
+    <h2>등록된 유저</h2>
     <table border="2">
     <tr>
         <th>ID</th>
