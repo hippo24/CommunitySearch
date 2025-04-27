@@ -48,8 +48,7 @@ public class StatsController {
     @GetMapping("/records")
     public String showRecords(
         @RequestParam(value="gameName", required=false) String gameName,
-        @RequestParam(value="tagLine", required=false) String tagLine,
-        Model model) {
+        @RequestParam(value="tagLine", required=false) String tagLine, Model model) {
 
         List<Map<String, Object>> top3Units = null;
         if (gameName != null && tagLine != null && !gameName.isEmpty() && !tagLine.isEmpty()) {
@@ -65,6 +64,13 @@ public class StatsController {
             top3Traits = statsService.getTop3TraitsByRiotId(gameName, tagLine);
         }
         model.addAttribute("top3Traits", top3Traits);
+        
+        List<Map<String, Object>> top3Items = null;
+        if (gameName != null && tagLine != null && !gameName.isEmpty() && !tagLine.isEmpty()) {
+            top3Items = statsService.getTop3ItemsByRiotId(gameName, tagLine);
+        }
+        model.addAttribute("top3Items", top3Items);
+        
         return "records";
     }
 }

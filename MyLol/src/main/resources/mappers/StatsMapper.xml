@@ -100,4 +100,17 @@
 	    ORDER BY cnt DESC
 	    LIMIT 3
 	</select>
+	<!-- 검색한 유저의 아이템 3 -->
+	<select id="selectTop3ItemsByRiotId" resultType="map">
+	    SELECT i.item_name AS itemName, COUNT(*) AS cnt
+	    FROM tft_items i
+	    LEFT JOIN tft_players p ON i.puuid = p.puuid
+	    WHERE p.riot_id_name = #{riotIdName}
+	      AND p.riot_id_tagline = #{riotIdTagline}
+	      AND i.item_name IS NOT NULL
+	      AND i.item_name != ''
+	    GROUP BY i.item_name
+	    ORDER BY cnt DESC
+	    LIMIT 3
+	</select>
 </mapper>

@@ -21,4 +21,5 @@ public interface StatsService {
 	//유저 통계
 	List<Map<String, Object>> getTop3UnitsByRiotId(String riotIdName, String riotIdTagline);
 	List<Map<String, Object>> getTop3TraitsByRiotId(String riotIdName, String riotIdTagline);
+	List<Map<String, Object>> getTop3ItemsByRiotId(String riotIdName, String riotIdTagline);
 }

@@ -78,6 +78,22 @@
                 </tr>
             </c:forEach>
         </table>
+        <br>
+        <h3>가장 많이 쓴 아이템 TOP 3</h3>
+        <table border="2">
+            <tr>
+                <th>순위</th>
+                <th>아이템 이름</th>
+                <th>사용 횟수</th>
+            </tr>
+            <c:forEach var="item" items="${top3Items}" varStatus="status">
+                <tr>
+                    <td>${status.index + 1}</td>
+                    <td>${item.itemName}</td>
+                    <td>${item.cnt}</td>
+                </tr>
+            </c:forEach>
+        </table>
     </c:when>
     <c:otherwise>
         <div>검색 후 결과가 표시됩니다.</div>
