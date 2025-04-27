@@ -10,8 +10,8 @@ USE riot;
 CREATE TABLE tft_players (
     id INT AUTO_INCREMENT PRIMARY KEY,
     puuid VARCHAR(100) NOT NULL,      -- puuid
-    name VARCHAR(40),         -- 소환사 이름
-    tagline VARCHAR(10),      -- 소환사 태그
+    riot_id_name VARCHAR(40),         -- 소환사 이름
+    riot_id_tagline VARCHAR(10),      -- 소환사 태그
     game_date DATE,                   -- 날짜
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     is_bot BOOLEAN GENERATED ALWAYS AS (puuid LIKE 'BOT%') STORED,  -- BOT으로 시작하면 자동으로 TRUE
@@ -91,7 +91,7 @@ ORDER BY use_count DESC
 LIMIT 10;
 
 -- 티어 등록된 유저 확인
-SELECT r.id, p.name, p.tagline, r.tier, r.rank_division, r.league_points, r.wins, r.losses, r.created_at, r.updated_at 
+SELECT r.id, p.riot_id_name, p.riot_id_tagline, r.tier, r.rank_division, r.league_points, r.wins, r.losses, r.created_at, r.updated_at 
 FROM tft_rank r 
 LEFT JOIN tft_players p ON r.puuid = p.puuid 
 ORDER BY r.id LIMIT 100;
@@ -185,7 +185,7 @@ GROUP BY last_round
 ORDER BY last_round ASC;
 
 -- BOT들의 정보 확인
-SELECT DISTINCT puuid, name, tagline 
+SELECT DISTINCT puuid, riot_id_name, riot_id_tagline 
 FROM tft_players 
 WHERE puuid LIKE 'BOT%';
 
