@@ -135,8 +135,8 @@
 
     // json으로부터 챔피언 데이터 가져오기
     Promise.all([
-	  fetch("/riot/resources/14unit_data.json").then(res => res.json()),
-	  fetch("/riot/resources/14trait_data.json").then(res => res.json())
+	  fetch("/riot/resources/json/14unit_data.json").then(res => res.json()),
+	  fetch("/riot/resources/json/14trait_data.json").then(res => res.json())
 	])
     .then(([unitData, traitData]) => {
     	console.log(unitData);
@@ -191,12 +191,13 @@
           });
           $("#champion-pool").append(champImg);
         });
-      },
-      error: function() {
+      }).
+      catch(()=>{
         alert("챔피언 데이터를 불러오는 데 실패했습니다.");
-      }
-    });
-
+   	  
+      })
+      
+   
     //클리어버튼
     function clearBoard() {
       document.querySelectorAll(".cell").forEach(cell => {
@@ -230,6 +231,7 @@
 
       const champs = new Set();
       const champCount = {};
+      const synergyCount = {};
 
       // 올라간 챔피언 등록
       document.querySelectorAll(".cell").forEach(cell => {
@@ -242,7 +244,7 @@
         const champ = Object.values(championData).find(c => c.name === champName);
         if (!champ) return;
         champ.traits.forEach(trait => {
-          synergyCount[trait] = (synergyCount[trait] || 0) + 1;
+        	champCount[trait] = (champCount[trait] || 0) + 1;
         });
       });
 
