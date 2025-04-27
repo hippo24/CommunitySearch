@@ -14,7 +14,7 @@ CREATE TABLE tft_players (
     riot_id_tagline VARCHAR(10),      -- 소환사 태그
     game_date DATE,                   -- 날짜
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    is_bot BOOLEAN GENERATED ALWAYS AS (puuid LIKE 'BOT%') STORED,  -- BOT으로 시작하면 자동으로 TRUE
+    bot BOOLEAN GENERATED ALWAYS AS (puuid LIKE 'BOT%') STORED,  -- BOT으로 시작하면 자동으로 TRUE
     INDEX idx_puuid (puuid)
 );
 
@@ -279,5 +279,5 @@ SELECT
     p.riot_id_name
 FROM tft_matches m
 JOIN tft_players p ON m.puuid = p.puuid
-WHERE p.is_bot = true
+WHERE p.bot = true
 ORDER BY m.match_id, m.placement;

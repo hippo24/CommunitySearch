@@ -90,7 +90,7 @@
 			    <!-- 일반 메뉴 -->
 			    <a class="dropdown-item" href="<c:url value='/post/duo' />">듀오모집게시판1</a>
 			    <a class="dropdown-item" href="<c:url value='/exampleTFT' />">TFT 배치 툴</a>
-			    <a class="dropdown-item" href="<c:url value='/stats' />">유저 통계</a>
+			    <a class="dropdown-item" href="<c:url value='/stats' />">tft_players</a>
 			  </div>
 			</li>
 				    
