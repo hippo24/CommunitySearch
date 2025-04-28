@@ -15,6 +15,5 @@
 		<typeAlias type="kr.kh.riot.model.vo.EmailVO" alias="EmailVO"/>	
 		<typeAlias type="kr.kh.riot.model.vo.PositionVO" alias="PositionVO"/>	
 
-
 	</typeAliases>
 </configuration>

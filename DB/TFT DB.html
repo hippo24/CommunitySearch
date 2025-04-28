@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>TFT DB 연동</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      padding: 2rem;
+      background: #1c1c1e;
+      color: #fff;
+    }
+
+    input,
+    button {
+      padding: 0.5rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: none;
+    }
+
+    input {
+      width: 300px;
+      margin-right: 10px;
+    }
+
+    button {
+      background-color: #3b82f6;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>🔍 TFT DB 연동</h1>
+  <p>
+    소환사 이름을 <strong>게임이름#태그라인</strong> 형식으로 입력하세요 (예:
+    바다새#KR1)
+  </p>
+  <input type="text" id="riotId" placeholder="예: 바다새#KR1" />
+  <button onclick="fetchTFTStats()">조회하기</button>
+
+  <script>
+    const itemMap = {};
+    const traitMap = {};
+
+    fetch(
+      "https://ddragon.leagueoflegends.com/cdn/15.6.1/data/ko_KR/tft-item.json"
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        // 아이템 마스터 데이터를 메모리에 저장
+        for (let key in data.data) {
+          const item = data.data[key];
+          itemMap[item.id] = {
+            name: item.name,
+            icon: `https://ddragon.leagueoflegends.com/cdn/15.6.1/img/tft-item/${item.image.full}`
+          };
+        }
+        console.log("아이템 매핑 완료:", itemMap);
+      });
+
+    fetch(
+      "https://ddragon.leagueoflegends.com/cdn/15.6.1/data/ko_KR/tft-trait.json"
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        for (let key in data.data) {
+          const trait = data.data[key];
+          traitMap[trait.key] = {
+            name: trait.name,
+            icon: `https://ddragon.leagueoflegends.com/cdn/15.6.1/img/tft-trait/${trait.image.full}`,
+          };
+        }
+      });
+
+    async function fetchTFTStats() {
+      const fullInputRaw = document.getElementById("riotId").value;
+
+      // 입력값이 비어있거나 공백만 있는 경우 체크
+      if (!fullInputRaw || fullInputRaw.trim() === "") {
+        alert("소환사 이름을 입력해주세요.");
+        return;
+      }
+
+      // 태그 없는 경우 자동으로 #KR1 붙이기
+      const fullInput = fullInputRaw.includes("#") ? fullInputRaw : `${fullInputRaw}#KR1`;
+      const [gameName, tagLine] = fullInput.split("#");
+
+      const apiKey = "RGAPI-9b484120-f042-423e-b0b5-0e3a256de28a";
+      try {
+        const accountRes = await fetch(
+          `https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(
+            gameName
+          )}/${encodeURIComponent(tagLine)}`,
+          { headers: { "X-Riot-Token": apiKey } }
+        );
+        const accountData = await accountRes.json();
+        const puuid = accountData.puuid;
+
+        // 검색한 플레이어의 랭크 정보 먼저 저장
+        try {
+          const summonerRes = await fetch(
+            `https://kr.api.riotgames.com/tft/summoner/v1/summoners/by-puuid/${puuid}`,
+            { headers: { "X-Riot-Token": apiKey } }
+          );
+          const summonerData = await summonerRes.json();
+
+          const rankRes = await fetch(
+            `https://kr.api.riotgames.com/tft/league/v1/entries/by-summoner/${summonerData.id}`,
+            { headers: { "X-Riot-Token": apiKey } }
+          );
+          const rankData = await rankRes.json();
+
+          if (rankData && rankData[0]) {
+            await fetch("http://localhost:3001/api/save-rank", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                puuid: puuid,
+                riot_id_name: accountData.gameName,
+                riot_id_tagline: accountData.tagLine,
+                tier: rankData[0].tier,
+                rank_division: rankData[0].rank,
+                league_points: rankData[0].leaguePoints,
+                wins: rankData[0].wins,
+                losses: rankData[0].losses
+              }),
+            });
+          } else {
+            await fetch("http://localhost:3001/api/save-rank", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                puuid: puuid,
+                riot_id_name: accountData.gameName,
+                riot_id_tagline: accountData.tagLine,
+                tier: "UNRANKED",
+                rank_division: "",
+                league_points: 0,
+                wins: 0,
+                losses: 0
+              }),
+            });
+          }
+        } catch (e) {
+          console.error("랭크 정보 저장 실패:", e);
+        }
+
+        const matchIdsRes = await fetch(
+          `https://asia.api.riotgames.com/tft/match/v1/matches/by-puuid/${puuid}/ids?count=20`,
+          { headers: { "X-Riot-Token": apiKey } }
+        );
+        const matchIds = await matchIdsRes.json();
+
+        // localStorage 데이터 초기화 로직 수정
+        let savedMatchData;
+        try {
+          const savedData = localStorage.getItem('savedMatchData');
+          savedMatchData = new Set(savedData ? JSON.parse(savedData) : []);
+        } catch (e) {
+          console.error('localStorage 데이터 파싱 실패:', e);
+          savedMatchData = new Set();
+        }
+        let hasNewData = false;
+
+        for (const matchId of matchIds) {
+          const matchRes = await fetch(
+            `https://asia.api.riotgames.com/tft/match/v1/matches/${matchId}`,
+            { headers: { "X-Riot-Token": apiKey } }
+          );
+          const matchData = await matchRes.json();
+
+          // 모든 참가자 정보 상세 로깅
+          console.log('매치 ID:', matchId);
+          console.log('전체 참가자 정보:');
+          matchData.info.participants.forEach((p, index) => {
+            console.log(`플레이어 ${index + 1}:`, {
+              puuid: p.puuid,
+              name: p.riotIdGameName,
+              tagline: p.riotIdTagline,
+              placement: p.placement,
+              level: p.level,
+              isBot: p.puuid.startsWith('BOT')
+            });
+          });
+          
+          // 각 매치의 모든 참가자에 대해 매치 정보 저장 (한 번만)
+          for (const p of matchData.info.participants) {
+            // 봇 판별 로직
+            const isBot = p.puuid.startsWith('BOT');
+            
+            // 봇의 경우 고유한 puuid 생성
+            const uniquePuuid = isBot ? `BOT_${p.riotIdGameName}_${p.riotIdTagline}` : p.puuid;
+            
+            const matchKey = `${matchId}_${uniquePuuid}`;
+            if (savedMatchData.has(matchKey)) {
+              console.log(`이미 저장된 매치 데이터 스킵: ${matchKey}`);
+              continue;
+            }
+            savedMatchData.add(matchKey);
+            hasNewData = true;
+            
+            // 모든 플레이어 데이터를 tft_players 테이블에 저장
+            await fetch("http://localhost:3001/api/save-match", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                match_id: matchId,
+                puuid: uniquePuuid,  // 고유한 puuid 사용
+                riot_id_name: p.riotIdGameName,
+                riot_id_tagline: p.riotIdTagline,
+                placement: p.placement,
+                level: p.level,
+                gold_left: p.gold_left,
+                last_round: p.last_round,
+                players_eliminated: p.players_eliminated,
+                time_eliminated: p.time_eliminated,
+                total_damage_to_players: p.total_damage_to_players,
+                game_length: matchData.info.game_length,
+                companion: JSON.stringify(p.companion),
+                traits: JSON.stringify(p.traits || []),
+                units: JSON.stringify(p.units || []),
+                game_date: new Date(matchData.info.game_datetime).toISOString().split("T")[0],
+                is_bot: isBot
+              }),
+            });
+
+            // 유닛별 아이템 정보도 하나의 테이블에 저장
+            for (const unit of (p.units || [])) {
+              const index = p.units.indexOf(unit);
+              const unitName = unit.character_id?.replace(/^TFT\d*_/, "") || "Unknown";
+              
+              for (const itemId of (unit.itemNames || [])) {
+                try {
+                  await fetch("http://localhost:3001/api/save-unit-item", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      match_id: matchId,
+                      puuid: uniquePuuid,  // 고유한 puuid 사용
+                      unit_index: index,
+                      unit_name: unitName,
+                      item_name: itemMap[itemId]?.name || `Item_${itemId}`,
+                      is_bot: isBot
+                    }),
+                  });
+                } catch (error) {
+                  console.error(`아이템 저장 실패:`, error);
+                }
+              }
+            }
+          }
+        }
+
+        // 새로운 데이터가 저장되었다면 localStorage 업데이트
+        if (hasNewData) {
+          localStorage.setItem('savedMatchData', JSON.stringify(Array.from(savedMatchData)));
+        }
+
+      } catch (e) {
+        console.error("에러 발생:", e);
+      }
+    }
+
+    //엔터로 검색 가능
+    document.addEventListener("DOMContentLoaded", () => {
+      const input = document.getElementById("riotId");
+
+      input.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          fetchTFTStats();
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

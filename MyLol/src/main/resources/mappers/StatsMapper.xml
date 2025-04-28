@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.kh.riot.dao.StatsMapper">
+	<!-- DB 플레이어 -->
+    <select id="selectTftPlayers" resultType="kr.kh.riot.model.vo.TftPlayers">
+        SELECT 
+            id, 
+            puuid, 
+            riot_id_name AS riotIdName, 
+            riot_id_tagline AS riotIdTagline, 
+            game_date AS gameDate, 
+            created_at AS createdAt, 
+            bot
+        FROM tft_players
+    </select>
+    <!-- DB 랭크 -->
+    <select id="selectTftRank" resultType="kr.kh.riot.model.vo.TftRank">
+	    SELECT 
+	        r.id, 
+	        r.puuid, 
+	        p.riot_id_name AS riotIdName, 
+	        p.riot_id_tagline AS riotIdTagline, 
+	        r.tier, 
+	        r.rank_division AS rankDivision, 
+	        r.league_points AS leaguePoints, 
+	        r.wins, 
+	        r.losses
+	    FROM tft_rank r
+	    LEFT JOIN tft_players p ON r.puuid = p.puuid
+	</select>
+	<!-- DB 매치 데이터 -->
+	<select id="selectTftMatches" resultType="kr.kh.riot.model.vo.TftMatches">
+	    SELECT 
+	        match_id AS matchId,
+	        placement,
+	        level,
+	        gold_left AS goldLeft,
+	        last_round AS lastRound,
+	        players_eliminated AS playersEliminated,
+	        time_eliminated AS timeEliminated,
+	        total_damage_to_players AS totalDamageToPlayers,
+	        game_length AS gameLength,
+	        companion,
+	        traits,
+	        units
+	    FROM tft_matches
+	</select>
+	<!-- DB 아이템 -->
+	<select id="selectTftItems" resultType="kr.kh.riot.model.vo.TftItems">
+	    SELECT 
+	        i.id,
+	        i.match_id AS matchId,
+	        i.puuid,
+	        p.riot_id_name AS riotIdName,
+	        p.riot_id_tagline AS riotIdTagline,
+	        i.unit_index AS unitIndex,
+	        i.unit_name AS unitName,
+	        i.item_name AS itemName
+	    FROM tft_items i
+	    LEFT JOIN tft_players p ON i.puuid = p.puuid
+	</select>
+	<!-- 검색한 유저의 매치 수 -->
+	<select id="selectTftMatchesByRiotId" resultType="kr.kh.riot.model.vo.TftMatches">
+	    SELECT m.*
+	    FROM tft_matches m
+	    LEFT JOIN tft_players p ON m.puuid = p.puuid
+	    WHERE p.riot_id_name = #{riotIdName}
+	      AND p.riot_id_tagline = #{riotIdTagline}
+	</select>
+	<!-- 검색한 유저의 유닛 3 -->
+	<select id="selectTop3UnitsByRiotId" resultType="map">
+	    SELECT 
+	        i.unit_name AS unitName, 
+	        COUNT(*) AS cnt,
+	        AVG(m.placement) AS avgPlacement
+	    FROM tft_items i
+	    LEFT JOIN tft_players p ON i.puuid = p.puuid
+	    LEFT JOIN tft_matches m ON i.match_id = m.match_id AND i.puuid = m.puuid
+	    WHERE p.riot_id_name = #{riotIdName}
+	      AND p.riot_id_tagline = #{riotIdTagline}
+	      AND i.unit_name IS NOT NULL
+	      AND i.unit_name != ''
+	    GROUP BY i.unit_name
+	    ORDER BY cnt DESC
+	    LIMIT 3
+	</select>
+	<!-- 검색한 유저의 시너지 3 -->
+	<select id="selectTop3TraitsByRiotId" resultType="map">
+	    SELECT traitName, COUNT(*) AS cnt, AVG(placement) AS avgPlacement
+		FROM (
+		  SELECT
+		    JSON_UNQUOTE(JSON_EXTRACT(m.traits, CONCAT('$[', n.n, '].name'))) AS traitName,
+		    m.placement
+		  FROM tft_matches m
+		  LEFT JOIN tft_players p ON m.puuid = p.puuid
+		  JOIN (
+		    SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4
+		    UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
+		  ) n
+		  WHERE p.riot_id_name = #{riotIdName}
+		    AND p.riot_id_tagline = #{riotIdTagline}
+		    AND JSON_EXTRACT(m.traits, CONCAT('$[', n.n, '].name')) IS NOT NULL
+		) t
+		GROUP BY traitName
+		ORDER BY cnt DESC
+		LIMIT 3
+	</select>
+	<!-- 검색한 유저의 아이템 3 -->
+	<select id="selectTop3ItemsByRiotId" resultType="map">
+	    SELECT 
+	        i.item_name AS itemName, 
+	        COUNT(*) AS cnt,
+	        AVG(m.placement) AS avgPlacement
+	    FROM tft_items i
+	    LEFT JOIN tft_players p ON i.puuid = p.puuid
+	    LEFT JOIN tft_matches m ON i.match_id = m.match_id AND i.puuid = m.puuid
+	    WHERE p.riot_id_name = #{riotIdName}
+	      AND p.riot_id_tagline = #{riotIdTagline}
+	      AND i.item_name IS NOT NULL
+	      AND i.item_name != ''
+	    GROUP BY i.item_name
+	    ORDER BY cnt DESC
+	    LIMIT 3
+	</select>
+	<!-- 검색한 유저의 별 갯수 -->
+	<select id="selectTierCountByRiotId" resultType="map">
+	    SELECT
+		  t.tier,
+		  COUNT(*) AS cnt
+		FROM (
+		  SELECT
+		    jt.tier
+		  FROM tft_matches m
+		  LEFT JOIN tft_players p ON m.puuid = p.puuid
+		  JOIN JSON_TABLE(
+		    m.units,
+		    '$[*]' COLUMNS (
+		      tier INT PATH '$.tier'
+		    )
+		  ) jt
+		  WHERE p.riot_id_name = #{riotIdName}
+		    AND p.riot_id_tagline = #{riotIdTagline}
+		  -- 필요시 AND jt.tier IN (1,2,3)
+		) t
+		GROUP BY t.tier
+		ORDER BY t.tier
+	</select>
+	<!-- 평균 레벨 3 -->
+	<select id="selectTop3LevelsByRiotId" resultType="map">
+	    SELECT
+	      level,
+	      COUNT(*) AS cnt,
+	      AVG(placement) AS avgPlacement
+	    FROM tft_matches m
+	    LEFT JOIN tft_players p ON m.puuid = p.puuid
+	    WHERE p.riot_id_name = #{riotIdName}
+	      AND p.riot_id_tagline = #{riotIdTagline}
+	    GROUP BY level
+	    ORDER BY cnt DESC, level DESC
+	    LIMIT 3
+	</select>
+</mapper>
